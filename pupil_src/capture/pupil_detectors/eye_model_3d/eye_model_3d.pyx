@@ -1,4 +1,3 @@
-from pyglui cimport cygl
 
 cdef extern from "singleeyefitter/singleeyefitter.h" namespace "singleeyefitter":
     cdef cppclass EyeModelFitter:

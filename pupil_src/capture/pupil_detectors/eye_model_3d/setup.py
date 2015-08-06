@@ -8,12 +8,15 @@ import numpy as np
 np.get_include()
 extensions = [
     Extension(
+        # configured to Andrew Xia's ubuntu installation location
         name="eye_model_3d",
         sources=['eye_model_3d.pyx','SingleEyeFitter.cpp','utils.cpp','cvx.cpp'],
-        include_dirs = [ '.', '/usr/local/include/eigen3','/usr/local/include/ceres','/usr/local/include/boost','usr/local/include/opencv2',' /usr/local/include/spii'],
+        include_dirs = [ '.', '/usr/local/include/eigen3','/usr/local/include/ceres'
+        #'usr/local/include/spii',#'/home/ceres-solver',
+        ],
         libraries = ['spii','opencv_core','opencv_highgui','ceres'],
-        library_dirs = [],
-        extra_link_args=[],
+        # library_dirs = ['/usr/local/lib'],
+        extra_link_args=[], #'-WL,-R/usr/local/lib'
         extra_compile_args=["-std=c++11"],
         language="c++")
 ]
