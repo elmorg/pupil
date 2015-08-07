@@ -21,7 +21,8 @@ void singleeyefitter::cvx::getROI(const cv::Mat& src, cv::Mat& dst, const cv::Re
         int bottom = std::max(br.y, 0);
 
         cv::Mat tmp(src, validROI);
-        cv::copyMakeBorder(tmp, dst, top, bottom, left, right, borderType);
+        cv::copyMakeBorder(tmp, dst, top, bottom, left, right, borderType); 
+        //setup.py can't find libopencv_higlui.so... problem here.
     }
 }
 

@@ -1,5 +1,4 @@
 ﻿// SingleEyeFitter.cpp : Defines the entry point for the console application.
-//
 
 #include <boost/math/special_functions/sign.hpp>
 
@@ -10,7 +9,6 @@
 #include <ceres/autodiff_cost_function.h>
 #include <ceres/solver.h>
 #include <ceres/jet.h>
-
 
 #include <singleeyefitter/singleeyefitter.h>
 
