@@ -12,7 +12,8 @@
 #define DistancePointEllipse_h__
 
 #include <Eigen/Core>
-#include <singleeyefitter/Ellipse.h>
+// #include <singleeyefitter/Ellipse.h>
+#include <singleeyefitter/Geometry.h>
 
 namespace singleeyefitter {
 

@@ -14,11 +14,12 @@
 
 #include <singleeyefitter/utils.h>
 // #include <singleeyefitter/cvx.h>
-#include <singleeyefitter/Conic.h>
-#include <singleeyefitter/Ellipse.h>
-#include <singleeyefitter/Circle.h>
-#include <singleeyefitter/Conicoid.h>
-#include <singleeyefitter/Sphere.h>
+// #include <singleeyefitter/Conic.h>
+// #include <singleeyefitter/Ellipse.h>
+// #include <singleeyefitter/Circle.h>
+// #include <singleeyefitter/Conicoid.h>
+// #include <singleeyefitter/Sphere.h>
+#include <singleeyefitter/geometry.h>
 #include <singleeyefitter/solve.h>
 #include <singleeyefitter/intersect.h>
 #include <singleeyefitter/projection.h>
@@ -620,83 +621,85 @@ void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius
     Vector2 eye_centre_proj;
     bool valid_eye;
 
-    if (use_ransac) {
-        auto indices = fun::range_<std::vector<size_t>>(pupil_gazelines_proj.size());
+    // fun.h and utils.h are only used here.
+    // if (use_ransac) {
+    //     auto indices = fun::range_<std::vector<size_t>>(pupil_gazelines_proj.size());
 
-        const int n = 2;
-        double w = 0.3;
-        double p = 0.9999;
-        int k = ceil(log(1 - p) / log(1 - pow(w, n)));
+    //     const int n = 2;
+    //     double w = 0.3;
+    //     double p = 0.9999;
+    //     int k = ceil(log(1 - p) / log(1 - pow(w, n)));
 
-        double epsilon = 10;
-        auto huber_error = [&](const Vector2& point, const Line& line) {
-            double dist = euclidean_distance(point, line);
-            if (sq(dist) < sq(epsilon))
-                return sq(dist) / 2;
-            else
-                return epsilon*(abs(dist) - epsilon / 2);
-        };
-        auto m_error = [&](const Vector2& point, const Line& line) {
-            double dist = euclidean_distance(point, line);
-            if (sq(dist) < sq(epsilon))
-                return sq(dist);
-            else
-                return sq(epsilon);
-        };
-        auto error = m_error;
+    //     double epsilon = 10;
+    //     auto huber_error = [&](const Vector2& point, const Line& line) {
+    //         double dist = euclidean_distance(point, line);
+    //         if (sq(dist) < sq(epsilon))
+    //             return sq(dist) / 2;
+    //         else
+    //             return epsilon*(abs(dist) - epsilon / 2);
+    //     };
+    //     auto m_error = [&](const Vector2& point, const Line& line) {
+    //         double dist = euclidean_distance(point, line);
+    //         if (sq(dist) < sq(epsilon))
+    //             return sq(dist);
+    //         else
+    //             return sq(epsilon);
+    //     };
+    //     auto error = m_error;
 
-        auto best_inlier_indices = decltype(indices)();
-        Vector2 best_eye_centre_proj;// = nearest_intersect(pupil_gazelines_proj);
-        double best_line_distance_error = std::numeric_limits<double>::infinity();// = fun::sum(LAMBDA(const Line& line)(error(best_eye_centre_proj,line)), pupil_gazelines_proj);
+    //     auto best_inlier_indices = decltype(indices)();
+    //     Vector2 best_eye_centre_proj;// = nearest_intersect(pupil_gazelines_proj);
+    //     double best_line_distance_error = std::numeric_limits<double>::infinity();// = fun::sum(LAMBDA(const Line& line)(error(best_eye_centre_proj,line)), pupil_gazelines_proj);
 
-        for (int i = 0; i < k; ++i) {
-            auto index_sample = singleeyefitter::randomSubset(indices, n);
-            auto sample = fun::map([&](size_t i){ return pupil_gazelines_proj[i]; }, index_sample);
+    //     for (int i = 0; i < k; ++i) {
+    //         auto index_sample = singleeyefitter::randomSubset(indices, n);
+    //         auto sample = fun::map([&](size_t i){ return pupil_gazelines_proj[i]; }, index_sample);
 
-            auto sample_centre_proj = nearest_intersect(sample);
+    //         auto sample_centre_proj = nearest_intersect(sample);
 
-            auto index_inliers = fun::filter(
-                [&](size_t i){ return euclidean_distance(sample_centre_proj, pupil_gazelines_proj[i]) < epsilon; },
-                indices);
-            auto inliers = fun::map([&](size_t i){ return pupil_gazelines_proj[i]; }, index_inliers);
+    //         auto index_inliers = fun::filter(
+    //             [&](size_t i){ return euclidean_distance(sample_centre_proj, pupil_gazelines_proj[i]) < epsilon; },
+    //             indices);
+    //         auto inliers = fun::map([&](size_t i){ return pupil_gazelines_proj[i]; }, index_inliers);
 
-            if (inliers.size() <= w*pupil_gazelines_proj.size()) {
-                continue;
-            }
+    //         if (inliers.size() <= w*pupil_gazelines_proj.size()) {
+    //             continue;
+    //         }
 
-            auto inlier_centre_proj = nearest_intersect(inliers);
+    //         auto inlier_centre_proj = nearest_intersect(inliers);
 
-            double line_distance_error = fun::sum(
-                [&](size_t i){ return error(inlier_centre_proj, pupil_gazelines_proj[i]); },
-                indices);
+    //         double line_distance_error = fun::sum(
+    //             [&](size_t i){ return error(inlier_centre_proj, pupil_gazelines_proj[i]); },
+    //             indices);
 
-            if (line_distance_error < best_line_distance_error) {
-                best_eye_centre_proj = inlier_centre_proj;
-                best_line_distance_error = line_distance_error;
-                best_inlier_indices = std::move(index_inliers);
-            }
-        }
+    //         if (line_distance_error < best_line_distance_error) {
+    //             best_eye_centre_proj = inlier_centre_proj;
+    //             best_line_distance_error = line_distance_error;
+    //             best_inlier_indices = std::move(index_inliers);
+    //         }
+    //     }
 
-        std::cout << "Inliers: " << best_inlier_indices.size()
-            << " (" << (100.0*best_inlier_indices.size() / pupil_gazelines_proj.size()) << "%)"
-            << " = " << best_line_distance_error
-            << std::endl;
+    //     std::cout << "Inliers: " << best_inlier_indices.size()
+    //         << " (" << (100.0*best_inlier_indices.size() / pupil_gazelines_proj.size()) << "%)"
+    //         << " = " << best_line_distance_error
+    //         << std::endl;
 
-        for (auto& pupil : pupils) {
-            pupil.init_valid = false;
-        }
-        for (auto& i : best_inlier_indices) {
-            pupils[i].init_valid = true;
-        }
+    //     for (auto& pupil : pupils) {
+    //         pupil.init_valid = false;
+    //     }
+    //     for (auto& i : best_inlier_indices) {
+    //         pupils[i].init_valid = true;
+    //     }
 
-        if (best_inlier_indices.size() > 0) {
-            eye_centre_proj = best_eye_centre_proj;
-            valid_eye = true;
-        }
-        else {
-            valid_eye = false;
-        }
-    }
+    //     if (best_inlier_indices.size() > 0) {
+    //         eye_centre_proj = best_eye_centre_proj;
+    //         valid_eye = true;
+    //     }
+    //     else {
+    //         valid_eye = false;
+    //     }
+    // }
+
     else {
         for (auto& pupil : pupils) {
             pupil.init_valid = true;
