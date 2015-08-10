@@ -10,13 +10,15 @@
 
 // see ../../eye_model_3d folder to recover the individual geometry header files
 
-/////////////////////////////////////////////////////////////////////
-// CIRCLE
-
-#ifndef _CIRCLE_H_
-#define _CIRCLE_H_
+#ifndef GEOMETRY_H_
+#define GEOMETRY_H_
 
 #include <Eigen/Core>
+#include <singleeyefitter/math.h> // for conic
+#include <boost/math/constants/constants.hpp> // for accessing pi in ellipse
+
+/////////////////////////////////////////////////////////////////////
+// CIRCLE
 
 namespace singleeyefitter {
 
@@ -72,19 +74,8 @@ namespace singleeyefitter {
             "radius: " << circle.radius << " }";
     }
 
-}
-#endif //_CIRCLE_H_
-
 /////////////////////////////////////////////////////////////////////
 // CONIC
-
-#ifndef _CONIC_H_
-#define _CONIC_H_
-
-#include <Eigen/Core>
-#include <singleeyefitter/math.h>
-
-namespace singleeyefitter {
 
     template<typename T>
     class Ellipse2D;
@@ -125,7 +116,6 @@ namespace singleeyefitter {
         Scalar operator()(Scalar x, Scalar y) const {
             return A*x*x + B*x*y + C*y*y + D*x + E*y + F;
         }
-
     };
 
     template<typename T>
@@ -133,19 +123,8 @@ namespace singleeyefitter {
         return os << "Conic { " << conic.A << "x^2 + " << conic.B << "xy + " << conic.C << "y^2 + " << conic.D << "x + " << conic.E << "y + " << conic.F << " = 0 } ";
     }
 
-}
-
-#endif
-
 /////////////////////////////////////////////////////////////////////
 // CONICOID
-
-#ifndef _CONICOID_H_
-#define _CONICOID_H_
-
-#include <Eigen/Core>
-
-namespace singleeyefitter {
 
     template<typename T>
     class Conic;
@@ -215,20 +194,8 @@ namespace singleeyefitter {
             "2*" << 2 * conicoid.U << "x + 2*" << 2 * conicoid.V << "y + 2*" << 2 * conicoid.W << "z + " << conicoid.D << " = 0 }";
     }
 
-}
-
-#endif
-
 /////////////////////////////////////////////////////////////////////
 // ELLIPSE
-
-#ifndef _ELLIPSE_H_
-#define _ELLIPSE_H_
-
-#include <boost/math/constants/constants.hpp>
-#include <Eigen/Core>
-
-namespace singleeyefitter {
 
     template<typename T>
     class Conic;
@@ -363,19 +330,8 @@ namespace singleeyefitter {
         return Eigen::Matrix<typename std::common_type<Scalar, Scalar2>::type, 2, 1>(xt, yt);
     }
 
-}
-
-#endif
-
 /////////////////////////////////////////////////////////////////////
 // SPHERE
-
-#ifndef _SPHERE_H_
-#define _SPHERE_H_
-
-#include <Eigen/Core>
-
-namespace singleeyefitter {
 
     template<typename T>
     class Sphere {
@@ -424,4 +380,4 @@ namespace singleeyefitter {
 
 }
 
-#endif//_SPHERE_H_
+#endif
