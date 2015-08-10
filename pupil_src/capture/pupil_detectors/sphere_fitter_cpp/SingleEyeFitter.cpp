@@ -350,7 +350,7 @@ EyeModelFitter::Pupil::Pupil(Ellipse e,Eigen::Matrix<double, 3, 4> i){
     // size circles that would project onto it. The size of the circles
     // doesn't matter here, only their center and normal does.
     
-    self.projected_circles = self.ellipse.unproject(radius = 1, intrinsics= intrinsics);
+    projected_circles = self.ellipse.unproject(radius = 1, intrinsics= intrinsics);
     // get projected circles and gaze vectors
     // Project the circle centers and gaze vectors down back onto the image plane.
     // We're only using them as line parameterizations, so it doesn't matter which of the two centers/gaze

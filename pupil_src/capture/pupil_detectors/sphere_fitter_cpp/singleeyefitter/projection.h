@@ -11,12 +11,11 @@
 namespace singleeyefitter {
 
     template<typename Scalar>
-    Conic<Scalar> project(const Circle3D<Scalar>& circle, Scalar focal_length)
-    {
+    Conic<Scalar> project(const Circle3D<Scalar>& circle, Scalar focal_length){
         typedef typename Circle3D<Scalar>::Vector Vector;
         using math::sq;
 
-        Vector c = circle.centre;
+        Vector c = circle.center;
         Vector n = circle.normal;
         Scalar r = circle.radius;
         Scalar f = focal_length;
@@ -28,7 +27,7 @@ namespace singleeyefitter {
             |p - c|^2 = r^2 where (p-c).n = 0 (i.e. on the circle plane)
         
         A cone is basically concentric circles, with center on the line c->v.
-        For any point p, the corresponding circle centre c' is the intersection
+        For any point p, the corresponding circle center c' is the intersection
         of the line c->v and the plane through p normal to n. So,
         
             d = ((p - v).n)/(c.n)
@@ -107,7 +106,7 @@ namespace singleeyefitter {
         typedef typename Circle3D<Scalar>::Vector Vector;
         using math::sq;
 
-        Vector c = circle.centre;
+        Vector c = circle.center;
         Vector n = circle.normal;
         Scalar r = circle.radius;
         Scalar f = intrinsics(1,1); //different syntax from python
@@ -131,36 +130,41 @@ namespace singleeyefitter {
             );
 
         Ellipse2D<Scalar> return_ellipse = Ellipse2D<Scalar>(temp_conic);
+        return_ellipse.center = [ellipse.center[0] + intrinsics(0,2), -ellipse.center[1] + intrinsics(1,2)];
+        return_ellipse.angle = -return_ellipse.angle % boost::math::double_constants::pi; // boost included in ellipse
+        return return_ellipse;
     }
-
-    /*template<typename Scalar, typename PDerived, typename NDerived>
-    typename Conic<Scalar> project(Conic<Scalar> conic, const Eigen::DenseBase<PDerived>& point, const Eigen::DenseBase<NDerived>& normal, Scalar focal_length)
-    {
-    // Consider two coordinate systems:
-    //    camera (camera at 0, x,y aligned with image plane, z going away from camera)
-    //    conic (conic on xy-plane, with plane normal = (0,0,1) and plane point = (0,0,0) )
-    //
-    // To project conic lying on plane defined by point and normal (point corresponding to (0,0) in conic's 2D space), do:
-    //
-    //     Input as in camera space,
-    //     Transform to conic space,
-    //     Form conicoid with conic as base and camera centre as vertex
-    //     Transform back to camera space
-    //     Intersect conicoid with image plane (z=f)
-
-    Eigen::Matrix<Scalar,3,1> camera_centre(0,0,0);
-    }*/
-
 
     template<typename Scalar>
-    Ellipse2D<Scalar> project(const Sphere<Scalar>& sphere, Scalar focal_length)
-    {
+    Ellipse2D<Scalar> project(const Sphere<Scalar>& sphere, Scalar focal_length){
         return Ellipse2D<Scalar>(
-            focal_length * sphere.centre.template head<2>() / sphere.centre[2],
-            focal_length * sphere.radius / sphere.centre[2],
-            focal_length * sphere.radius / sphere.centre[2],
+            focal_length * sphere.center.template head<2>() / sphere.center[2],
+            focal_length * sphere.radius / sphere.center[2],
+            focal_length * sphere.radius / sphere.center[2],
             0);
     }
+
+    template<typename Scalar> //project function with camera intrinsics instead
+    Ellipse2D<Scalar> project(const Sphere<Scalar>& sphere, Eigen::Matrix<double, 3, 4> intrinsics){
+        auto center = project(sphere.center, intrinsics);
+        auto radius = abs(sphere.radius/sphere.center[2]*intrinsics(1,1));
+        return Ellipse2D<Scalar>(center,radius,radius,0);
+    }
+
+    template<typename Scalar> // with intrinsics matrix
+    Eigen::Vector2d project_point(Eigen::Vector3d point, Eigen::Matrix<double, 3, 4> intrinsics){
+        x = intrinsics(0,0)*point[0]/point[2] + intrinsics(0,2);
+        y = intrinsics(1,1)*point[1]/point[2] + intrinsics(1,2);
+        return Eigen::Vector2d pt(x,y); 
+    }
+
+    template<typename Scalar> // with intrinsics matrix
+    Eigen::Vector3d unproject_point(Eigen::Vector2d point, Scalar z, Eigen::Matrix<double, 3, 4> intrinsics){
+        x = (point[0]-intrinsics(0,2)) * z / intrinsics(0,0);
+        y = (point[1]-intrinsics(1,2) * z / intrinsics(1,1);
+        return Eigen::Vector3d pt(x,y,z); 
+    }    
+
     template<typename Derived>
     typename Eigen::DenseBase<Derived>::template FixedSegmentReturnType<2>::Type::PlainObject project(const Eigen::DenseBase<Derived>& point, typename Eigen::DenseBase<Derived>::Scalar focal_length)
     {
@@ -168,7 +172,6 @@ namespace singleeyefitter {
 
         return focal_length * point.template head<2>() / point(2);
     }
-
 
     template<typename Scalar>
     std::pair<Circle3D<Scalar>, Circle3D<Scalar>> unproject(const Ellipse2D<Scalar>& ellipse, Scalar circle_radius, Scalar focal_length)
@@ -188,8 +191,8 @@ namespace singleeyefitter {
         // Get cone with base of ellipse and vertex at [0 0 -f]
         // Safaee-Rad 1992 eq (3)
         Conic conic(ellipse);
-        Vector3 cam_centre_in_ellipse(0, 0, -focal_length);
-        Conicoid pupil_cone(conic, cam_centre_in_ellipse);
+        Vector3 cam_center_in_ellipse(0, 0, -focal_length);
+        Conicoid pupil_cone(conic, cam_center_in_ellipse);
 
         auto a = pupil_cone.A;
         auto b = pupil_cone.B;
@@ -295,7 +298,7 @@ namespace singleeyefitter {
                     0, abs(l), n;
             }
 
-            // Calculate the circle centre
+            // Calculate the circle center
             // Safaee-Rad 1992 eq (38), using T3 as defined in (36)
             auto A = lambda.matrix().dot(T3.col(0).cwiseAbs2());
             auto B = lambda.matrix().dot(T3.col(0).cwiseProduct(T3.col(2)));
@@ -303,35 +306,206 @@ namespace singleeyefitter {
             auto D = lambda.matrix().dot(T3.col(2).cwiseAbs2());
 
             // Safaee-Rad 1992 eq (41)
-            Vector3 centre_in_Xprime;
-            centre_in_Xprime(2) = A*circle_radius / sqrt(sq(B) + sq(C) - A*D);
-            centre_in_Xprime(0) = -B / A * centre_in_Xprime(2);
-            centre_in_Xprime(1) = -C / A * centre_in_Xprime(2);
+            Vector3 center_in_Xprime;
+            center_in_Xprime(2) = A*circle_radius / sqrt(sq(B) + sq(C) - A*D);
+            center_in_Xprime(0) = -B / A * center_in_Xprime(2);
+            center_in_Xprime(1) = -C / A * center_in_Xprime(2);
 
             // Safaee-Rad 1992 eq (34)
             Translation3 T0;
             T0.translation() << 0, 0, focal_length;
 
             // Safaee-Rad 1992 eq (42) using (35)
-            Vector3 centre = T0*T1*T2*T3*centre_in_Xprime;
+            Vector3 center = T0*T1*T2*T3*center_in_Xprime;
 
             // If z is negative (behind the camera), choose the other
             // solution of eq (41) [maybe there's a way of calculating which
             // solution should be chosen first]
 
-            if (centre(2) < 0) {
-                centre_in_Xprime = -centre_in_Xprime;
-                centre = T0*T1*T2*T3*centre_in_Xprime;
+            if (center(2) < 0) {
+                center_in_Xprime = -center_in_Xprime;
+                center = T0*T1*T2*T3*center_in_Xprime;
             }
 
             // Make sure that the gaze vector is toward the camera and is normalised
-            if (gaze.dot(centre) > 0) {
+            if (gaze.dot(center) > 0) {
                 gaze = -gaze;
             }
             gaze.normalize();
 
             // Save the results
-            solutions[i] = Circle(centre, gaze, circle_radius);
+            solutions[i] = Circle(center, gaze, circle_radius);
+        }
+        return std::make_pair(solutions[0], solutions[1]);
+    }
+
+    template<typename Scalar> // with camera matrix intrinsic
+    std::pair<Circle3D<Scalar>, Circle3D<Scalar>> unproject(const Ellipse2D<Scalar>& input_ellipse, Scalar circle_radius, Eigen::Matrix<double, 3, 4> intrinsics){
+        using std::sqrt;
+        using boost::math::sign;
+        using math::sq;
+
+        typedef Conic<Scalar> Conic;
+        typedef Conicoid<Scalar> Conicoid;
+        typedef Circle3D<Scalar> Circle;
+        typedef Eigen::Matrix<Scalar, 3, 3> Matrix3;
+        typedef Eigen::Matrix<Scalar, 3, 1> Vector3;
+        typedef Eigen::Array<Scalar, 1, 3> RowArray3;
+        typedef Eigen::Translation<Scalar, 3> Translation3;
+
+        // preprocessing
+        Scalar focal_length = intrinsics(0,0);
+        input_ellipse.center[0] = intrinsics(2,0); // watch out np is col major, eigen is row major
+        input_ellipse.center[1] = intrinsics(2,1) - input_ellipse.center[1]; //our y focal length is negative by convention
+        Ellipse2D<Scalar> offset_ellipse(input_ellipse.center,input_ellipse.major_radius,input_ellipse.minor_radius,sign(intrinsics(1,1))*self.angle)
+
+        // Get cone with base of ellipse and vertex at [0 0 -f]
+        // Safaee-Rad 1992 eq (3)
+        Conic conic(offset_ellipse);
+        Vector3 cam_center_in_ellipse(0, 0, -focal_length);
+        Conicoid pupil_cone(conic, cam_center_in_ellipse);
+
+        auto a = pupil_cone.A;
+        auto b = pupil_cone.B;
+        auto c = pupil_cone.C;
+        auto f = pupil_cone.F;
+        auto g = pupil_cone.G;
+        auto h = pupil_cone.H;
+        auto u = pupil_cone.U;
+        auto v = pupil_cone.V;
+        auto w = pupil_cone.W;
+        auto d = pupil_cone.D;
+
+        // Get canonical conic form:
+        //     lambda(1) X^2 + lambda(2) Y^2 + lambda(3) Z^2 = mu
+        // Safaee-Rad 1992 eq (6)
+        // Done by solving the discriminating cubic (10)
+        // Lambdas are sorted descending because order of roots doesn't
+        // matter, and it later eliminates the case of eq (30), where
+        // lambda(2) > lambda(1)
+
+        RowArray3 lambda;
+        std::tie(lambda(0), lambda(1), lambda(2)) = solve(1., -(a + b + c), (b*c + c*a + a*b - f*f - g*g - h*h), -(a*b*c + 2 * f*g*h - a*f*f - b*g*g - c*h*h));
+
+        assert(lambda(0) >= lambda(1));
+        assert(lambda(1) > 0);
+        assert(lambda(2) < 0);
+
+        // Now want to calculate l,m,n of the plane
+        //     lX + mY + nZ = p
+        // which intersects the cone to create a circle.
+        // Safaee-Rad 1992 eq (31)
+        // [Safaee-Rad 1992 eq (33) comes out of this as a result of lambda(1) == lambda(2)]
+        auto n = sqrt((lambda(1) - lambda(2)) / (lambda(0) - lambda(2)));
+        auto m = 0.0;
+        auto l = sqrt((lambda(0) - lambda(1)) / (lambda(0) - lambda(2)));
+        // There are two solutions for l, positive and negative, we handle these later
+
+        // Want to calculate T1, the rotation transformation from image
+        // space in the canonical conic frame back to image space in the
+        // real world
+
+        Matrix3 T1;
+        // Safaee-Rad 1992 eq (8)
+        auto li = T1.row(0);
+        auto mi = T1.row(1);
+        auto ni = T1.row(2);
+
+        // Safaee-Rad 1992 eq (12)
+        RowArray3 t1 = (b - lambda)*g - f*h;
+        RowArray3 t2 = (a - lambda)*f - g*h;
+        RowArray3 t3 = -(a - lambda)*(t1 / t2) / g - h / g;
+
+        mi = 1 / sqrt(1 + (t1 / t2).square() + t3.square());
+        li = (t1 / t2) * mi.array();
+        ni = t3 * mi.array();
+
+        // If li,mi,ni follow the left hand rule, flip their signs
+        if ((li.cross(mi)).dot(ni) < 0) {
+            li = -li;
+            mi = -mi;
+            ni = -ni;
+        }
+
+        // Calculate T2, a translation transformation from the canonical
+        // conic frame to the image space in the canonical conic frame
+        // Safaee-Rad 1992 eq (14)
+        Translation3 T2;
+        T2.translation() = -(u*li + v*mi + w*ni).array() / lambda;
+
+        Circle solutions[2];
+        Scalar ls[2] = { l, -l };
+        for (int i = 0; i < 2; i++) {
+            auto l = ls[i];
+            // Circle normal in image space (i.e. gaze vector)
+            Vector3 gaze = T1 * Vector3(l, m, n);
+
+            // Calculate T3, a rotation from a frame where Z is the circle normal
+            // to the canonical conic frame
+            // Safaee-Rad 1992 eq (19)
+            // Want T3 = / -m/sqrt(l*l+m*m) -l*n/sqrt(l*l+m*m) l \
+                    //              |  l/sqrt(l*l+m*m) -m*n/sqrt(l*l+m*m) m |
+            //                \            0           sqrt(l*l+m*m)   n /
+            // But m = 0, so this simplifies to
+            //      T3 = /       0      -n*l/sqrt(l*l) l \
+                    //              |  l/sqrt(l*l)        0       0 |
+            //                \          0         sqrt(l*l)   n /
+            //         = /    0    -n*sgn(l) l \
+                    //              |  sgn(l)     0     0 |
+            //                \       0       |l|    n /
+            Matrix3 T3;
+            if (l == 0) {
+                // Discontinuity of sgn(l), have to handle explicitly
+                assert(n == 1);
+                std::cout << "Warning: l == 0" << std::endl;
+                T3 << 0, -1, 0,
+                    1, 0, 0,
+                    0, 0, 1;
+            }
+            else {
+                auto sgnl = sign(l);
+                T3 << 0, -n*sign(l), l,
+                    sign(l), 0, 0,
+                    0, fabs(l), n; // abs rounds to int.
+            }
+
+            // Calculate the circle center
+            // Safaee-Rad 1992 eq (38), using T3 as defined in (36)
+            auto A = lambda.matrix().dot(T3.col(0).cwiseAbs2());
+            auto B = lambda.matrix().dot(T3.col(0).cwiseProduct(T3.col(2)));
+            auto C = lambda.matrix().dot(T3.col(1).cwiseProduct(T3.col(2)));
+            auto D = lambda.matrix().dot(T3.col(2).cwiseAbs2());
+
+            // Safaee-Rad 1992 eq (41)
+            Vector3 center_in_Xprime;
+            center_in_Xprime(2) = A*circle_radius / sqrt(sq(B) + sq(C) - A*D);
+            center_in_Xprime(0) = -B / A * center_in_Xprime(2);
+            center_in_Xprime(1) = -C / A * center_in_Xprime(2);
+
+            // Safaee-Rad 1992 eq (34)
+            Translation3 T0;
+            T0.translation() << 0, 0, focal_length;
+
+            // Safaee-Rad 1992 eq (42) using (35)
+            Vector3 center = T0*T1*T2*T3*center_in_Xprime;
+
+            // If z is negative (behind the camera), choose the other
+            // solution of eq (41) [maybe there's a way of calculating which
+            // solution should be chosen first]
+
+            if (center(2) < 0) {
+                center_in_Xprime = -center_in_Xprime;
+                center = T0*T1*T2*T3*center_in_Xprime;
+            }
+
+            // Make sure that the gaze vector is toward the camera and is normalised
+            if (gaze.dot(center) > 0) {
+                gaze = -gaze;
+            }
+            gaze.normalize();
+
+            // Save the results
+            solutions[i] = Circle(center, gaze, circle_radius);
         }
         return std::make_pair(solutions[0], solutions[1]);
     }
