@@ -4,9 +4,11 @@
 #include <mutex>
 #include <Eigen/Core>
 // #include <opencv2/core/core.hpp>
-#include <singleeyefitter/Circle.h>
-#include <singleeyefitter/Ellipse.h>
-#include <singleeyefitter/Sphere.h>
+// #include <singleeyefitter/Circle.h>
+// #include <singleeyefitter/Ellipse.h>
+// #include <singleeyefitter/Sphere.h>
+#include <singleeyefitter/Geometry.h>
+
 
 namespace singleeyefitter {
 
