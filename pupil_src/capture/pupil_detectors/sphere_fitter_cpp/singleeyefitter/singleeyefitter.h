@@ -10,37 +10,6 @@
 
 namespace singleeyefitter {
 
-
-    // template<typename Scalar>
-    // inline Eigen::Matrix<Scalar, 2, 1> toEigen(const cv::Point2f& point) {
-    //     return Eigen::Matrix<Scalar, 2, 1>(static_cast<Scalar>(point.x),
-    //         static_cast<Scalar>(point.y));
-    // }
-    // template<typename Scalar>
-    // inline cv::Point2f toPoint2f(const Eigen::Matrix<Scalar, 2, 1>& point) {
-    //     return cv::Point2f(static_cast<float>(point[0]),
-    //         static_cast<float>(point[1]));
-    // }
-    // template<typename Scalar>
-    // inline cv::Point toPoint(const Eigen::Matrix<Scalar, 2, 1>& point) {
-    //     return cv::Point(static_cast<int>(point[0]),
-    //         static_cast<int>(point[1]));
-    // }
-    // template<typename Scalar>
-    // inline cv::RotatedRect toRotatedRect(const Ellipse2D<Scalar>& ellipse) {
-    //     return cv::RotatedRect(toPoint2f(ellipse.centre),
-    //         cv::Size2f(static_cast<float>(2 * ellipse.major_radius),
-    //         static_cast<float>(2 * ellipse.minor_radius)),
-    //         static_cast<float>(ellipse.angle * 180 / PI));
-    // }
-    // template<typename Scalar>
-    // inline Ellipse2D<Scalar> toEllipse(const cv::RotatedRect& rect) {
-    //     return Ellipse2D<Scalar>(toEigen<Scalar>(rect.center),
-    //         static_cast<Scalar>(rect.size.width / 2),
-    //         static_cast<Scalar>(rect.size.height / 2),
-    //         static_cast<Scalar>(rect.angle*PI / 180));
-    // }
-
     class EyeModelFitter {
     public:
         // structures
@@ -52,14 +21,14 @@ namespace singleeyefitter {
         struct Pupil {
             // Observation observation;
             // modifying to have it similar to sphere_fitter/__init__.py
-            Circle circle;
+            singleeyefitter::Ellipse2D<double>ellipse;
+            singleeyefitter::Circle3D<double> circle;
             PupilParams params;
-            bool init_valid;
+            bool init_valid = false;
             Circle[] projected_circles; // is this the right syntax?
             Eigen::ParametrizedLine<Scalar, 2>& line; //self.line
 
-            Pupil();
-            // Pupil(Observation observation);
+            Pupil(Ellipse ellipse,Eigen::Matrix<double, 3, 4> intrinsics);
         };
 
         // Typedefs
@@ -72,38 +41,35 @@ namespace singleeyefitter {
         typedef singleeyefitter::Sphere<double> Sphere;
         typedef size_t Index;
 
-        static const Vector3 camera_centre;
-
         // Public fields
-        double focal_length;
-        // double region_band_width;
-        // double region_step_epsilon;
-        // double region_scale;
+        Eigen::Matrix<double, 3, 4> intrinsics;
+        static const Vector3 camera_center;
+        Sphere eye;
+        Ellipse projected_eye;
+        std::vector<Pupil> pupils;
+        double scale = 1;
+        int model_version = 0; // not exactly used
 
+        Eigen::ParametrizedLine<Scalar, 2>& pupil_gazelines_proj;
+        Eigen::Matrix<double, 2,2> twoDim_A;        
+        Vector2 twoDim_B;
+
+        double count;
 
         // Constructors
         EyeModelFitter();
-        EyeModelFitter(double focal_length, double region_band_width, double region_step_epsilon);
+        EyeModelFitter(Eigen::Matrix<double, 3, 4> intrinsics);
+        EyeModelFitter(double focal_length);
 
         // functions
         Index add_observation(Ellipse pupil);
         Index add_pupil_labs_observation(Ellipse pupil);
         void reset();
-        Circle circleFromParams(const PupilParams& params) const;
+        Circle circleFromParams(PupilParams& params);
         void initialise_model();
-        const Circle& initialise_single_observation(Pupil& pupil);
-        void unproject_observations(double pupil_radius = 1, double eye_z = 20, bool use_ransac = false);
+        Circle& initialise_single_observation(Pupil& pupil);
         void update_model();
-
-        Sphere eye;
-        std::vector<Pupil> pupils;
-        std::mutex model_mutex;
-        // Model version gets incremented on initialisation/reset, so that long-running background-thread refines don't overwrite the model
-        int model_version = 0;
-
-        const Circle& unproject_single_observation(Pupil& pupil, double pupil_radius = 1) const;
-
-        static Circle circleFromParams(const Sphere& eye, const PupilParams& params);
+        void unproject_observations(double eye_z = 20, bool use_ransac = false);
 
         // DON'T NEED OBSERVATION STRUCTURE. see sphere_fitter/__init__.py
         // struct Observation {
@@ -127,7 +93,42 @@ namespace singleeyefitter {
         // double single_contrast_metric(Index id) const;
         // void print_single_contrast_metric(Index id) const;
 
+        // Unused Variables
+        // double region_band_width;
+        // double region_step_epsilon;
+        // double region_scale;
+
     };
+
+        // template<typename Scalar>
+    // inline Eigen::Matrix<Scalar, 2, 1> toEigen(const cv::Point2f& point) {
+    //     return Eigen::Matrix<Scalar, 2, 1>(static_cast<Scalar>(point.x),
+    //         static_cast<Scalar>(point.y));
+    // }
+    // template<typename Scalar>
+    // inline cv::Point2f toPoint2f(const Eigen::Matrix<Scalar, 2, 1>& point) {
+    //     return cv::Point2f(static_cast<float>(point[0]),
+    //         static_cast<float>(point[1]));
+    // }
+    // template<typename Scalar>
+    // inline cv::Point toPoint(const Eigen::Matrix<Scalar, 2, 1>& point) {
+    //     return cv::Point(static_cast<int>(point[0]),
+    //         static_cast<int>(point[1]));
+    // }
+    // template<typename Scalar>
+    // inline cv::RotatedRect toRotatedRect(const Ellipse2D<Scalar>& ellipse) {
+    //     return cv::RotatedRect(toPoint2f(ellipse.center),
+    //         cv::Size2f(static_cast<float>(2 * ellipse.major_radius),
+    //         static_cast<float>(2 * ellipse.minor_radius)),
+    //         static_cast<float>(ellipse.angle * 180 / PI));
+    // }
+    // template<typename Scalar>
+    // inline Ellipse2D<Scalar> toEllipse(const cv::RotatedRect& rect) {
+    //     return Ellipse2D<Scalar>(toEigen<Scalar>(rect.center),
+    //         static_cast<Scalar>(rect.size.width / 2),
+    //         static_cast<Scalar>(rect.size.height / 2),
+    //         static_cast<Scalar>(rect.angle*PI / 180));
+    // }
 
 }
 
