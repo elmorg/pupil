@@ -1047,8 +1047,8 @@ struct PupilAnthroTerm : public spii::Term {
 
 const EyeModelFitter::Vector3 EyeModelFitter::camera_center = EyeModelFitter::Vector3::Zero();
 
-EyeModelFitter::Pupil::Pupil(Ellipse pupil_ellipse, Eigen::Matrix<double, 3, 4> intrinsics) 
-    : ellipse(pupil_ellipse), params(0, 0, 0){}
+EyeModelFitter::Pupil::Pupil() {}
+// EyeModelFitter::Pupil::Pupil(Ellipse pupil_ellipse, Eigen::Matrix<double, 3, 4> intrinsics) : ellipse(pupil_ellipse), params(0, 0, 0) {}
 
 EyeModelFitter::PupilParams::PupilParams(double theta, double psi, double radius) : theta(theta), psi(psi), radius(radius){}
 EyeModelFitter::PupilParams::PupilParams() : theta(0), psi(0), radius(0){}
@@ -1527,29 +1527,9 @@ void singleeyefitter::EyeModelFitter::initialise_model()
     }
 
     model_version++;
-
-    // Try previous circle in case of bad fits
-    /*EllipseGoodnessFunction<double> goodnessFunction;
-    for (int i = 1; i < pupils.size(); ++i) {
-    auto& pupil = pupils[i];
-    auto& prevPupil = pupils[i-1];
-
-    if (prevPupil.circle) {
-    double currentGoodness, prevGoodness;
-    if (pupil.circle) {
-    currentGoodness = goodnessFunction(eye, pupil.params.theta, pupil.params.psi, pupil.params.radius, focal_length, pupil.observation.image);
-    prevGoodness = goodnessFunction(eye, prevPupil.params.theta, prevPupil.params.psi, prevPupil.params.radius, focal_length, pupil.observation.image);
-    }
-
-    if (!pupil.circle || prevGoodness > currentGoodness) {
-    pupil.circle = prevPupil.circle;
-    pupil.params = prevPupil.params;
-    }
-    }
-    }*/
 }
 
-void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius /*= 1*/, double eye_z /*= 20*/, bool use_ransac = false)
+void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius /*= 1*/, double eye_z /*= 20*/, bool use_ransac)
 {
     using math::sq;
 
@@ -1587,17 +1567,12 @@ void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius
         pupil_gazelines_proj.emplace_back(c_proj, v_proj);
     }
 
-
     // Get eyeball center
-    //
     // Find a least-squares 'intersection' (point nearest to all lines) of
     // the projected 2D gaze vectors. Then, unproject that circle onto a
     // point a fixed distance away.
-    //
     // For robustness, use RANSAC to eliminate stray gaze lines
-    //
-    // (This has to be done here because it's used by the pupil circle
-    // disambiguation)
+    // (This has to be done here because it's used by the pupil circle disambiguation)
 
     Vector2 eye_center_proj;
     bool valid_eye;
@@ -1693,7 +1668,6 @@ void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius
         eye.radius = 1;
 
         // Disambiguate pupil circles using projected eyeball center
-        //
         // Assume that the gaze vector points away from the eye center, and
         // so projected gaze points away from projected eye center. Pick the
         // solution which satisfies this assumption

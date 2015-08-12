@@ -54,6 +54,38 @@ namespace singleeyefitter {
         typedef singleeyefitter::Sphere<double> Sphere;
         typedef size_t Index;
 
+        // Variables I use
+        Eigen::Matrix<double, 3, 4> intrinsics;
+        // intrinsics << 1, 0, 0, 0,
+        //             0, -1, 0, 0,
+        //             0, 0, 0, 0; // default argument
+        static const Vector3 camera_center;
+        Sphere eye;
+        Ellipse projected_eye;
+        double scale = 1;
+        std::mutex model_mutex;
+        // Model version gets incremented on initialisation/reset, so that long-running background-thread refines don't overwrite the model
+        int model_version = 0;
+
+        // Nonessential Variables I use
+        // Line pupil_gazelines_proj;
+        Eigen::Matrix<double, 2,2> twoDim_A;        
+        Vector2 twoDim_B;
+        double count;
+
+        // Variables I don't use, but swirski uses
+        double focal_length;
+        double region_band_width;
+        double region_step_epsilon;
+        double region_scale;
+
+        // Constructors
+        EyeModelFitter();
+        EyeModelFitter(double focal_length, double region_band_width, double region_step_epsilon);
+        // EyeModelFitter(Eigen::Matrix<double, 3, 4> intrinsics);
+        // EyeModelFitter(double focal_length);
+        void reset();
+
         // structures
         struct PupilParams {
             double theta, psi, radius;
@@ -68,43 +100,11 @@ namespace singleeyefitter {
             PupilParams params;
             bool init_valid = false;
             std::pair<Circle3D<double>, Circle3D<double>> projected_circles;
-            Eigen::ParametrizedLine<double, 2>& line; //self.line
+            // Line line; //self.line
 
-            Pupil(Ellipse pupil_ellipse,Eigen::Matrix<double, 3, 4> intrinsics);
+            Pupil();
+            // Pupil(Ellipse pupil_ellipse, Eigen::Matrix<double, 3, 4> intrinsics);
         };
-
-        // Variables I use
-        Eigen::Matrix<double, 3, 4> intrinsics;
-        // intrinsics << 1, 0, 0, 0,
-        //             0, -1, 0, 0,
-        //             0, 0, 0, 0; // default argument
-        static const Vector3 camera_center;
-        Sphere eye;
-        Ellipse projected_eye;
-        std::vector<Pupil> pupils;
-        double scale = 1;
-        std::mutex model_mutex;
-        // Model version gets incremented on initialisation/reset, so that long-running background-thread refines don't overwrite the model
-        int model_version = 0;
-
-        // Nonessential Variables I use
-        Eigen::ParametrizedLine<double, 2>& pupil_gazelines_proj;
-        Eigen::Matrix<double, 2,2> twoDim_A;        
-        Vector2 twoDim_B;
-        double count;
-
-        // Variables I don't use, but swirski uses
-        double focal_length;
-        double region_band_width;
-        double region_step_epsilon;
-        double region_scale;
-
-        // Constructors
-        EyeModelFitter();
-        EyeModelFitter(double focal_length, double region_band_width, double region_step_epsilon);
-        EyeModelFitter(Eigen::Matrix<double, 3, 4> intrinsics);
-        EyeModelFitter(double focal_length);
-        void reset();
 
         // Functions I use       
         Index add_observation(Ellipse pupil_ellipse);
@@ -114,6 +114,7 @@ namespace singleeyefitter {
         Circle circleFromParams(const PupilParams& params) const;
         const Circle& initialise_single_observation(Index id);
         const Circle& initialise_single_observation(Pupil& pupil);
+        std::vector<Pupil> pupils;
 
         // functions I don't use
         typedef std::function<void(const Sphere&, const std::vector<Circle>&)> CallbackFunction;

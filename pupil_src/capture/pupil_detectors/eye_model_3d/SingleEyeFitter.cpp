@@ -1049,49 +1049,20 @@ struct PupilAnthroTerm : public spii::Term {
 const EyeModelFitter::Vector3 EyeModelFitter::camera_centre = EyeModelFitter::Vector3::Zero();
 
 
-EyeModelFitter::Pupil::Pupil(Observation observation) : observation(observation), params(0, 0, 0)
-{
+EyeModelFitter::Pupil::Pupil(Observation observation) : observation(observation), params(0, 0, 0){}
+EyeModelFitter::Pupil::Pupil(){}
 
-}
+EyeModelFitter::PupilParams::PupilParams(double theta, double psi, double radius) : theta(theta), psi(psi), radius(radius){}
+EyeModelFitter::PupilParams::PupilParams() : theta(0), psi(0), radius(0){}
 
-EyeModelFitter::Pupil::Pupil()
-{
-
-}
-
-
-EyeModelFitter::PupilParams::PupilParams(double theta, double psi, double radius) : theta(theta), psi(psi), radius(radius)
-{
-
-}
-
-EyeModelFitter::PupilParams::PupilParams() : theta(0), psi(0), radius(0)
-{
+EyeModelFitter::Observation::Observation(cv::Mat image, Ellipse ellipse, std::vector<cv::Point2f> inliers) : image(std::move(image)), ellipse(std::move(ellipse)), inliers(std::move(inliers)){}
+EyeModelFitter::Observation::Observation(){}
 
 }
 
 
-EyeModelFitter::Observation::Observation(cv::Mat image, Ellipse ellipse, std::vector<cv::Point2f> inliers) : image(std::move(image)), ellipse(std::move(ellipse)), inliers(std::move(inliers))
-{
-
-}
-
-EyeModelFitter::Observation::Observation()
-{
-
-}
-
-}
-
-
-singleeyefitter::EyeModelFitter::EyeModelFitter() : region_band_width(5), region_step_epsilon(0.5), region_scale(1)
-{
-
-}
-singleeyefitter::EyeModelFitter::EyeModelFitter(double focal_length, double region_band_width, double region_step_epsilon) : focal_length(focal_length), region_band_width(region_band_width), region_step_epsilon(region_step_epsilon), region_scale(1)
-{
-
-}
+singleeyefitter::EyeModelFitter::EyeModelFitter() : region_band_width(5), region_step_epsilon(0.5), region_scale(1){}
+singleeyefitter::EyeModelFitter::EyeModelFitter(double focal_length, double region_band_width, double region_step_epsilon) : focal_length(focal_length), region_band_width(region_band_width), region_step_epsilon(region_step_epsilon), region_scale(1){}
 
 singleeyefitter::EyeModelFitter::Index singleeyefitter::EyeModelFitter::add_observation(cv::Mat image, Ellipse pupil, int n_pseudo_inliers /*= 0*/)
 {
