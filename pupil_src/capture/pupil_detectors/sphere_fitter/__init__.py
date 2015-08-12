@@ -108,6 +108,7 @@ class Sphere_Fitter():
 		converted_ellipse = geometry.Ellipse.from_ellipse_dict(pupil_ellipse)
 		pupil = Pupil(ellipse = converted_ellipse, intrinsics = self.intrinsics)
 		self.observations.append(pupil)
+		
 		self.pupil_gazelines_proj.append(pupil.line)
 		vi = pupil.line.direction.reshape(2,1) #appending to intersection matrix calculations
 		Ivivi = np.identity(2) - np.dot(vi,vi.T)

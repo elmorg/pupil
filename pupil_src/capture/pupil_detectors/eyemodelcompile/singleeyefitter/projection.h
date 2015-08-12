@@ -102,7 +102,7 @@ namespace singleeyefitter {
     }
 
     template<typename Scalar> // new function, using intrinsics.
-    Conic<Scalar> project_circle_to_ellipse(const Circle3D<Scalar>& circle, Eigen::Matrix<double, 3, 3> intrinsics){
+    Conic<Scalar> project_circle_to_ellipse(const Circle3D<Scalar>& circle, Eigen::Matrix<Scalar, 3, 3> intrinsics){
         typedef typename Circle3D<Scalar>::Vector Vector;
         using math::sq;
 
@@ -145,14 +145,14 @@ namespace singleeyefitter {
     }
 
     template<typename Scalar> //project function with camera intrinsics instead
-    Ellipse2D<Scalar> project(const Sphere<Scalar>& sphere, Eigen::Matrix<double, 3, 3> intrinsics){
+    Ellipse2D<Scalar> project(const Sphere<Scalar>& sphere, Eigen::Matrix<Scalar, 3, 3> intrinsics){
         auto center = project(sphere.center, intrinsics);
         auto radius = abs(sphere.radius/sphere.center[2]*intrinsics(1,1));
         return Ellipse2D<Scalar>(center,radius,radius,0);
     }
 
     template<typename Scalar> // with intrinsics matrix
-    Eigen::Vector2d project_point(Eigen::Vector3d point, Eigen::Matrix<double, 3, 3> intrinsics){
+    Eigen::Vector2d project_point(Eigen::Vector3d point, Eigen::Matrix<Scalar, 3, 3> intrinsics){
         auto x = intrinsics(0,0)*point[0]/point[2] + intrinsics(0,2);
         auto y = intrinsics(1,1)*point[1]/point[2] + intrinsics(1,2);
         Eigen::Vector2d pt = Eigen::Vector2d(x,y); 
@@ -160,7 +160,7 @@ namespace singleeyefitter {
     }
 
     template<typename Scalar> // with intrinsics matrix
-    Eigen::Vector3d unproject_point(Eigen::Vector2d point, Scalar z, Eigen::Matrix<double, 3, 3> intrinsics){
+    Eigen::Vector3d unproject_point(Eigen::Vector2d point, Scalar z, Eigen::Matrix<Scalar, 3, 3> intrinsics){
         auto x = (point[0]-intrinsics(0,2)) * z / intrinsics(0,0);
         auto y = (point[1]-intrinsics(1,2)) * z / intrinsics(1,1);
         Eigen::Vector3d pt = Eigen::Vector3d(x,y,z); 
@@ -176,8 +176,7 @@ namespace singleeyefitter {
     }
 
     template<typename Scalar>
-    std::pair<Circle3D<Scalar>, Circle3D<Scalar>> unproject(const Ellipse2D<Scalar>& ellipse, Scalar circle_radius, Scalar focal_length)
-    {
+    std::pair<Circle3D<Scalar>, Circle3D<Scalar>> unproject(const Ellipse2D<Scalar>& ellipse, Scalar circle_radius, Scalar focal_length){
         using std::sqrt;
         using boost::math::sign;
         using math::sq;
@@ -342,7 +341,7 @@ namespace singleeyefitter {
     }
 
     template<typename Scalar> // with camera matrix intrinsic
-    std::pair<Circle3D<Scalar>, Circle3D<Scalar>> unproject(const Ellipse2D<Scalar>& input_ellipse, Scalar circle_radius, Eigen::Matrix<double, 3, 3> intrinsics){
+    std::pair<Circle3D<Scalar>, Circle3D<Scalar>> unproject_intrinsics(const Ellipse2D<Scalar>& input_ellipse, Scalar circle_radius, Eigen::Matrix<Scalar, 3, 3> intrinsics){
         using std::sqrt;
         using boost::math::sign;
         using math::sq;
@@ -356,10 +355,9 @@ namespace singleeyefitter {
         typedef Eigen::Translation<Scalar, 3> Translation3;
 
         // preprocessing
-        Scalar focal_length = intrinsics(0,0);
-        input_ellipse.center[0] = intrinsics(2,0); // watch out np is col major, eigen is row major
-        input_ellipse.center[1] = intrinsics(2,1) - input_ellipse.center[1]; //our y focal length is negative by convention
-        Ellipse2D<Scalar> offset_ellipse(input_ellipse.center,
+        Eigen::Matrix<Scalar, 2, 1> center(input_ellipse.center[0] - intrinsics(2,0), // watch out np is col major, eigen is row major
+            intrinsics(2,1) - input_ellipse.center[1]); //our y focal length is negative by convention    
+        Ellipse2D<Scalar> offset_ellipse(center, // input_ellipse.center
             input_ellipse.major_radius,
             input_ellipse.minor_radius,
             sign(intrinsics(1,1))*input_ellipse.angle);
@@ -367,7 +365,7 @@ namespace singleeyefitter {
         // Get cone with base of ellipse and vertex at [0 0 -f]
         // Safaee-Rad 1992 eq (3)
         Conic conic(offset_ellipse);
-        Vector3 cam_center_in_ellipse(0, 0, -focal_length);
+        Vector3 cam_center_in_ellipse(0, 0, -intrinsics(0,0));
         Conicoid pupil_cone(conic, cam_center_in_ellipse);
 
         auto a = pupil_cone.A;
@@ -489,7 +487,7 @@ namespace singleeyefitter {
 
             // Safaee-Rad 1992 eq (34)
             Translation3 T0;
-            T0.translation() << 0, 0, focal_length;
+            T0.translation() << 0, 0, intrinsics(0,0);
 
             // Safaee-Rad 1992 eq (42) using (35)
             Vector3 center = T0*T1*T2*T3*center_in_Xprime;

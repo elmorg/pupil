@@ -1044,10 +1044,17 @@ struct PupilAnthroTerm : public spii::Term {
 const EyeModelFitter::Vector3 EyeModelFitter::camera_center = EyeModelFitter::Vector3::Zero();
 
 // EyeModelFitter::Pupil::Pupil(Ellipse ellipse) : ellipse(ellipse), params(0, 0, 0){}
-EyeModelFitter::Pupil::Pupil(Ellipse ellipse) : ellipse(ellipse){
+EyeModelFitter::Pupil::Pupil(Ellipse ellipse, Eigen::Matrix<double,3,3> intrinsics) : ellipse(ellipse){
     params = PupilParams(0,0,0);
-    init_valid = false; // variable of Pupil structure
-    // projected_circles = unproject(ellipse,1, intrinsics); 
+
+    // performance enhancements: to be implemented
+    // projected_circles = unproject_intrinsics(ellipse,1, intrinsics); 
+    // Eigen::Vector3d c = projected_circles.first.center; // or auto, or Vector, idk
+    // Eigen::Vector3d v = projected_circles.first.normal;
+    // Eigen::Vector2d c_proj = project_point(c,intrinsics);
+    // Eigen::Vector2d v_proj = project_point(v+c, intrinsics) - c_proj;
+    // v_proj.normalize();
+    // line = Line2d(c_proj,v_proj);
 
 }
 EyeModelFitter::Pupil::Pupil(){}
@@ -1074,21 +1081,15 @@ singleeyefitter::EyeModelFitter::EyeModelFitter(double focal_length)
     : focal_length(focal_length) {}
 
 
-// singleeyefitter::EyeModelFitter::Index singleeyefitter::EyeModelFitter::add_observation(cv::Mat image, Ellipse pupil, int n_pseudo_inliers /*= 0*/)
-// {
-//     std::vector<cv::Point2f> pupil_inliers;
-//     for (int i = 0; i < n_pseudo_inliers; ++i) {
-//         auto p = pointAlongEllipse(pupil, i * 2 * M_PI / n_pseudo_inliers);
-//         pupil_inliers.emplace_back(static_cast<float>(p[0]), static_cast<float>(p[1]));
-//     }
-//     return add_observation(std::move(image), std::move(pupil), std::move(pupil_inliers));
-// }
-
 singleeyefitter::EyeModelFitter::Index singleeyefitter::EyeModelFitter::add_observation(Ellipse pupil){
-    // assert(image.channels() == 1 && image.depth() == CV_8U);
     std::lock_guard<std::mutex> lock_model(model_mutex);
+    pupils.emplace_back(pupil, intrinsics); // this should call EyeModelFitter::Pupil::Pupil(Ellipse ellipse)
+    return pupils.size() - 1;
+}
 
-    pupils.emplace_back(pupil); // this should call EyeModelFitter::Pupil::Pupil(Ellipse ellipse)
+singleeyefitter::EyeModelFitter::Index singleeyefitter::EyeModelFitter::add_pupil_labs_observation(Ellipse pupil){
+    std::lock_guard<std::mutex> lock_model(model_mutex);
+    pupils.emplace_back(pupil, intrinsics); // this should call EyeModelFitter::Pupil::Pupil(Ellipse ellipse)
     return pupils.size() - 1;
 }
 
@@ -1143,7 +1144,6 @@ const singleeyefitter::EyeModelFitter::Circle& singleeyefitter::EyeModelFitter::
         pupil.params.psi = 0;
         pupil.params.radius = 0;
     }
-
     return pupil.circle;
 }
 
@@ -1160,19 +1160,14 @@ const singleeyefitter::EyeModelFitter::Circle& singleeyefitter::EyeModelFitter::
     }
 
     // Single pupil version of "unproject_observations"
+    auto unprojection_pair = unproject_intrinsics(pupil.ellipse, pupil_radius, intrinsics);
 
-    // auto unprojection_pair = unproject(pupil.observation.ellipse, pupil_radius, focal_length);
-    auto unprojection_pair = unproject(pupil.ellipse, pupil_radius, focal_length);
-
-    const Vector3& c = unprojection_pair.first.center;
-    const Vector3& v = unprojection_pair.first.normal;
-
-    Vector2 c_proj = project(c, focal_length);
-    Vector2 v_proj = project(v + c, focal_length) - c_proj;
-
+    const Eigen::Vector3d c = unprojection_pair.first.center;
+    const Eigen::Vector3d v = unprojection_pair.first.normal;
+    Vector2 c_proj = project_point(c, intrinsics);
+    Vector2 v_proj = project_point(v + c, intrinsics) - c_proj;
     v_proj.normalize();
-
-    Vector2 eye_center_proj = project(eye.center, focal_length);
+    Vector2 eye_center_proj = project_point(eye.center, intrinsics);
 
     if ((c_proj - eye_center_proj).dot(v_proj) >= 0) {
         pupil.circle = std::move(unprojection_pair.first);
@@ -1247,26 +1242,6 @@ void singleeyefitter::EyeModelFitter::initialise_model()
     }
 
     model_version++;
-
-    // Try previous circle in case of bad fits
-    /*EllipseGoodnessFunction<double> goodnessFunction;
-    for (int i = 1; i < pupils.size(); ++i) {
-    auto& pupil = pupils[i];
-    auto& prevPupil = pupils[i-1];
-
-    if (prevPupil.circle) {
-    double currentGoodness, prevGoodness;
-    if (pupil.circle) {
-    currentGoodness = goodnessFunction(eye, pupil.params.theta, pupil.params.psi, pupil.params.radius, focal_length, pupil.observation.image);
-    prevGoodness = goodnessFunction(eye, prevPupil.params.theta, prevPupil.params.psi, prevPupil.params.radius, focal_length, pupil.observation.image);
-    }
-
-    if (!pupil.circle || prevGoodness > currentGoodness) {
-    pupil.circle = prevPupil.circle;
-    pupil.params = prevPupil.params;
-    }
-    }
-    }*/
 }
 
 void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius /*= 1*/, double eye_z /*= 20*/, bool use_ransac /*= true*/)
@@ -1284,15 +1259,13 @@ void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius
 
     for (const auto& pupil : pupils) {
         // Get pupil circles (up to depth)
-        //
         // Do a per-image unprojection of the pupil ellipse into the two fixed
         // size circles that would project onto it. The size of the circles
         // doesn't matter here, only their center and normal does.
-        auto unprojection_pair = unproject(pupil.ellipse,
-            pupil_radius, focal_length);
+        auto unprojection_pair = unproject_intrinsics(pupil.ellipse,
+            pupil_radius, intrinsics);
 
         // Get projected circles and gaze vectors
-        //
         // Project the circle centers and gaze vectors down back onto the image
         // plane. We're only using them as line parametrisations, so it doesn't
         // matter which of the two centers/gaze vectors we use, as the
@@ -1301,8 +1274,8 @@ void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius
         const auto& c = unprojection_pair.first.center;
         const auto& v = unprojection_pair.first.normal;
 
-        Vector2 c_proj = project(c, focal_length);
-        Vector2 v_proj = project(v + c, focal_length) - c_proj;
+        Vector2 c_proj = project_point(c, intrinsics);
+        Vector2 v_proj = project_point(v + c, intrinsics) - c_proj;
 
         v_proj.normalize();
 
@@ -1310,21 +1283,18 @@ void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius
         pupil_gazelines_proj.emplace_back(c_proj, v_proj);
     }
 
-
     // Get eyeball center
-    //
     // Find a least-squares 'intersection' (point nearest to all lines) of
     // the projected 2D gaze vectors. Then, unproject that circle onto a
     // point a fixed distance away.
-    //
     // For robustness, use RANSAC to eliminate stray gaze lines
-    //
     // (This has to be done here because it's used by the pupil circle
     // disambiguation)
 
     Vector2 eye_center_proj;
     bool valid_eye;
 
+    use_ransac = false;
     if (use_ransac) {
         auto indices = fun::range_<std::vector<size_t>>(pupil_gazelines_proj.size());
 
@@ -1411,7 +1381,7 @@ void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius
     }
 
     if (valid_eye) {
-        eye.center << eye_center_proj * eye_z / focal_length,
+        eye.center << eye_center_proj * eye_z / intrinsics(0,0),
             eye_z;
         eye.radius = 1;
 

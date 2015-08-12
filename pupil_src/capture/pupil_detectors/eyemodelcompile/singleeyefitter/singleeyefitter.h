@@ -83,6 +83,7 @@ namespace singleeyefitter {
         // Index add_observation(cv::Mat image, Ellipse pupil, int n_pseudo_inliers = 0);
         // Index add_observation(cv::Mat image, Ellipse pupil, std::vector<cv::Point2f> pupil_inliers);
         Index add_observation(Ellipse pupil);
+        Index add_pupil_labs_observation(Ellipse pupil);
         void reset();
 
         // struct Observation {
@@ -108,7 +109,7 @@ namespace singleeyefitter {
 
             Pupil();
             // Pupil(Observation observation);
-            Pupil(Ellipse ellipse);
+            Pupil(Ellipse ellipse, Eigen::Matrix<double,3,3> intrinsics);
         };
 
         std::vector<Pupil> pupils;
