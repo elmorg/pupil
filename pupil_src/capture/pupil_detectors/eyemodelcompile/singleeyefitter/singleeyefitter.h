@@ -59,6 +59,7 @@ namespace singleeyefitter {
         Eigen::Matrix<double, 3, 3> intrinsics;
         double intrinsicsval;
         Sphere eye;
+        Ellipse projected_eye;
         std::mutex model_mutex;
         // Model version gets incremented on initialisation/reset, so that long-running background-thread refines don't overwrite the model
         int model_version = 0;
@@ -105,7 +106,7 @@ namespace singleeyefitter {
             PupilParams params;
             bool init_valid;
             std::pair<Circle, Circle> projected_circles;
-            // Line line;
+            // Line line = Line((0,0),(0,0));
 
             Pupil();
             // Pupil(Observation observation);
@@ -115,7 +116,7 @@ namespace singleeyefitter {
         std::vector<Pupil> pupils;
 
         // Functions used 
-        void unproject_observations(double pupil_radius = 1, double eye_z = 20, bool use_ransac = true);
+        void unproject_observations(double pupil_radius = 1, double eye_z = 20);
         void initialise_model();
         typedef std::function<void(const Sphere&, const std::vector<Circle>&)> CallbackFunction;
         const Circle& unproject_single_observation(Index id, double pupil_radius = 1);
