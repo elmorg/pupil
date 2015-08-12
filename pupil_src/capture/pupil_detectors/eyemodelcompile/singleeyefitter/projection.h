@@ -20,67 +20,67 @@ namespace singleeyefitter {
         Scalar r = circle.radius;
         Scalar f = focal_length;
 
-    /* NOTES
-        Construct cone with circle as base and vertex v = (0,0,0).
-        
-        For the circle,
-            |p - c|^2 = r^2 where (p-c).n = 0 (i.e. on the circle plane)
-        
-        A cone is basically concentric circles, with center on the line c->v.
-        For any point p, the corresponding circle center c' is the intersection
-        of the line c->v and the plane through p normal to n. So,
-        
-            d = ((p - v).n)/(c.n)
-            c' = d c + v
-        
-        The radius of these circles decreases linearly as you approach 0, so
-        
-            |p - c'|^2 = (r*|c' - v|/|c - v|)^2
-        
-        Since v = (0,0,0), this simplifies to
-        
-            |p - (p.n/c.n)c|^2 = (r*|(p.n/c.n)c|/|c|)^2
-        
-            |(c.n)p - (p.n)c|^2         / p.n \^2
-            ------------------- = r^2 * | --- |
-                  (c.n)^2               \ c.n /
-        
-            |(c.n)p - (p.n)c|^2 - r^2 * (p.n)^2 = 0
-        
-        Expanding out p, c and n gives
-        
-            |(c.n)x - (x*n_x + y*n_y + z*n_z)c_x|^2
-            |(c.n)y - (x*n_x + y*n_y + z*n_z)c_y|   - r^2 * (x*n_x + y*n_y + z*n_z)^2 = 0
-            |(c.n)z - (x*n_x + y*n_y + z*n_z)c_z|
-        
-              ((c.n)x - (x*n_x + y*n_y + z*n_z)c_x)^2
-            + ((c.n)y - (x*n_x + y*n_y + z*n_z)c_y)^2
-            + ((c.n)z - (x*n_x + y*n_y + z*n_z)c_z)^2
-            - r^2 * (x*n_x + y*n_y + z*n_z)^2 = 0
-        
-              (c.n)^2 x^2 - 2*(c.n)*(x*n_x + y*n_y + z*n_z)*x*c_x + (x*n_x + y*n_y + z*n_z)^2 c_x^2
-            + (c.n)^2 y^2 - 2*(c.n)*(x*n_x + y*n_y + z*n_z)*y*c_y + (x*n_x + y*n_y + z*n_z)^2 c_y^2
-            + (c.n)^2 z^2 - 2*(c.n)*(x*n_x + y*n_y + z*n_z)*z*c_z + (x*n_x + y*n_y + z*n_z)^2 c_z^2
-            - r^2 * (x*n_x + y*n_y + z*n_z)^2 = 0
-        
-              (c.n)^2 x^2 - 2*(c.n)*c_x*(x*n_x + y*n_y + z*n_z)*x
-            + (c.n)^2 y^2 - 2*(c.n)*c_y*(x*n_x + y*n_y + z*n_z)*y
-            + (c.n)^2 z^2 - 2*(c.n)*c_z*(x*n_x + y*n_y + z*n_z)*z
-            + (x*n_x + y*n_y + z*n_z)^2 * (c_x^2 + c_y^2 + c_z^2 - r^2)
-        
-              (c.n)^2 x^2 - 2*(c.n)*c_x*(x*n_x + y*n_y + z*n_z)*x
-            + (c.n)^2 y^2 - 2*(c.n)*c_y*(x*n_x + y*n_y + z*n_z)*y
-            + (c.n)^2 z^2 - 2*(c.n)*c_z*(x*n_x + y*n_y + z*n_z)*z
-            + (|c|^2 - r^2) * (n_x^2*x^2 + n_y^2*y^2 + n_z^2*z^2 + 2*n_x*n_y*x*y + 2*n_x*n_z*x*z + 2*n_y*n_z*y*z)
-        
-        Collecting conicoid terms gives
-        
-              [xyz]^2 : (c.n)^2 - 2*(c.n)*c_[xyz]*n_[xyz] + (|c|^2 - r^2)*n_[xyz]^2
-           [yzx][zxy] : - 2*(c.n)*c_[yzx]*n_[zxy] - 2*(c.n)*c_[zxy]*n_[yzx] + (|c|^2 - r^2)*2*n_[yzx]*n_[zxy]
-                      : 2*((|c|^2 - r^2)*n_[yzx]*n_[zxy] - (c,n)*(c_[yzx]*n_[zxy] + c_[zxy]*n_[yzx]))
-                [xyz] : 0
-                    1 : 0 
-    */
+        /* NOTES
+            Construct cone with circle as base and vertex v = (0,0,0).
+            
+            For the circle,
+                |p - c|^2 = r^2 where (p-c).n = 0 (i.e. on the circle plane)
+            
+            A cone is basically concentric circles, with center on the line c->v.
+            For any point p, the corresponding circle center c' is the intersection
+            of the line c->v and the plane through p normal to n. So,
+            
+                d = ((p - v).n)/(c.n)
+                c' = d c + v
+            
+            The radius of these circles decreases linearly as you approach 0, so
+            
+                |p - c'|^2 = (r*|c' - v|/|c - v|)^2
+            
+            Since v = (0,0,0), this simplifies to
+            
+                |p - (p.n/c.n)c|^2 = (r*|(p.n/c.n)c|/|c|)^2
+            
+                |(c.n)p - (p.n)c|^2         / p.n \^2
+                ------------------- = r^2 * | --- |
+                      (c.n)^2               \ c.n /
+            
+                |(c.n)p - (p.n)c|^2 - r^2 * (p.n)^2 = 0
+            
+            Expanding out p, c and n gives
+            
+                |(c.n)x - (x*n_x + y*n_y + z*n_z)c_x|^2
+                |(c.n)y - (x*n_x + y*n_y + z*n_z)c_y|   - r^2 * (x*n_x + y*n_y + z*n_z)^2 = 0
+                |(c.n)z - (x*n_x + y*n_y + z*n_z)c_z|
+            
+                  ((c.n)x - (x*n_x + y*n_y + z*n_z)c_x)^2
+                + ((c.n)y - (x*n_x + y*n_y + z*n_z)c_y)^2
+                + ((c.n)z - (x*n_x + y*n_y + z*n_z)c_z)^2
+                - r^2 * (x*n_x + y*n_y + z*n_z)^2 = 0
+            
+                  (c.n)^2 x^2 - 2*(c.n)*(x*n_x + y*n_y + z*n_z)*x*c_x + (x*n_x + y*n_y + z*n_z)^2 c_x^2
+                + (c.n)^2 y^2 - 2*(c.n)*(x*n_x + y*n_y + z*n_z)*y*c_y + (x*n_x + y*n_y + z*n_z)^2 c_y^2
+                + (c.n)^2 z^2 - 2*(c.n)*(x*n_x + y*n_y + z*n_z)*z*c_z + (x*n_x + y*n_y + z*n_z)^2 c_z^2
+                - r^2 * (x*n_x + y*n_y + z*n_z)^2 = 0
+            
+                  (c.n)^2 x^2 - 2*(c.n)*c_x*(x*n_x + y*n_y + z*n_z)*x
+                + (c.n)^2 y^2 - 2*(c.n)*c_y*(x*n_x + y*n_y + z*n_z)*y
+                + (c.n)^2 z^2 - 2*(c.n)*c_z*(x*n_x + y*n_y + z*n_z)*z
+                + (x*n_x + y*n_y + z*n_z)^2 * (c_x^2 + c_y^2 + c_z^2 - r^2)
+            
+                  (c.n)^2 x^2 - 2*(c.n)*c_x*(x*n_x + y*n_y + z*n_z)*x
+                + (c.n)^2 y^2 - 2*(c.n)*c_y*(x*n_x + y*n_y + z*n_z)*y
+                + (c.n)^2 z^2 - 2*(c.n)*c_z*(x*n_x + y*n_y + z*n_z)*z
+                + (|c|^2 - r^2) * (n_x^2*x^2 + n_y^2*y^2 + n_z^2*z^2 + 2*n_x*n_y*x*y + 2*n_x*n_z*x*z + 2*n_y*n_z*y*z)
+            
+            Collecting conicoid terms gives
+            
+                  [xyz]^2 : (c.n)^2 - 2*(c.n)*c_[xyz]*n_[xyz] + (|c|^2 - r^2)*n_[xyz]^2
+               [yzx][zxy] : - 2*(c.n)*c_[yzx]*n_[zxy] - 2*(c.n)*c_[zxy]*n_[yzx] + (|c|^2 - r^2)*2*n_[yzx]*n_[zxy]
+                          : 2*((|c|^2 - r^2)*n_[yzx]*n_[zxy] - (c,n)*(c_[yzx]*n_[zxy] + c_[zxy]*n_[yzx]))
+                    [xyz] : 0
+                        1 : 0 
+        */
 
         Scalar cn = c.dot(n);
         Scalar c2r2 = (c.dot(c) - sq(r));
@@ -102,7 +102,7 @@ namespace singleeyefitter {
     }
 
     template<typename Scalar> // new function, using intrinsics.
-    Conic<Scalar> project_circle_to_ellipse(const Circle3D<Scalar>& circle, Eigen::Matrix<double, 3, 4> intrinsics){
+    Conic<Scalar> project_circle_to_ellipse(const Circle3D<Scalar>& circle, Eigen::Matrix<double, 3, 3> intrinsics){
         typedef typename Circle3D<Scalar>::Vector Vector;
         using math::sq;
 
@@ -130,7 +130,7 @@ namespace singleeyefitter {
             );
 
         Ellipse2D<Scalar> return_ellipse = Ellipse2D<Scalar>(temp_conic);
-        // return_ellipse.center = [(return_ellipse.center[0] + intrinsics(0,2)),(-return_ellipse.center[1] + intrinsics(1,2))];
+        return_ellipse.center = ((return_ellipse.center[0] + intrinsics(0,2)),(-return_ellipse.center[1] + intrinsics(1,2)));
         return_ellipse.angle = -return_ellipse.angle % boost::math::double_constants::pi; // boost included in ellipse
         return return_ellipse;
     }
@@ -145,25 +145,27 @@ namespace singleeyefitter {
     }
 
     template<typename Scalar> //project function with camera intrinsics instead
-    Ellipse2D<Scalar> project(const Sphere<Scalar>& sphere, Eigen::Matrix<double, 3, 4> intrinsics){
+    Ellipse2D<Scalar> project(const Sphere<Scalar>& sphere, Eigen::Matrix<double, 3, 3> intrinsics){
         auto center = project(sphere.center, intrinsics);
         auto radius = abs(sphere.radius/sphere.center[2]*intrinsics(1,1));
         return Ellipse2D<Scalar>(center,radius,radius,0);
     }
 
-    // template<typename Scalar> // with intrinsics matrix
-    // Eigen::Vector2d project_point(Eigen::Vector3d point, Eigen::Matrix<double, 3, 4> intrinsics){
-    //     auto x = intrinsics(0,0)*point[0]/point[2] + intrinsics(0,2);
-    //     auto y = intrinsics(1,1)*point[1]/point[2] + intrinsics(1,2);
-    //     return Eigen::Vector2d pt(x,y); 
-    // }
+    template<typename Scalar> // with intrinsics matrix
+    Eigen::Vector2d project_point(Eigen::Vector3d point, Eigen::Matrix<double, 3, 3> intrinsics){
+        auto x = intrinsics(0,0)*point[0]/point[2] + intrinsics(0,2);
+        auto y = intrinsics(1,1)*point[1]/point[2] + intrinsics(1,2);
+        Eigen::Vector2d pt = Eigen::Vector2d(x,y); 
+        return pt;
+    }
 
-    // template<typename Scalar> // with intrinsics matrix
-    // Eigen::Vector3d unproject_point(Eigen::Vector2d point, Scalar z, Eigen::Matrix<double, 3, 4> intrinsics){
-    //     auto x = (point[0]-intrinsics(0,2)) * z / intrinsics(0,0);
-    //     auto y = (point[1]-intrinsics(1,2)) * z / intrinsics(1,1);
-    //     return Eigen::Vector3d pt(x,y,z); 
-    // }    
+    template<typename Scalar> // with intrinsics matrix
+    Eigen::Vector3d unproject_point(Eigen::Vector2d point, Scalar z, Eigen::Matrix<double, 3, 3> intrinsics){
+        auto x = (point[0]-intrinsics(0,2)) * z / intrinsics(0,0);
+        auto y = (point[1]-intrinsics(1,2)) * z / intrinsics(1,1);
+        Eigen::Vector3d pt = Eigen::Vector3d(x,y,z); 
+        return pt;
+    }    
 
     template<typename Derived>
     typename Eigen::DenseBase<Derived>::template FixedSegmentReturnType<2>::Type::PlainObject project(const Eigen::DenseBase<Derived>& point, typename Eigen::DenseBase<Derived>::Scalar focal_length)
@@ -340,7 +342,7 @@ namespace singleeyefitter {
     }
 
     template<typename Scalar> // with camera matrix intrinsic
-    std::pair<Circle3D<Scalar>, Circle3D<Scalar>> unproject(const Ellipse2D<Scalar>& input_ellipse, Scalar circle_radius, Eigen::Matrix<double, 3, 4> intrinsics){
+    std::pair<Circle3D<Scalar>, Circle3D<Scalar>> unproject(const Ellipse2D<Scalar>& input_ellipse, Scalar circle_radius, Eigen::Matrix<double, 3, 3> intrinsics){
         using std::sqrt;
         using boost::math::sign;
         using math::sq;

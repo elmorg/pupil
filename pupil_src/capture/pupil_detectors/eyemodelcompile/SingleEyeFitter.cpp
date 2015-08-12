@@ -1044,9 +1044,11 @@ struct PupilAnthroTerm : public spii::Term {
 const EyeModelFitter::Vector3 EyeModelFitter::camera_center = EyeModelFitter::Vector3::Zero();
 
 // EyeModelFitter::Pupil::Pupil(Ellipse ellipse) : ellipse(ellipse), params(0, 0, 0){}
-EyeModelFitter::Pupil::Pupil(Ellipse ellipse){
-    ellipse = ellipse; // does this actually work?
+EyeModelFitter::Pupil::Pupil(Ellipse ellipse) : ellipse(ellipse){
     params = PupilParams(0,0,0);
+    init_valid = false; // variable of Pupil structure
+    // projected_circles = unproject(ellipse,1, intrinsics); 
+
 }
 EyeModelFitter::Pupil::Pupil(){}
 
