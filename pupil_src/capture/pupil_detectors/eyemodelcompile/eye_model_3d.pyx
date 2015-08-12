@@ -7,6 +7,8 @@ cdef extern from "singleeyefitter/singleeyefitter.h" namespace "singleeyefitter"
         void reset()
         void initialise_model()
 
+        float model_version
+        float intrinsicsval # can delete later, for testing purpose
 
 cdef class PyEyeModelFitter:
     cdef EyeModelFitter *thisptr
@@ -25,5 +27,14 @@ cdef class PyEyeModelFitter:
 
     def initialise_model(self):
         self.thisptr.initialise_model()
+
+    property model_version:
+        def __get__(self):
+            return self.thisptr.model_version
+
+    property intrinsicsval: #can delete later, for testing purpose
+        def __get__(self):
+            return self.thisptr.intrinsicsval
+
 
 

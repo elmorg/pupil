@@ -56,7 +56,8 @@ namespace singleeyefitter {
 
         // Variables I use
         static const Vector3 camera_center;
-        Eigen::Matrix<double, 3, 4> intrinsics;
+        Eigen::Matrix<double, 3, 3> intrinsics;
+        double intrinsicsval;
         Sphere eye;
         std::mutex model_mutex;
         // Model version gets incremented on initialisation/reset, so that long-running background-thread refines don't overwrite the model
@@ -70,9 +71,9 @@ namespace singleeyefitter {
 
         // Variables I don't use, but swirski uses
         double focal_length;
-        double region_band_width;
-        double region_step_epsilon;
-        double region_scale;
+        // double region_band_width;
+        // double region_step_epsilon;
+        // double region_scale;
 
         // Constructors
         EyeModelFitter();
