@@ -1043,7 +1043,6 @@ struct PupilAnthroTerm : public spii::Term {
 
 const EyeModelFitter::Vector3 EyeModelFitter::camera_center = EyeModelFitter::Vector3::Zero();
 
-
 EyeModelFitter::Pupil::Pupil(Ellipse ellipse) : ellipse(ellipse), params(0, 0, 0){}
 EyeModelFitter::Pupil::Pupil(){}
 
@@ -1055,8 +1054,15 @@ EyeModelFitter::PupilParams::PupilParams() : theta(0), psi(0), radius(0){}
 
 }
 
-singleeyefitter::EyeModelFitter::EyeModelFitter() : region_band_width(5), region_step_epsilon(0.5), region_scale(1){}
-singleeyefitter::EyeModelFitter::EyeModelFitter(double focal_length, double region_band_width, double region_step_epsilon) : focal_length(focal_length), region_band_width(region_band_width), region_step_epsilon(region_step_epsilon), region_scale(1){}
+singleeyefitter::EyeModelFitter::EyeModelFitter() 
+    : region_band_width(5), region_step_epsilon(0.5), region_scale(1){}
+// singleeyefitter::EyeModelFitter::EyeModelFitter(double focal_length, double region_band_width, double region_step_epsilon) 
+//     : focal_length(focal_length), region_band_width(region_band_width), region_step_epsilon(region_step_epsilon), region_scale(1){}
+singleeyefitter::EyeModelFitter::EyeModelFitter(double focal_length, double x_disp, double y_disp)
+    : focal_length(focal_length) {}
+singleeyefitter::EyeModelFitter::EyeModelFitter(double focal_length) 
+    : focal_length(focal_length) {}
+
 
 // singleeyefitter::EyeModelFitter::Index singleeyefitter::EyeModelFitter::add_observation(cv::Mat image, Ellipse pupil, int n_pseudo_inliers /*= 0*/)
 // {
@@ -1068,8 +1074,7 @@ singleeyefitter::EyeModelFitter::EyeModelFitter(double focal_length, double regi
 //     return add_observation(std::move(image), std::move(pupil), std::move(pupil_inliers));
 // }
 
-singleeyefitter::EyeModelFitter::Index singleeyefitter::EyeModelFitter::add_observation(Ellipse pupil)
-{
+singleeyefitter::EyeModelFitter::Index singleeyefitter::EyeModelFitter::add_observation(Ellipse pupil){
     // assert(image.channels() == 1 && image.depth() == CV_8U);
     std::lock_guard<std::mutex> lock_model(model_mutex);
 
@@ -1077,16 +1082,14 @@ singleeyefitter::EyeModelFitter::Index singleeyefitter::EyeModelFitter::add_obse
     return pupils.size() - 1;
 }
 
-void EyeModelFitter::reset()
-{
+void EyeModelFitter::reset(){
     std::lock_guard<std::mutex> lock_model(model_mutex);
     pupils.clear();
     eye = Sphere::Null;
     model_version++;
 }
 
-singleeyefitter::EyeModelFitter::Circle singleeyefitter::EyeModelFitter::circleFromParams(const Sphere& eye, const PupilParams& params)
-{
+singleeyefitter::EyeModelFitter::Circle singleeyefitter::EyeModelFitter::circleFromParams(const Sphere& eye, const PupilParams& params){
     if (params.radius == 0)
         return Circle::Null;
 
@@ -1096,8 +1099,7 @@ singleeyefitter::EyeModelFitter::Circle singleeyefitter::EyeModelFitter::circleF
         params.radius);
 }
 
-singleeyefitter::EyeModelFitter::Circle singleeyefitter::EyeModelFitter::circleFromParams(const PupilParams& params) const
-{
+singleeyefitter::EyeModelFitter::Circle singleeyefitter::EyeModelFitter::circleFromParams(const PupilParams& params) const{
     return circleFromParams(eye, params);
 }
 
