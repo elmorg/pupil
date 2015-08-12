@@ -1060,13 +1060,14 @@ EyeModelFitter::PupilParams::PupilParams() : theta(0), psi(0), radius(0){}
 // singleeyefitter::EyeModelFitter::EyeModelFitter(double focal_length, double region_band_width, double region_step_epsilon) 
 //     : focal_length(focal_length), region_band_width(region_band_width), region_step_epsilon(region_step_epsilon), region_scale(1){}
 singleeyefitter::EyeModelFitter::EyeModelFitter() {}
-singleeyefitter::EyeModelFitter::EyeModelFitter(double focal_length, double x_disp, double y_disp){
-    intrinsics(0,0) = focal_length;
+singleeyefitter::EyeModelFitter::EyeModelFitter(double focal_length, double x_disp, double y_disp)
+    : focal_length(focal_length) { // keeping this line in for backwards compatibility.
+    intrinsics(0,0) = focal_length; // setting the intrinsics value
     intrinsics(1,1) = -focal_length;
     intrinsics(0,2) = x_disp;
     intrinsics(1,2) = y_disp;
-    intrinsicsval = intrinsics(1,2) + intrinsics(0,2);
-} // incorrect right now, will implement backend
+    intrinsicsval = intrinsics(1,2) + intrinsics(0,2); // for testing purposes, may remove later
+} 
 singleeyefitter::EyeModelFitter::EyeModelFitter(double focal_length) 
     : focal_length(focal_length) {}
 

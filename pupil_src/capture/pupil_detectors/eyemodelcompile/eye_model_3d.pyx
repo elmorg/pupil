@@ -9,6 +9,7 @@ cdef extern from "singleeyefitter/singleeyefitter.h" namespace "singleeyefitter"
 
         float model_version
         float intrinsicsval # can delete later, for testing purpose
+        float focal_length
 
 cdef class PyEyeModelFitter:
     cdef EyeModelFitter *thisptr
@@ -31,6 +32,10 @@ cdef class PyEyeModelFitter:
     property model_version:
         def __get__(self):
             return self.thisptr.model_version
+
+    property focal_length:
+        def __get__(self):
+            return self.thisptr.focal_length
 
     property intrinsicsval: #can delete later, for testing purpose
         def __get__(self):
