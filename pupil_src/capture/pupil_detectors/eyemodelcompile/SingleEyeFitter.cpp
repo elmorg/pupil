@@ -202,14 +202,13 @@ EyeModelFitter::Pupil::Pupil(Ellipse ellipse, Eigen::Matrix<double,3,3> intrinsi
     params = PupilParams(0,0,0);
 
     // performance enhancements: to be implemented
-    projected_circles = unproject_intrinsics(ellipse, 1.0, intrinsics); //force radius to be double.
-    Eigen::Vector3d c = projected_circles.first.center; // or auto, or Vector, idk
-    Eigen::Vector3d v = projected_circles.first.normal;
-    Eigen::Vector2d c_proj = project_point(c,intrinsics);
-    Eigen::Vector2d v_proj = project_point(v+c, intrinsics) - c_proj;
-    // v_proj.normalize();
-    // line = Line2d(c_proj,v_proj);
-
+    projected_circles = unproject_intrinsics(ellipse, 1.0, intrinsics); //getting pupil circles, force radius to be double.
+    Vector3 c = projected_circles.first.center; // get projected circles, gaze vectors
+    Vector3 v = projected_circles.first.normal;
+    Vector2 c_proj = project_point(c,intrinsics);
+    Vector2 v_proj = project_point(v+c, intrinsics) - c_proj;
+    v_proj.normalize();
+    line = Line(c_proj,v_proj);
 }
 EyeModelFitter::Pupil::Pupil(){}
 
@@ -219,22 +218,25 @@ EyeModelFitter::PupilParams::PupilParams() : theta(0), psi(0), radius(0){}
 }
 
 singleeyefitter::EyeModelFitter::EyeModelFitter() {}
-singleeyefitter::EyeModelFitter::EyeModelFitter(double focal_length, double x_disp, double y_disp)
-    : focal_length(focal_length) { // keeping this line in for backwards compatibility.
+singleeyefitter::EyeModelFitter::EyeModelFitter(double focal_length, double x_disp, double y_disp){
     intrinsics(0,0) = focal_length; // setting the intrinsics value
     intrinsics(1,1) = -focal_length;
     intrinsics(0,2) = x_disp;
     intrinsics(1,2) = y_disp;
     intrinsicsval = intrinsics(1,2) + intrinsics(0,2); // for testing purposes, may remove later
 } 
-singleeyefitter::EyeModelFitter::EyeModelFitter(double focal_length) 
-    : focal_length(focal_length) {}
+singleeyefitter::EyeModelFitter::EyeModelFitter(double focal_length) {
+    intrinsics(0,0) = focal_length;
+    intrinsics(1,1) = -focal_length;
+}
 
-
-singleeyefitter::EyeModelFitter::Index singleeyefitter::EyeModelFitter::add_observation(Ellipse pupil){
+void singleeyefitter::EyeModelFitter::add_observation(
+    double center_x, double center_y, double major_radius, double minor_radius, double angle){
     std::lock_guard<std::mutex> lock_model(model_mutex);
+    Vector2 center(center_x,center_y);
+    Ellipse pupil(center, major_radius, minor_radius, angle);
     pupils.emplace_back(pupil, intrinsics); // this should call EyeModelFitter::Pupil::Pupil(Ellipse ellipse)
-    return pupils.size() - 1;
+    // return pupils.size() - 1;
 }
 
 singleeyefitter::EyeModelFitter::Index singleeyefitter::EyeModelFitter::add_pupil_labs_observation(Ellipse pupil){
@@ -248,6 +250,10 @@ void EyeModelFitter::reset(){
     pupils.clear();
     eye = Sphere::Null;
     model_version++;
+}
+
+double singleeyefitter::EyeModelFitter::get_eye(){
+    return eye.center[0];
 }
 
 singleeyefitter::EyeModelFitter::Circle singleeyefitter::EyeModelFitter::circleFromParams(const Sphere& eye, const PupilParams& params){

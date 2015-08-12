@@ -4,11 +4,14 @@ if __name__ == '__main__':
 print "BUILD COMPLETE ______________________"
 
 import eye_model_3d
-model = eye_model_3d.PyEyeModelFitter(focal_length=20, x_disp = 10, y_disp = 101)
-print model
-# testing
-# print model.model_version
-print model.intrinsicsval
-print model.focal_length
 
-model.reset()
+############# TESTING MODEL ##################
+model = eye_model_3d.PyEyeModelFitter(focal_length=100, x_disp = 50, y_disp = 80)
+print model
+print model.intrinsicsval
+
+model.add_observation(20,20,5,3,1)
+model.add_observation(40,20,5,2,1)
+model.unproject_observations()
+model.initialise_model()
+print model.get_eye_model()
