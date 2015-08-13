@@ -85,7 +85,10 @@ namespace singleeyefitter {
         void add_observation(double center_x, double center_y, double major_radius, double minor_radius, double angle);
         Index add_pupil_labs_observation(Ellipse pupil);
         void reset();
-        double get_eye();
+
+        //printing functions
+        void print_eye();
+        void print_ellipse(Index id);
 
         struct PupilParams {
             double theta, psi, radius;

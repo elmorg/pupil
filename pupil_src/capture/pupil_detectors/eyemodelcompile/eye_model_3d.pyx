@@ -8,7 +8,8 @@ cdef extern from "singleeyefitter/singleeyefitter.h" namespace "singleeyefitter"
         void initialise_model()
         void unproject_observations(double pupil_radius, double eye_z )
         void add_observation(double center_x,double center_y, double major_radius, double minor_radius, double angle)
-        double get_eye()
+        void print_eye()
+        void print_ellipse(size_t id)
 
         float model_version
         float intrinsicsval # can delete later, for testing purpose
@@ -37,8 +38,12 @@ cdef class PyEyeModelFitter:
     def add_observation(self,center_x, center_y,major_radius,minor_radius,angle):
         self.thisptr.add_observation(center_x, center_y,major_radius,minor_radius,angle)
 
-    def get_eye_model(self):
-        return self.thisptr.get_eye()
+    def print_eye(self):
+        self.thisptr.print_eye()
+        # return temp[0],temp[1],temp[2], temp[3]
+
+    def print_ellipse(self,index):
+        self.thisptr.print_ellipse(index)
 
     property model_version:
         def __get__(self):

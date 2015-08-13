@@ -252,8 +252,19 @@ void EyeModelFitter::reset(){
     model_version++;
 }
 
-double singleeyefitter::EyeModelFitter::get_eye(){
-    return eye.center[0];
+void  singleeyefitter::EyeModelFitter::print_eye(){
+    std::cout << eye << std::endl;
+    // std::vector<double> eye_variables;
+    // eye_variables.push_back(eye.center[0]);
+    // eye_variables.push_back(eye.center[1]);
+    // eye_variables.push_back(eye.center[2]);
+    // eye_variables.push_back(eye.radius);
+    // double* toreturn = &eye_variables[0];
+    // return toreturn;
+}
+
+void singleeyefitter::EyeModelFitter::print_ellipse(Index id){
+    std::cout << pupils[id].ellipse << std::endl;
 }
 
 singleeyefitter::EyeModelFitter::Circle singleeyefitter::EyeModelFitter::circleFromParams(const Sphere& eye, const PupilParams& params){
@@ -413,6 +424,8 @@ void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius
     std::vector<std::pair<Circle, Circle>> pupil_unprojection_pairs;
     std::vector<Line> pupil_gazelines_proj;
 
+    std::cout << intrinsics << std::endl;
+
     for (const auto& pupil : pupils) {
         // Get pupil circles (up to depth)
         // Do a per-image unprojection of the pupil ellipse into the two fixed
@@ -427,6 +440,8 @@ void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius
         // two gazes are parallel and the centers are co-linear.
         const auto& c = unprojection_pair.first.center;
         const auto& v = unprojection_pair.first.normal;
+        std::cout << "c " << c << std::endl;
+        std::cout << "v " << v << std::endl;
 
         Vector2 c_proj = project_point(c, intrinsics);
         Vector2 v_proj = project_point(v + c, intrinsics) - c_proj;

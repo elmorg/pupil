@@ -261,10 +261,15 @@ if __name__ == '__main__':
 	#testing stuff
 	# intrinsics = np.matrix('879.193 0 320; 0 -879.193 240; 0 0 1')
 	intrinsics = np.matrix('100 0 50; 0 -100 80; 0 0 1')
+	# intrinsics = np.matrix('100 0 0; 0 -100 0; 50 80 1')
 	huding = Sphere_Fitter(intrinsics = intrinsics)
 
 	huding.add_observation(geometry.Ellipse([20,20],5,3,1))
 	huding.add_observation(geometry.Ellipse([40,20],5,2,1))
+	print huding.intrinsics
+	print huding.observations[0].ellipse
+	print huding.observations[1].ellipse
+	huding.unproject_observations() #Sphere(center = [ 29.78174904  40.23627353  20.], radius = 1)
 	# after unproject & initialize, should be 
 	# Sphere(center = [ 6.46494922  8.73439181  4.34155107], radius = 12.0)
 
@@ -291,7 +296,7 @@ if __name__ == '__main__':
 	# huding.add_observation(ellipse9)
 	# huding.add_observation(ellipse10)
 
-	huding.unproject_observations()
-	huding.initialize_model()
+	# huding.unproject_observations()
+	# huding.initialize_model()
 	# print huding.observations[-1]
 	print huding.eye #Sphere {center: [ -3.02103998  -4.64862274  49.54492648] radius: 12.0}

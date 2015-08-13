@@ -164,7 +164,6 @@ class Ellipse:
         self.minor_radius = minor_radius
         self.angle = angle%np.pi
 
-
     @classmethod
     def from_ellipse_dict(cls, e_dict):
         center = np.asarray(e_dict['center'])
