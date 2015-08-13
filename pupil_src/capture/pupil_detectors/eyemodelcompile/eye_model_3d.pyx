@@ -14,13 +14,15 @@ cdef extern from "singleeyefitter/singleeyefitter.h" namespace "singleeyefitter"
 
 cdef class PyEyeModelFitter:
     cdef EyeModelFitter *thisptr
+    cdef public int counter
     # def __cinit__(self, focal_length):
     #     self.thisptr = new EyeModelFitter(focal_length)
     def __cinit__(self, focal_length, x_disp, y_disp):
         self.thisptr = new EyeModelFitter(focal_length, x_disp, y_disp)
 
     def __init__(self,focal_length, x_disp, y_disp):
-        pass
+        self.counter = 0
+
     def __dealloc__(self):
         del self.thisptr
 
@@ -33,8 +35,33 @@ cdef class PyEyeModelFitter:
     def unproject_observations(self, pupil_radius = 1, eye_z = 20):
         self.thisptr.unproject_observations(pupil_radius,eye_z)
 
-    def add_observation(self,center_x, center_y,major_radius,minor_radius,angle):
-        self.thisptr.add_observation(center_x, center_y,major_radius,minor_radius,angle)
+    def update_model(self, pupil_radius = 1, eye_z = 20):
+        # this function runs unproject_observations and initialise_model, and prints
+        # the eye model once every 30 iterations.
+        if self.counter >= 30:
+            self.counter = 0
+            self.thisptr.print_eye()
+        self.counter += 1
+        self.thisptr.unproject_observations(pupil_radius,eye_z)
+        self.thisptr.initialise_model()
+
+    def add_observation(self,center,major_radius,minor_radius,angle):
+        #standard way of adding an observation
+        self.thisptr.add_observation(center[0], center[1],major_radius,minor_radius,angle)
+
+    def add_pupil_labs_observation(self,e_dict):
+        # a special method for taking in arguments from eye.py
+        a,b = e_dict['axes']
+        a,b = e_dict['axes']
+        if a > b:
+            major_radius = a/2
+            minor_radius = b/2
+            angle = e_dict['angle']*3.1415926535/180
+        else:
+            major_radius = b/2
+            minor_radius = a/2
+            angle = (e_dict['angle']+90)*3.1415926535/180 # not importing np just for pi constant
+        self.thisptr.add_observation(e_dict['center'][0],e_dict['center'][1],major_radius,minor_radius,angle)
 
     def print_eye(self):
         self.thisptr.print_eye()
@@ -42,6 +69,9 @@ cdef class PyEyeModelFitter:
 
     def print_ellipse(self,index):
         self.thisptr.print_ellipse(index)
+
+    def get_ellipse(self,index):
+        pass
 
     property model_version:
         def __get__(self):

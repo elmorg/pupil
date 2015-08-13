@@ -7,7 +7,6 @@
  License details are in the file license.txt, distributed as part of this software.
 ----------------------------------------------------------------------------------~(*)
 '''
-
 import sys, os, platform
 from ctypes import c_bool, c_double
 
@@ -35,7 +34,6 @@ else:
         #compile all cython source files
         from pyx_compiler import build_extensions
         build_extensions()
-
 
 # create folder for user settings, tmp data
 if not os.path.isdir(user_dir):

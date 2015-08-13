@@ -235,12 +235,14 @@ void singleeyefitter::EyeModelFitter::add_observation( // factoring in can't fee
     Vector2 center(center_x,center_y);
     Ellipse pupil(center, major_radius, minor_radius, angle);
     pupils.emplace_back(pupil, intrinsics); // this should call EyeModelFitter::Pupil::Pupil(Ellipse ellipse)
-
+    // optimization
     pupil_gazelines_projection.push_back(pupils[pupils.size()-1].line);
-    // auto vi = line.direction();
-    // Matrix Ivivi = Matrix::Identity() - vi * vi.transpose();
-    // twoDim_A += Ivivi;
-    // twoDim_B += 
+    auto vi = pupils[pupils.size()-1].line.direction();
+    auto pi = pupils[pupils.size()-1].line.origin();
+    Eigen::Matrix2d Ivivi = Eigen::Matrix2d::Identity() - vi * vi.transpose();
+    twoDim_A += Ivivi;
+    twoDim_B += (Ivivi * pi);
+    // pupils[pupils.size()-1].line.clear(); // don't need it anymore, though code doesn't currently work
 }
 
 singleeyefitter::EyeModelFitter::Index singleeyefitter::EyeModelFitter::add_pupil_labs_observation(Ellipse pupil){
@@ -300,7 +302,8 @@ const singleeyefitter::EyeModelFitter::Circle& singleeyefitter::EyeModelFitter::
         pupil.params.radius = new_pupil_radius;
 
         // Update pupil circle to match parameters
-        pupil.circle = circleFromParams(pupil.params);
+        // pupil.circle = circleFromParams(pupil.params); 
+        // skip this line since in initialize model, will recreate pupil.circle
     }
     catch (no_intersection_exception&) {
         pupil.circle = Circle::Null;
@@ -419,19 +422,13 @@ void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius
     // Find a least-squares 'intersection' (point nearest to all lines) of
     // the projected 2D gaze vectors. Then, unproject that circle onto a
     // point a fixed distance away.
-    // For robustness, use RANSAC to eliminate stray gaze lines
-    // (This has to be done here because it's used by the pupil circle
-    // disambiguation)
-    Vector2 eye_center_proj = nearest_intersect(pupil_gazelines_projection);
-
+    Vector2 eye_center_proj = twoDim_A.partialPivLu().solve(twoDim_B);
+    // Vector2 eye_center_proj = nearest_intersect(pupil_gazelines_projection);
     eye.center = unproject_point(eye_center_proj,eye_z, intrinsics);
     eye.radius = 1;
     projected_eye = project_sphere(eye,intrinsics); //projection.h function
 
     // Disambiguate pupil circles using projected eyeball center
-    // Assume that the gaze vector points away from the eye center, and
-    // so projected gaze points away from projected eye center. Pick the
-    // solution which satisfies this assumption
     for (size_t i = 0; i < pupils.size(); ++i) {
         const auto& c_proj = pupil_gazelines_projection[i].origin(); // pupil_gazelines_proj is line
         const auto& v_proj = pupil_gazelines_projection[i].direction();
