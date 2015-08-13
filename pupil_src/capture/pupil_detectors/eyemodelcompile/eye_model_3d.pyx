@@ -1,7 +1,6 @@
 
 cdef extern from "singleeyefitter/singleeyefitter.h" namespace "singleeyefitter":
     cdef cppclass EyeModelFitter:
-        # EyeModelFitter(double focal_length, double region_band_width, double region_step_epsilon)
         EyeModelFitter(double focal_length, double x_disp, double y_disp)
         # EyeModelFitter(double focal_length)
         void reset()
@@ -12,7 +11,6 @@ cdef extern from "singleeyefitter/singleeyefitter.h" namespace "singleeyefitter"
         void print_ellipse(size_t id)
 
         float model_version
-        float intrinsicsval # can delete later, for testing purpose
 
 cdef class PyEyeModelFitter:
     cdef EyeModelFitter *thisptr
@@ -48,11 +46,6 @@ cdef class PyEyeModelFitter:
     property model_version:
         def __get__(self):
             return self.thisptr.model_version
-
-    property intrinsicsval: #can delete later, for testing purpose
-        def __get__(self):
-            return self.thisptr.intrinsicsval
-
 
 
 

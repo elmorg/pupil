@@ -58,7 +58,6 @@ namespace singleeyefitter {
         // Variables I use
         static const Vector3 camera_center;
         Eigen::Matrix<double, 3, 3> intrinsics;
-        double intrinsicsval;
         Sphere eye;
         Ellipse projected_eye;
         std::mutex model_mutex;
@@ -66,7 +65,7 @@ namespace singleeyefitter {
         int model_version = 0;
 
         // Nonessential Variables I use
-        Line pupil_gazelines_proj; // giving an error but will need to add in at some point
+        std::vector<Line> pupil_gazelines_projection; // giving an error but will need to add in at some point
         Eigen::Matrix<double, 2,2> twoDim_A;        
         Vector2 twoDim_B;
         double count;

@@ -56,7 +56,7 @@ class Pupil(): #data structure for a pupil
 		c_proj = geometry.project_point(c,intrinsics)
 		v_proj = geometry.project_point(v + c, intrinsics) - c_proj
 		v_proj = v_proj/np.linalg.norm(v_proj) #normalizing
-		self.line = geometry.Line2D(c_proj, v_proj) #append this to self.pupil_gazeline_proj
+		self.line = geometry.Line2D(c_proj, v_proj) #append this to self.pupil_gazeline_proj, will delete later
 
 	def __str__(self):
 		return "Pupil Class: %s %s %s "%(self.ellipse,self.circle,self.params)
@@ -102,18 +102,19 @@ class Sphere_Fitter():
 		Ivivi = np.identity(2) - np.dot(vi,vi.T)
 		self.twoDim_A += Ivivi
 		self.twoDim_B += np.dot(pupil.line.origin,Ivivi)
+		self.line = None #deallocate
 
 
 	def add_pupil_labs_observation(self,pupil_ellipse):
 		converted_ellipse = geometry.Ellipse.from_ellipse_dict(pupil_ellipse)
 		pupil = Pupil(ellipse = converted_ellipse, intrinsics = self.intrinsics)
 		self.observations.append(pupil)
-
 		self.pupil_gazelines_proj.append(pupil.line)
 		vi = pupil.line.direction.reshape(2,1) #appending to intersection matrix calculations
 		Ivivi = np.identity(2) - np.dot(vi,vi.T)
 		self.twoDim_A += Ivivi
 		self.twoDim_B += np.dot(pupil.line.origin,Ivivi)
+		self.line = None #deallocate
 
 	def reset(self):
 		self.observations = []
@@ -270,7 +271,8 @@ if __name__ == '__main__':
 	print huding.observations[0].ellipse
 	print huding.observations[1].ellipse
 	huding.unproject_observations() #Sphere(center = [ 29.78174904  40.23627353  20.], radius = 1)
-	# after unproject & initialize, should be 
+	huding.initialize_model()
+	# after unproject & initialize, should be
 	# Sphere(center = [ 6.46494922  8.73439181  4.34155107], radius = 12.0)
 
 	#testing unproject_observation, with data suitable for camera intrinsics

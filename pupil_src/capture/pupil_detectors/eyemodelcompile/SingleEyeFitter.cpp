@@ -209,6 +209,7 @@ EyeModelFitter::Pupil::Pupil(Ellipse ellipse, Eigen::Matrix<double,3,3> intrinsi
     Vector2 v_proj = project_point(v+c, intrinsics) - c_proj;
     v_proj.normalize();
     line = Line(c_proj,v_proj);
+    // return Line(c_proj, v_proj); // I wish I could return
 }
 EyeModelFitter::Pupil::Pupil(){}
 
@@ -221,22 +222,26 @@ singleeyefitter::EyeModelFitter::EyeModelFitter() {}
 singleeyefitter::EyeModelFitter::EyeModelFitter(double focal_length, double x_disp, double y_disp){
     intrinsics(0,0) = focal_length; // setting the intrinsics value
     intrinsics(1,1) = -focal_length;
-    intrinsics(0,2) = x_disp;
-    intrinsics(1,2) = y_disp;
-    intrinsicsval = intrinsics(1,2) + intrinsics(0,2); // for testing purposes, may remove later
+    intrinsics(2,0) = x_disp; //should be 0,2 technically, but 
+    intrinsics(2,1) = y_disp; //should be 1,2
 } 
 singleeyefitter::EyeModelFitter::EyeModelFitter(double focal_length) {
     intrinsics(0,0) = focal_length;
     intrinsics(1,1) = -focal_length;
 }
 
-void singleeyefitter::EyeModelFitter::add_observation(
+void singleeyefitter::EyeModelFitter::add_observation( // factoring in can't feed in ellipse from python
     double center_x, double center_y, double major_radius, double minor_radius, double angle){
     std::lock_guard<std::mutex> lock_model(model_mutex);
     Vector2 center(center_x,center_y);
     Ellipse pupil(center, major_radius, minor_radius, angle);
     pupils.emplace_back(pupil, intrinsics); // this should call EyeModelFitter::Pupil::Pupil(Ellipse ellipse)
-    // return pupils.size() - 1;
+
+    pupil_gazelines_projection.push_back(pupils[pupils.size()-1].line);
+    // auto vi = line.direction();
+    // Matrix Ivivi = Matrix::Identity() - vi * vi.transpose();
+    // twoDim_A += Ivivi;
+    // twoDim_B += 
 }
 
 singleeyefitter::EyeModelFitter::Index singleeyefitter::EyeModelFitter::add_pupil_labs_observation(Ellipse pupil){
@@ -254,13 +259,6 @@ void EyeModelFitter::reset(){
 
 void  singleeyefitter::EyeModelFitter::print_eye(){
     std::cout << eye << std::endl;
-    // std::vector<double> eye_variables;
-    // eye_variables.push_back(eye.center[0]);
-    // eye_variables.push_back(eye.center[1]);
-    // eye_variables.push_back(eye.center[2]);
-    // eye_variables.push_back(eye.radius);
-    // double* toreturn = &eye_variables[0];
-    // return toreturn;
 }
 
 void singleeyefitter::EyeModelFitter::print_ellipse(Index id){
@@ -407,6 +405,7 @@ void singleeyefitter::EyeModelFitter::initialise_model()
         pupil.params.radius *= scale;
         pupil.circle = circleFromParams(pupil.params);
     }
+    std::cout << eye << std::endl;
 
     model_version++;
 }
@@ -422,34 +421,34 @@ void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius
     }
 
     std::vector<std::pair<Circle, Circle>> pupil_unprojection_pairs;
-    std::vector<Line> pupil_gazelines_proj;
+    // std::vector<Line> pupil_gazelines_proj;
 
     std::cout << intrinsics << std::endl;
 
-    for (const auto& pupil : pupils) {
-        // Get pupil circles (up to depth)
-        // Do a per-image unprojection of the pupil ellipse into the two fixed
-        // size circles that would project onto it. The size of the circles
-        // doesn't matter here, only their center and normal does.
-        auto unprojection_pair = unproject_intrinsics(pupil.ellipse,pupil_radius, intrinsics);
+    // for (const auto& pupil : pupils) {
+    //     // Get pupil circles (up to depth)
+    //     // Do a per-image unprojection of the pupil ellipse into the two fixed
+    //     // size circles that would project onto it. The size of the circles
+    //     // doesn't matter here, only their center and normal does.
+    //     auto unprojection_pair = unproject_intrinsics(pupil.ellipse,pupil_radius, intrinsics);
 
-        // Get projected circles and gaze vectors
-        // Project the circle centers and gaze vectors down back onto the image
-        // plane. We're only using them as line parametrisations, so it doesn't
-        // matter which of the two centers/gaze vectors we use, as the
-        // two gazes are parallel and the centers are co-linear.
-        const auto& c = unprojection_pair.first.center;
-        const auto& v = unprojection_pair.first.normal;
-        std::cout << "c " << c << std::endl;
-        std::cout << "v " << v << std::endl;
+    //     // Get projected circles and gaze vectors
+    //     // Project the circle centers and gaze vectors down back onto the image
+    //     // plane. We're only using them as line parametrisations, so it doesn't
+    //     // matter which of the two centers/gaze vectors we use, as the
+    //     // two gazes are parallel and the centers are co-linear.
+    //     const auto& c = unprojection_pair.first.center;
+    //     const auto& v = unprojection_pair.first.normal;
+    //     std::cout << "c " << c << std::endl;
+    //     std::cout << "v " << v << std::endl;
 
-        Vector2 c_proj = project_point(c, intrinsics);
-        Vector2 v_proj = project_point(v + c, intrinsics) - c_proj;
-        v_proj.normalize();
+    //     Vector2 c_proj = project_point(c, intrinsics);
+    //     Vector2 v_proj = project_point(v + c, intrinsics) - c_proj;
+    //     v_proj.normalize();
 
-        pupil_unprojection_pairs.push_back(std::move(unprojection_pair));
-        pupil_gazelines_proj.emplace_back(c_proj, v_proj);
-    }
+    //     pupil_unprojection_pairs.push_back(std::move(unprojection_pair));
+    //     pupil_gazelines_proj.emplace_back(c_proj, v_proj);
+    // }
 
     // Get eyeball center
     // Find a least-squares 'intersection' (point nearest to all lines) of
@@ -465,21 +464,23 @@ void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius
     for (auto& pupil : pupils) {
         pupil.init_valid = true;
     }
-    eye_center_proj = nearest_intersect(pupil_gazelines_proj);
+    // eye_center_proj = nearest_intersect(pupil_gazelines_proj);
+    eye_center_proj = nearest_intersect(pupil_gazelines_projection);
     valid_eye = true;
 
     if (valid_eye) {
         eye.center = unproject_point(eye_center_proj,eye_z, intrinsics);
         eye.radius = 1;
         projected_eye = project_sphere(eye,intrinsics); //projection.h function
+        std::cout << eye << std::endl;
 
         // Disambiguate pupil circles using projected eyeball center
         // Assume that the gaze vector points away from the eye center, and
         // so projected gaze points away from projected eye center. Pick the
         // solution which satisfies this assumption
         for (size_t i = 0; i < pupils.size(); ++i) {
-            const auto& pupil_pair = pupil_unprojection_pairs[i];
-            const auto& line = pupil_gazelines_proj[i];
+            // const auto& pupil_pair = pupil_unprojection_pairs[i];
+            const auto& line = pupil_gazelines_projection[i];
 
             const auto& c_proj = line.origin();
             const auto& v_proj = line.direction();
@@ -489,12 +490,15 @@ void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius
             // The two normals will point in opposite directions, so only need
             // to check one.
             if ((c_proj - eye_center_proj).dot(v_proj) >= 0) {
-                pupils[i].circle = std::move(pupil_pair.first);
+                // pupils[i].circle = std::move(pupil_pair.first);
+                pupils[i].circle = pupils[i].projected_circles.first;
             }
             else {
-                pupils[i].circle = std::move(pupil_pair.second);
+                // pupils[i].circle = std::move(pupil_pair.second);
+                pupils[i].circle = pupils[i].projected_circles.second;
             }
         }
+        std::cout << "yaygpojpojothere" << std::endl;
     }
     else {
         // No inliers, so no eye
@@ -508,4 +512,5 @@ void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius
     }
 
     model_version++;
+    std::cout << "gothere" << std::endl;
 }

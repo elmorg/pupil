@@ -13,7 +13,7 @@ model.add_observation(20,20,5,3,1)
 model.add_observation(40,20,5,2,1)
 model.print_ellipse(0)
 model.print_ellipse(1)
-
+print " "
 model.unproject_observations()
-# model.initialise_model()
+model.initialise_model()
 model.print_eye()
