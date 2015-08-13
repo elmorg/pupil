@@ -201,7 +201,7 @@ const EyeModelFitter::Vector3 EyeModelFitter::camera_center = EyeModelFitter::Ve
 EyeModelFitter::Pupil::Pupil(Ellipse ellipse, Eigen::Matrix<double,3,3> intrinsics) : ellipse(ellipse){
     params = PupilParams(0,0,0);
 
-    // performance enhancements: to be implemented
+    // performance enhancements originally in unproject_observations()
     projected_circles = unproject_intrinsics(ellipse, 1.0, intrinsics); //getting pupil circles, force radius to be double.
     Vector3 c = projected_circles.first.center; // get projected circles, gaze vectors
     Vector3 v = projected_circles.first.normal;
@@ -209,7 +209,6 @@ EyeModelFitter::Pupil::Pupil(Ellipse ellipse, Eigen::Matrix<double,3,3> intrinsi
     Vector2 v_proj = project_point(v+c, intrinsics) - c_proj;
     v_proj.normalize();
     line = Line(c_proj,v_proj);
-    // return Line(c_proj, v_proj); // I wish I could return
 }
 EyeModelFitter::Pupil::Pupil(){}
 
@@ -405,51 +404,17 @@ void singleeyefitter::EyeModelFitter::initialise_model()
         pupil.params.radius *= scale;
         pupil.circle = circleFromParams(pupil.params);
     }
-    std::cout << eye << std::endl;
-
     model_version++;
 }
 
 void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius, double eye_z)
 {
     using math::sq;
-
     std::lock_guard<std::mutex> lock_model(model_mutex);
 
     if (pupils.size() < 2) {
         throw std::runtime_error("Need at least two observations");
     }
-
-    std::vector<std::pair<Circle, Circle>> pupil_unprojection_pairs;
-    // std::vector<Line> pupil_gazelines_proj;
-
-    std::cout << intrinsics << std::endl;
-
-    // for (const auto& pupil : pupils) {
-    //     // Get pupil circles (up to depth)
-    //     // Do a per-image unprojection of the pupil ellipse into the two fixed
-    //     // size circles that would project onto it. The size of the circles
-    //     // doesn't matter here, only their center and normal does.
-    //     auto unprojection_pair = unproject_intrinsics(pupil.ellipse,pupil_radius, intrinsics);
-
-    //     // Get projected circles and gaze vectors
-    //     // Project the circle centers and gaze vectors down back onto the image
-    //     // plane. We're only using them as line parametrisations, so it doesn't
-    //     // matter which of the two centers/gaze vectors we use, as the
-    //     // two gazes are parallel and the centers are co-linear.
-    //     const auto& c = unprojection_pair.first.center;
-    //     const auto& v = unprojection_pair.first.normal;
-    //     std::cout << "c " << c << std::endl;
-    //     std::cout << "v " << v << std::endl;
-
-    //     Vector2 c_proj = project_point(c, intrinsics);
-    //     Vector2 v_proj = project_point(v + c, intrinsics) - c_proj;
-    //     v_proj.normalize();
-
-    //     pupil_unprojection_pairs.push_back(std::move(unprojection_pair));
-    //     pupil_gazelines_proj.emplace_back(c_proj, v_proj);
-    // }
-
     // Get eyeball center
     // Find a least-squares 'intersection' (point nearest to all lines) of
     // the projected 2D gaze vectors. Then, unproject that circle onto a
@@ -457,60 +422,32 @@ void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius
     // For robustness, use RANSAC to eliminate stray gaze lines
     // (This has to be done here because it's used by the pupil circle
     // disambiguation)
+    Vector2 eye_center_proj = nearest_intersect(pupil_gazelines_projection);
 
-    Vector2 eye_center_proj;
-    bool valid_eye;
+    eye.center = unproject_point(eye_center_proj,eye_z, intrinsics);
+    eye.radius = 1;
+    projected_eye = project_sphere(eye,intrinsics); //projection.h function
 
-    for (auto& pupil : pupils) {
-        pupil.init_valid = true;
-    }
-    // eye_center_proj = nearest_intersect(pupil_gazelines_proj);
-    eye_center_proj = nearest_intersect(pupil_gazelines_projection);
-    valid_eye = true;
+    // Disambiguate pupil circles using projected eyeball center
+    // Assume that the gaze vector points away from the eye center, and
+    // so projected gaze points away from projected eye center. Pick the
+    // solution which satisfies this assumption
+    for (size_t i = 0; i < pupils.size(); ++i) {
+        const auto& c_proj = pupil_gazelines_projection[i].origin(); // pupil_gazelines_proj is line
+        const auto& v_proj = pupil_gazelines_projection[i].direction();
 
-    if (valid_eye) {
-        eye.center = unproject_point(eye_center_proj,eye_z, intrinsics);
-        eye.radius = 1;
-        projected_eye = project_sphere(eye,intrinsics); //projection.h function
-        std::cout << eye << std::endl;
-
-        // Disambiguate pupil circles using projected eyeball center
-        // Assume that the gaze vector points away from the eye center, and
-        // so projected gaze points away from projected eye center. Pick the
-        // solution which satisfies this assumption
-        for (size_t i = 0; i < pupils.size(); ++i) {
-            // const auto& pupil_pair = pupil_unprojection_pairs[i];
-            const auto& line = pupil_gazelines_projection[i];
-
-            const auto& c_proj = line.origin();
-            const auto& v_proj = line.direction();
-
-            // Check if v_proj going away from est eye center. If it is, then
-            // the first circle was correct. Otherwise, take the second one.
-            // The two normals will point in opposite directions, so only need
-            // to check one.
-            if ((c_proj - eye_center_proj).dot(v_proj) >= 0) {
-                // pupils[i].circle = std::move(pupil_pair.first);
-                pupils[i].circle = pupils[i].projected_circles.first;
-            }
-            else {
-                // pupils[i].circle = std::move(pupil_pair.second);
-                pupils[i].circle = pupils[i].projected_circles.second;
-            }
+        // Check if v_proj going away from est eye center. If it is, then
+        // the first circle was correct. Otherwise, take the second one.
+        // The two normals will point in opposite directions, so only need
+        // to check one.
+        if ((c_proj - eye_center_proj).dot(v_proj) >= 0) {
+            pupils[i].circle = pupils[i].projected_circles.first;
         }
-        std::cout << "yaygpojpojothere" << std::endl;
-    }
-    else {
-        // No inliers, so no eye
-        eye = Sphere::Null;
-
-        // Arbitrarily pick first circle
-        for (size_t i = 0; i < pupils.size(); ++i) {
-            const auto& pupil_pair = pupil_unprojection_pairs[i];
-            pupils[i].circle = std::move(pupil_pair.first);
+        else {
+            pupils[i].circle = pupils[i].projected_circles.second;
         }
+        pupils[i].init_valid = true;
     }
 
     model_version++;
-    std::cout << "gothere" << std::endl;
 }
