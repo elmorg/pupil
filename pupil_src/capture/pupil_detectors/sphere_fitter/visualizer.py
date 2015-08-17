@@ -148,6 +148,7 @@ class Visualizer():
 		back[:] = np.array(circle.normal)
 		back[-2] *=-1 #our z axis is inverted
 		back[-0] *=-1 #our z axis is inverted
+		# if np.linalg.norm(back) != 0:
 		back[:] /= np.linalg.norm(back)
 		right[:] = get_perpendicular_vector(back)/np.linalg.norm(get_perpendicular_vector(back))
 		up[:] = np.cross(right,back)/np.linalg.norm(np.cross(right,back))

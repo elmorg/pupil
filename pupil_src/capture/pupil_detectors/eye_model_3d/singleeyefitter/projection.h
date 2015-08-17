@@ -130,7 +130,7 @@ namespace singleeyefitter {
             );
 
         Ellipse2D<Scalar> return_ellipse = Ellipse2D<Scalar>(temp_conic);
-        return_ellipse.center = ((return_ellipse.center[0] + intrinsics(0,2)),(-return_ellipse.center[1] + intrinsics(1,2)));
+        return_ellipse.center = ((return_ellipse.center[0] + intrinsics(2,0)),(-return_ellipse.center[1] + intrinsics(2,1)));
         return_ellipse.angle = -return_ellipse.angle % boost::math::double_constants::pi; // boost included in ellipse
         return return_ellipse;
     }
@@ -146,16 +146,16 @@ namespace singleeyefitter {
 
     template<typename Scalar> // with intrinsics matrix
     Eigen::Vector2d project_point(Eigen::Vector3d point, Eigen::Matrix<Scalar, 3, 3> intrinsics){
-        auto x = intrinsics(0,0)*point[0]/point[2] + intrinsics(0,2);
-        auto y = intrinsics(1,1)*point[1]/point[2] + intrinsics(1,2);
+        auto x = intrinsics(0,0)*point[0]/point[2] + intrinsics(2,0); // x displacement
+        auto y = intrinsics(1,1)*point[1]/point[2] + intrinsics(2,1); // y displacement
         Eigen::Vector2d pt = Eigen::Vector2d(x,y); 
         return pt;
     }
 
     template<typename Scalar> // with intrinsics matrix
     Eigen::Vector3d unproject_point(Eigen::Vector2d point, Scalar z, Eigen::Matrix<Scalar, 3, 3> intrinsics){
-        auto x = (point[0]-intrinsics(0,2)) * z / intrinsics(0,0);
-        auto y = (point[1]-intrinsics(1,2)) * z / intrinsics(1,1);
+        auto x = (point[0]-intrinsics(2,0)) * z / intrinsics(0,0);
+        auto y = (point[1]-intrinsics(2,1)) * z / intrinsics(1,1);
         Eigen::Vector3d pt = Eigen::Vector3d(x,y,z); 
         return pt;
     }    

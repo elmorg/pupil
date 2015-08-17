@@ -383,11 +383,11 @@ def eye(g_pool,cap_src,cap_size,rx_from_world,eye_id=0):
             # cygl_draw_polyline(pts,2,cygl_rgba(1,1,0,.5))
 
         if len(eye_model.observations) > 1:
-            # eye_model.unproject_observations()
-            # eye_model.initialize_model()
             eye_model.update_model() #this calls unproject and initialize
             cpp_model.update_model() #this calls unproject and initialize, prints once every 30
-            cygl_draw_points([eye_model.eye.project(eye_model.intrinsics).center],30,cygl_rgba(1,1,0,.5)) #draw eye center
+            # cygl_draw_points([eye_model.projected_eye.center],30,cygl_rgba(1,1,0,.5)) #draw eye center
+            print eye_model.projected_eye.center, cpp_model.get_projected_eye_center()
+            cygl_draw_points([cpp_model.get_projected_eye_center()],30,cygl_rgba(1,0,1,.5))
 
         #draw all eye normal lines
         if eye_model.projected_eye.center[0] != 0 and eye_model.projected_eye.center[1] != 0:

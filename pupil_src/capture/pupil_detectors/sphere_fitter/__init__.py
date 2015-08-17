@@ -280,36 +280,38 @@ if __name__ == '__main__':
 	# Sphere(center = [ 6.46494922  8.73439181  4.34155107], radius = 12.0)
 
 	#testing unproject_observation, with data suitable for camera intrinsics
-	def basic_test():
-		intrinsics = np.matrix('879.193 0 320; 0 -879.193 240; 0 0 1')
-		huding = Sphere_Fitter(intrinsics = intrinsics)
-		ellipse1 = geometry.Ellipse([422.255,255.123],40.428,30.663,1.116)
-		ellipse2 = geometry.Ellipse([442.257,365.003],44.205,32.146,1.881)
-		ellipse3 = geometry.Ellipse([307.473,178.163],41.29,22.765,0.2601)
-		ellipse4 = geometry.Ellipse([411.339,290.978],51.663,41.082,1.377)
-		ellipse5 = geometry.Ellipse([198.128,223.905],46.852,34.949,2.659)
-		ellipse6 = geometry.Ellipse([299.641,177.639],40.133,24.089,0.171)
-		ellipse7 = geometry.Ellipse([211.669,212.248],46.885,33.538,2.738)
-		ellipse8 = geometry.Ellipse([196.43,236.69],47.094,38.258,2.632)
-		ellipse9 = geometry.Ellipse([317.584,189.71],42.599,27.721,0.3)
-		ellipse10 = geometry.Ellipse([482.762,315.186],38.397,23.238,1.519)
+	# def basic_test():
+	intrinsics = np.matrix('879.193 0 320; 0 -879.193 240; 0 0 1')
+	huding = Sphere_Fitter(intrinsics = intrinsics)
+	ellipse1 = geometry.Ellipse([422.255,255.123],40.428,30.663,1.116)
+	ellipse2 = geometry.Ellipse([442.257,365.003],44.205,32.146,1.881)
+	ellipse3 = geometry.Ellipse([307.473,178.163],41.29,22.765,0.2601)
+	ellipse4 = geometry.Ellipse([411.339,290.978],51.663,41.082,1.377)
+	ellipse5 = geometry.Ellipse([198.128,223.905],46.852,34.949,2.659)
+	ellipse6 = geometry.Ellipse([299.641,177.639],40.133,24.089,0.171)
+	ellipse7 = geometry.Ellipse([211.669,212.248],46.885,33.538,2.738)
+	ellipse8 = geometry.Ellipse([196.43,236.69],47.094,38.258,2.632)
+	ellipse9 = geometry.Ellipse([317.584,189.71],42.599,27.721,0.3)
+	ellipse10 = geometry.Ellipse([482.762,315.186],38.397,23.238,1.519)
 
-		huding.add_observation(ellipse1)
-		huding.add_observation(ellipse2)
-		huding.add_observation(ellipse3)
-		huding.add_observation(ellipse4)
-		huding.add_observation(ellipse5)
-		huding.add_observation(ellipse6)
-		huding.add_observation(ellipse7)
-		huding.add_observation(ellipse8)
-		huding.add_observation(ellipse9)
-		huding.add_observation(ellipse10)
-		huding.unproject_observations() #Sphere(center = [ 29.78174904  40.23627353  20.], radius = 1)
-		huding.initialize_model()
+	huding.add_observation(ellipse1)
+	huding.add_observation(ellipse2)
+	huding.add_observation(ellipse3)
+	huding.add_observation(ellipse4)
+	huding.add_observation(ellipse5)
+	huding.add_observation(ellipse6)
+	huding.add_observation(ellipse7)
+	huding.add_observation(ellipse8)
+	huding.add_observation(ellipse9)
+	huding.add_observation(ellipse10)
+	huding.unproject_observations() #Sphere(center = [ 29.78174904  40.23627353  20.], radius = 1)
+	huding.initialize_model()
 
-	print "starting"
-	start_time = timeit.default_timer()
-	timeit.Timer(basic_test).timeit(number=1000)
-	print(timeit.default_timer() - start_time)	
+	print geometry.project_point([200,300,100],intrinsics) # [ 2078.386 -2397.579]
+
+	# print "starting"
+	# start_time = timeit.default_timer()
+	# timeit.Timer(basic_test).timeit(number=1000)
+	# print(timeit.default_timer() - start_time)	
 
 	# print huding.eye #Sphere {center: [ -3.02103998  -4.64862274  49.54492648] radius: 12.0}

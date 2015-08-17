@@ -85,10 +85,12 @@ namespace singleeyefitter {
         Index add_pupil_labs_observation(Ellipse pupil);
         void reset();
 
-        //printing functions
+        //printing & returning functions
         std::string get_eye_string(); // will need to return string instead of simply void printing
         void print_eye();
         void print_ellipse(Index id);
+
+        std::pair<double,double> get_projected_eye_center();
 
         struct PupilParams {
             double theta, psi, radius;

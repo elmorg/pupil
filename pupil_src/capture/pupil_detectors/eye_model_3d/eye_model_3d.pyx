@@ -1,3 +1,5 @@
+from libcpp.pair cimport pair
+
 
 cdef extern from "singleeyefitter/singleeyefitter.h" namespace "singleeyefitter":
     cdef cppclass EyeModelFitter:
@@ -10,8 +12,10 @@ cdef extern from "singleeyefitter/singleeyefitter.h" namespace "singleeyefitter"
         # std::string get_eye_string()
         void print_eye()
         void print_ellipse(size_t id)
+        pair[double,double] get_projected_eye_center()
 
         float model_version
+
 
 cdef class PyEyeModelFitter:
     cdef EyeModelFitter *thisptr
@@ -62,6 +66,7 @@ cdef class PyEyeModelFitter:
             major_radius = b/2
             minor_radius = a/2
             angle = (e_dict['angle']+90)*3.1415926535/180 # not importing np just for pi constant
+        # print e_dict['center'][0],e_dict['center'][1],major_radius,minor_radius,angle
         self.thisptr.add_observation(e_dict['center'][0],e_dict['center'][1],major_radius,minor_radius,angle)
 
     def print_eye(self):
@@ -73,6 +78,10 @@ cdef class PyEyeModelFitter:
 
     def get_ellipse(self,index):
         pass
+
+    def get_projected_eye_center(self):
+        cdef pair[double,double] eye_center = self.thisptr.get_projected_eye_center()
+        return eye_center
 
     property model_version:
         def __get__(self):

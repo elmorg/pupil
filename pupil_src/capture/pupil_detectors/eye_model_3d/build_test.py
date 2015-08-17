@@ -11,7 +11,6 @@ if __name__ == '__main__':
 	def basic_test():
 		model = eye_model_3d.PyEyeModelFitter(focal_length=879.193, x_disp = 320, y_disp = 240)
 		# print model
-
 		model.add_observation([422.255,255.123],40.428,30.663,1.116)
 		model.add_observation([442.257,365.003],44.205,32.146,1.881)
 		model.add_observation([307.473,178.163],41.29,22.765,0.2601)
@@ -24,10 +23,11 @@ if __name__ == '__main__':
 		model.add_observation([482.762,315.186],38.397,23.238,1.519)
 		model.update_model()
 		model.print_eye() #Sphere(center = [ -3.02103998  -4.64862274  49.54492648], radius = 12.0)
+		# temp = model.get_projected_eye_center()
+		# print temp
 	basic_test()
 
-	# print min(timeit.Timer(basic_test).repeat(repeat=10,number=10000))
-
+	# timer functions
 	# start_time = timeit.default_timer()
 	# timeit.Timer(basic_test).timeit(number=1000)
 	# print(timeit.default_timer() - start_time)

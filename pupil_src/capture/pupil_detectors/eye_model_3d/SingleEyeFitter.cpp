@@ -220,7 +220,7 @@ EyeModelFitter::PupilParams::PupilParams() : theta(0), psi(0), radius(0){}
 singleeyefitter::EyeModelFitter::EyeModelFitter() {}
 singleeyefitter::EyeModelFitter::EyeModelFitter(double focal_length, double x_disp, double y_disp){
     intrinsics(0,0) = focal_length; // setting the intrinsics value
-    intrinsics(1,1) = -focal_length;
+    intrinsics(1,1) = -focal_length; 
     intrinsics(2,0) = x_disp; //should be 0,2 technically, but 
     intrinsics(2,1) = y_disp; //should be 1,2
 } 
@@ -262,6 +262,11 @@ void EyeModelFitter::reset(){
 //     // std::cout << eye << std::endl;
 //     return eye.tostring();
 // } // to be implemented
+
+std::pair<double,double> singleeyefitter::EyeModelFitter::get_projected_eye_center(){
+     std::pair<double,double> toreturn = std::pair<double,double>(projected_eye.center[0],projected_eye.center[1]);
+     return toreturn;
+}
 
 void singleeyefitter::EyeModelFitter::print_eye(){
     std::cout << eye << std::endl;
@@ -419,6 +424,11 @@ void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius
 {
     using math::sq;
     std::lock_guard<std::mutex> lock_model(model_mutex);
+
+    // testing project point
+    // Eigen::Vector3d pt = Eigen::Vector3d(200,300,100);
+    // auto pt2 = project_point(pt, intrinsics);
+    // std::cout << pt2 <<  std::endl;
 
     if (pupils.size() < 2) {
         throw std::runtime_error("Need at least two observations");
