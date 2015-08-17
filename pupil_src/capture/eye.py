@@ -43,10 +43,11 @@ from cv2_writer import CV_Writer
 # Pupil detectors
 from pupil_detectors import Canny_Detector
 from pupil_detectors import sphere_fitter
-from pupil_detectors.sphere_fitter import visualizer
+# from pupil_detectors.sphere_fitter import visualizer
 from pupil_detectors.sphere_fitter import geometry
 
 from pupil_detectors.eye_model_3d import build_test #cpp model
+from pupil_detectors.eye_model_3d import visualizer_cpp #cpp visualizer
 
 # time
 import time
@@ -280,8 +281,8 @@ def eye(g_pool,cap_src,cap_size,rx_from_world,eye_id=0):
     fps_graph.label = "%0.0f FPS"
 
     #initialize visualizer
-    # visual = visualizer.Visualizer("eye model", intrinsics = eye_model.intrinsics)
-    # visual.open_window()
+    visual = visualizer_cpp.Visualizer("eye model", intrinsics = intrinsics)
+    visual.open_window()
 
     # Event loop
     while not g_pool.quit.value:
@@ -391,8 +392,8 @@ def eye(g_pool,cap_src,cap_size,rx_from_world,eye_id=0):
             cygl_draw_points([cpp_model.get_projected_eye_center()],30,cygl_rgba(1,0,1,.5))
 
             # draw all eye normal lines
-            
-            
+
+
         # if eye_model.projected_eye.center[0] != 0 and eye_model.projected_eye.center[1] != 0:
         #     #the eye model has been initialized
         #     for line in eye_model.pupil_gazelines_proj:
@@ -407,6 +408,7 @@ def eye(g_pool,cap_src,cap_size,rx_from_world,eye_id=0):
 
         # show the visualizer
         # visual.update_window(g_pool,eye_model,contours) #also feeding in contours
+        visual.update_window(g_pool,cpp_model,contours) #cpp
         glfwMakeContextCurrent(main_window)
 
         # render GUI
@@ -425,7 +427,7 @@ def eye(g_pool,cap_src,cap_size,rx_from_world,eye_id=0):
     # END while running
 
     #close visualiser
-    # visual.close_window()
+    visual.close_window()
 
     # in case eye recording was still runnnig: Save&close
     if writer:

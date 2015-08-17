@@ -27,7 +27,7 @@ if __name__ == '__main__':
 		print model.print_ellipse(2)
 		# print model.num_observations
 		for pupil in model.get_all_pupil_observations():
-			print pupil
+			print pupil[0]
 		
 	basic_test()
 
