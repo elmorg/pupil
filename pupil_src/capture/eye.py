@@ -186,7 +186,7 @@ def eye(g_pool,cap_src,cap_size,rx_from_world,eye_id=0):
 
     pupil_detector = Canny_Detector(g_pool)
     intrinsics = np.matrix('879.193 0 320; 0 -879.193 240; 0 0 1')
-    eye_model = sphere_fitter.Sphere_Fitter(intrinsics = intrinsics)
+    # eye_model = sphere_fitter.Sphere_Fitter(intrinsics = intrinsics)
     #cpp model
     cpp_model = build_test.eye_model_3d.PyEyeModelFitter(focal_length=879.193, x_disp = 320, y_disp = 240)
 
@@ -280,8 +280,8 @@ def eye(g_pool,cap_src,cap_size,rx_from_world,eye_id=0):
     fps_graph.label = "%0.0f FPS"
 
     #initialize visualizer
-    visual = visualizer.Visualizer("eye model", intrinsics = eye_model.intrinsics)
-    visual.open_window()
+    # visual = visualizer.Visualizer("eye model", intrinsics = eye_model.intrinsics)
+    # visual.open_window()
 
     # Event loop
     while not g_pool.quit.value:
@@ -365,7 +365,7 @@ def eye(g_pool,cap_src,cap_size,rx_from_world,eye_id=0):
 
         #eye sphere fitter adding
         if result['confidence'] > 0.8:
-            eye_model.add_pupil_labs_observation(result)
+            # eye_model.add_pupil_labs_observation(result)
             cpp_model.add_pupil_labs_observation(result)
             # print eye_model.observations[-1].ellipse
 
@@ -382,18 +382,21 @@ def eye(g_pool,cap_src,cap_size,rx_from_world,eye_id=0):
             #     int(reproj_pupil.angle*180/scipy.pi), 0,360,15)
             # cygl_draw_polyline(pts,2,cygl_rgba(1,1,0,.5))
 
-        if len(eye_model.observations) > 1:
-            eye_model.update_model() #this calls unproject and initialize
+        # if len(eye_model.observations) > 1:
+        if cpp_model.num_observations > 3:
+            # eye_model.update_model() #this calls unproject and initialize
             cpp_model.update_model() #this calls unproject and initialize, prints once every 30
             # cygl_draw_points([eye_model.projected_eye.center],30,cygl_rgba(1,1,0,.5)) #draw eye center
-            print eye_model.projected_eye.center, cpp_model.get_projected_eye_center()
+            # print eye_model.projected_eye.center, cpp_model.get_projected_eye_center()
             cygl_draw_points([cpp_model.get_projected_eye_center()],30,cygl_rgba(1,0,1,.5))
 
-        #draw all eye normal lines
-        if eye_model.projected_eye.center[0] != 0 and eye_model.projected_eye.center[1] != 0:
-            #the eye model has been initialized
-            for line in eye_model.pupil_gazelines_proj:
-                cygl_draw_polyline([line.origin-line.direction*500,line.origin+line.direction*500],1,cygl_rgba(0,1.0,0,.5))
+            # draw all eye normal lines
+            
+            
+        # if eye_model.projected_eye.center[0] != 0 and eye_model.projected_eye.center[1] != 0:
+        #     #the eye model has been initialized
+        #     for line in eye_model.pupil_gazelines_proj:
+        #         cygl_draw_polyline([line.origin-line.direction*500,line.origin+line.direction*500],1,cygl_rgba(0,1.0,0,.5))
 
 
         # render graphs
@@ -403,7 +406,7 @@ def eye(g_pool,cap_src,cap_size,rx_from_world,eye_id=0):
         graph.pop_view()
 
         # show the visualizer
-        visual.update_window(g_pool,eye_model,contours) #also feeding in contours
+        # visual.update_window(g_pool,eye_model,contours) #also feeding in contours
         glfwMakeContextCurrent(main_window)
 
         # render GUI
@@ -422,7 +425,7 @@ def eye(g_pool,cap_src,cap_size,rx_from_world,eye_id=0):
     # END while running
 
     #close visualiser
-    visual.close_window()
+    # visual.close_window()
 
     # in case eye recording was still runnnig: Save&close
     if writer:

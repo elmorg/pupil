@@ -29,10 +29,6 @@ namespace singleeyefitter {
             return *this != Null ? &Sphere::this_type_does_not_support_comparisons : 0;
         }
 
-        // std::string tostring(){
-        //     std::string toreturn = "Sphere { center: (" + circle.center[0] + "," << circle.center[1] + "," + circle.center[2] << "), radius: " + circle.radius + " }";
-        //     return toreturn;
-        // } // to be implemented
     };
 
     template<typename Scalar>

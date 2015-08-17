@@ -32,122 +32,7 @@
 #include <spii/function.h>
 #include <spii/solver.h>
 
-namespace ceres {
-    using singleeyefitter::math::sq;
-
-    template<typename T, int N>
-    inline Jet<T,N> sq(Jet<T,N> val) {
-        val.v *= 2*val.a;
-        val.a *= val.a;
-        return val;
-    }
-}
-
 namespace singleeyefitter {
-
-struct scalar_tag{};
-struct ceres_jet_tag{};
-
-template<typename T, typename Enabled=void>
-struct ad_traits;
-
-template<typename T>
-struct ad_traits<T, typename std::enable_if< std::is_arithmetic<T>::value >::type >
-{
-    typedef scalar_tag ad_tag;
-    typedef T scalar;
-    static inline scalar value(const T& x) { return x; }
-};
-
-template<typename T, int N>
-struct ad_traits<::ceres::Jet<T,N>>
-{
-    typedef ceres_jet_tag ad_tag;
-    typedef T scalar;
-    static inline scalar get(const ::ceres::Jet<T,N>& x) { return x.a; }
-};
-
-template<typename T>
-struct ad_traits<T, typename std::enable_if< !std::is_same<T, typename std::decay<T>::type>::value >::type >
-    : public ad_traits<typename std::decay<T>::type>
-{
-};
-
-template<typename T>
-inline T norm(T x, T y, scalar_tag) {
-    using std::sqrt;
-    using math::sq;
-
-    return sqrt(sq(x) + sq(y));
-}
-template<typename T, int N>
-inline ::ceres::Jet<T,N> norm(const ::ceres::Jet<T,N>& x, const ::ceres::Jet<T,N>& y, ceres_jet_tag) {
-    T anorm = norm<T>(x.a, y.a, scalar_tag());
-
-    ::ceres::Jet<T,N> g;
-    g.a = anorm;
-    g.v = (x.a/anorm)*x.v + (y.a/anorm)*y.v;
-
-    return g;
-}
-template<typename T>
-inline typename std::decay<T>::type norm(T&& x, T&& y) {
-    return norm(std::forward<T>(x), std::forward<T>(y), typename ad_traits<T>::ad_tag());
-}
-
-template<typename Scalar>
-cv::Rect bounding_box(const Ellipse2D<Scalar>& ellipse) {
-    using std::sin;
-    using std::cos;
-    using std::sqrt;
-    using std::floor;
-    using std::ceil;
-
-    Scalar ux = ellipse.major_radius * cos(ellipse.angle);
-    Scalar uy = ellipse.major_radius * sin(ellipse.angle);
-    Scalar vx = ellipse.minor_radius * cos(ellipse.angle + PI/2);
-    Scalar vy = ellipse.minor_radius * sin(ellipse.angle + PI/2);
-
-    Scalar bbox_halfwidth = sqrt(ux*ux + vx*vx);
-    Scalar bbox_halfheight = sqrt(uy*uy + vy*vy);
-
-    return cv::Rect(floor(ellipse.center[0] - bbox_halfwidth), floor(ellipse.center[1] - bbox_halfheight),
-                    2*ceil(bbox_halfwidth) + 1, 2*ceil(bbox_halfheight) + 1);
-}
-
-// Calculates the x crossings of a conic at a given y value. Returns the number of crossings (0, 1 or 2)
-template<typename Scalar>
-int getXCrossing(const Conic<Scalar>& conic, Scalar y, Scalar& x1, Scalar& x2) {
-    using std::sqrt;
-
-    Scalar a = conic.A;
-    Scalar b = conic.B*y + conic.D;
-    Scalar c = conic.C*y*y + conic.E*y + conic.F;
-
-    Scalar det = b*b - 4*a*c;
-    if (det == 0) {
-        x1 = -b/(2*a);
-        return 1;
-    } else if (det < 0) {
-        return 0;
-    } else {
-        Scalar sqrtdet = sqrt(det);
-        x1 = (-b - sqrtdet)/(2*a);
-        x2 = (-b + sqrtdet)/(2*a);
-        return 2;
-    }
-}
-
-template<template<class, int> class Jet, class T, int N>
-typename std::enable_if<std::is_same<typename ad_traits<Jet<T,N>>::ad_tag, ceres_jet_tag>::value, Ellipse2D<T>>::type
-toConst(const Ellipse2D<Jet<T,N>>& ellipse) {
-    return Ellipse2D<T>(
-        ellipse.center[0].a,
-        ellipse.center[1].a,
-        ellipse.major_radius.a,
-        ellipse.minor_radius.a,
-        ellipse.angle.a);
-}
 
 template<class T>
 Ellipse2D<T> scaledMajorRadius(const Ellipse2D<T>& ellipse, const T& target_radius) {
@@ -165,24 +50,6 @@ Eigen::Matrix<T,3,1> sph2cart(T r, T theta, T psi) {
     using std::cos;
 
     return r * Eigen::Matrix<T,3,1>(sin(theta)*cos(psi), cos(theta), sin(theta)*sin(psi));
-}
-
-template<typename T>
-T angleDiffGoodness(T theta1, T psi1, T theta2, T psi2, typename ad_traits<T>::scalar sigma) {
-    using std::sin;
-    using std::cos;
-    using std::acos;
-    using std::asin;
-    using std::atan2;
-    using std::sqrt;
-
-    if (theta1 == theta2 && psi1 == psi2) {
-        return T(1);
-    }
-
-    // Haversine distance
-    auto dist = T(2)*asin(sqrt(sq(sin((theta1-theta2)/T(2))) + cos(theta1)*cos(theta2)*sq(sin((psi1-psi2)/T(2)))));
-    return exp(-sq(dist)/sq(sigma));
 }
 
 template<typename T>
@@ -256,24 +123,6 @@ void EyeModelFitter::reset(){
     pupils.clear();
     eye = Sphere::Null;
     model_version++;
-}
-
-// std::string singleeyefitter::EyeModelFitter::get_eye_string(){
-//     // std::cout << eye << std::endl;
-//     return eye.tostring();
-// } // to be implemented
-
-std::pair<double,double> singleeyefitter::EyeModelFitter::get_projected_eye_center(){
-     std::pair<double,double> toreturn = std::pair<double,double>(projected_eye.center[0],projected_eye.center[1]);
-     return toreturn;
-}
-
-void singleeyefitter::EyeModelFitter::print_eye(){
-    std::cout << eye << std::endl;
-}
-
-void singleeyefitter::EyeModelFitter::print_ellipse(Index id){
-    std::cout << pupils[id].ellipse << std::endl;
 }
 
 singleeyefitter::EyeModelFitter::Circle singleeyefitter::EyeModelFitter::circleFromParams(const Sphere& eye, const PupilParams& params){

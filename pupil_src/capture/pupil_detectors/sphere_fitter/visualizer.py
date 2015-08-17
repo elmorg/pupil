@@ -411,8 +411,6 @@ class Visualizer():
 				draw_named_texture(g_pool.image_tex,quad=((0,480),(640,480),(640,0),(0,0)),alpha=0.5)
 			self.draw_all_ellipses(model,10)
 
-
-
 			self.trackball.pop()
 			# 3. draw eye model text
 			if model and model.observations:

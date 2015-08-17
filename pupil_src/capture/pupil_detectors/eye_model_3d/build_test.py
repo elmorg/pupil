@@ -22,9 +22,13 @@ if __name__ == '__main__':
 		model.add_observation([317.584,189.71],42.599,27.721,0.3)
 		model.add_observation([482.762,315.186],38.397,23.238,1.519)
 		model.update_model()
-		model.print_eye() #Sphere(center = [ -3.02103998  -4.64862274  49.54492648], radius = 12.0)
-		# temp = model.get_projected_eye_center()
-		# print temp
+		print model.print_eye() #Sphere(center = [ -3.02103998  -4.64862274  49.54492648], radius = 12.0)
+		print model.eye
+		print model.print_ellipse(2)
+		# print model.num_observations
+		for pupil in model.get_all_pupil_observations():
+			print pupil
+		
 	basic_test()
 
 	# timer functions

@@ -1,7 +1,23 @@
 from libcpp.pair cimport pair
-
+from libcpp.vector cimport vector
 
 cdef extern from "singleeyefitter/singleeyefitter.h" namespace "singleeyefitter":
+
+    cdef cppclass Ellipse2D[T]:
+        Matrix21d center
+        T major_radius
+        T minor_radius
+        T angle
+
+    cdef cppclass Sphere[T]:
+        Matrix31d center
+        T radius
+
+    cdef cppclass Circle3D[T]:
+        Matrix31d center
+        Matrix31d normal
+        float radius
+
     cdef cppclass EyeModelFitter:
         EyeModelFitter(double focal_length, double x_disp, double y_disp)
         # EyeModelFitter(double focal_length)
@@ -9,17 +25,39 @@ cdef extern from "singleeyefitter/singleeyefitter.h" namespace "singleeyefitter"
         void initialise_model()
         void unproject_observations(double pupil_radius, double eye_z )
         void add_observation(double center_x,double center_y, double major_radius, double minor_radius, double angle)
-        # std::string get_eye_string()
-        void print_eye()
-        void print_ellipse(size_t id)
-        pair[double,double] get_projected_eye_center()
 
+        cppclass PupilParams:
+            float theta
+            float psi
+            float radius
+
+        cppclass Pupil:
+            Pupil() except +
+            Ellipse2D[double] ellipse  
+            PupilParams params
+            Circle3D[double] circle
+
+        #variables
         float model_version
+        vector[Pupil] pupils
+        Sphere[double] eye
+        Ellipse2D[double] projected_eye #technically only need center, not whole ellipse. can optimize here
 
+cdef extern from '<Eigen/Eigen>' namespace 'Eigen': 
+    cdef cppclass Matrix21d "Eigen::Matrix<double,2,1>": # eigen defaults to column major layout
+        Matrix21d() except + 
+        double * data()
+        double& operator[](size_t)
+
+    cdef cppclass Matrix31d "Eigen::Matrix<double,3,1>": # eigen defaults to column major layout
+        Matrix31d() except + 
+        double * data()
+        double& operator[](size_t)
 
 cdef class PyEyeModelFitter:
     cdef EyeModelFitter *thisptr
     cdef public int counter
+    cdef public int num_observations
     # def __cinit__(self, focal_length):
     #     self.thisptr = new EyeModelFitter(focal_length)
     def __cinit__(self, focal_length, x_disp, y_disp):
@@ -27,6 +65,7 @@ cdef class PyEyeModelFitter:
 
     def __init__(self,focal_length, x_disp, y_disp):
         self.counter = 0
+        self.num_observations = 0
 
     def __dealloc__(self):
         del self.thisptr
@@ -45,7 +84,7 @@ cdef class PyEyeModelFitter:
         # the eye model once every 30 iterations.
         if self.counter >= 30:
             self.counter = 0
-            self.thisptr.print_eye()
+            print self.print_eye()
         self.counter += 1
         self.thisptr.unproject_observations(pupil_radius,eye_z)
         self.thisptr.initialise_model()
@@ -53,6 +92,7 @@ cdef class PyEyeModelFitter:
     def add_observation(self,center,major_radius,minor_radius,angle):
         #standard way of adding an observation
         self.thisptr.add_observation(center[0], center[1],major_radius,minor_radius,angle)
+        self.num_observations += 1
 
     def add_pupil_labs_observation(self,e_dict):
         # a special method for taking in arguments from eye.py
@@ -68,24 +108,51 @@ cdef class PyEyeModelFitter:
             angle = (e_dict['angle']+90)*3.1415926535/180 # not importing np just for pi constant
         # print e_dict['center'][0],e_dict['center'][1],major_radius,minor_radius,angle
         self.thisptr.add_observation(e_dict['center'][0],e_dict['center'][1],major_radius,minor_radius,angle)
-
-    def print_eye(self):
-        self.thisptr.print_eye()
-        # return temp[0],temp[1],temp[2], temp[3]
+        self.num_observations += 1
 
     def print_ellipse(self,index):
-        self.thisptr.print_ellipse(index)
+        # self.thisptr.print_ellipse(index)
+        cdef Ellipse2D[double] ellipse = self.thisptr.pupils[index].ellipse
+        return "Ellipse ( center = [%s, %s], major_radius = %.3f, minor_radius = %.3f, angle = %.3f)"%(ellipse.center[0],ellipse.center[1],ellipse.major_radius,ellipse.minor_radius,ellipse.angle)
 
-    def get_ellipse(self,index):
-        pass
+    def print_eye(self):
+        cdef Sphere[double] eye = self.thisptr.eye
+        return "Sphere ( center = [%s, %s, %s], radius = %s)" %(eye.center[0],eye.center[1],eye.center[2],eye.radius)
 
     def get_projected_eye_center(self):
-        cdef pair[double,double] eye_center = self.thisptr.get_projected_eye_center()
-        return eye_center
+        cdef Ellipse2D[double] projected_eye = self.thisptr.projected_eye
+        return (projected_eye.center[0],projected_eye.center[1])
+
+    def get_pupil_observation(self,index):
+        cdef EyeModelFitter.Pupil p = self.thisptr.pupils[index]
+        # returning (Ellipse, Pupil Params). Ellipse = ([x,y],major,minor,angle). Params = (theta,psi,r)
+        return (((p.ellipse.center[0],p.ellipse.center[1]),
+            p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+            (p.params.theta,p.params.psi,p.params.radius))
+
+    def get_all_pupil_observations(self):
+        cdef EyeModelFitter.Pupil p
+        for p in self.thisptr.pupils:
+            yield (((p.ellipse.center[0],p.ellipse.center[1]),
+            p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+            (p.params.theta,p.params.psi,p.params.radius))
 
     property model_version:
         def __get__(self):
             return self.thisptr.model_version
+
+    property eye:
+        def __get__(self):
+            cdef Sphere[double] eye = self.thisptr.eye
+            temp = ((eye.center[0],eye.center[1],eye.center[2]),eye.radius)
+            return temp
+
+    property projected_eye:
+        def __get__(self):
+            cdef Ellipse2D[double] projected_eye = self.thisptr.projected_eye
+            temp = ((projected_eye.center[0],projected_eye.center[1]),
+                projected_eye.major_radius,projected_eye.minor_radius,projected_eye.angle)
+
 
 
 
