@@ -22,12 +22,12 @@ if __name__ == '__main__':
 		model.add_observation([196.43,236.69],47.094,38.258,2.632)
 		model.add_observation([317.584,189.71],42.599,27.721,0.3)
 		model.add_observation([482.762,315.186],38.397,23.238,1.519)
-		model.unproject_observations()
-		model.initialise_model()
-		# model.print_eye() #Sphere(center = [ -3.02103998  -4.64862274  49.54492648], radius = 12.0)
+		model.update_model()
+		model.print_eye() #Sphere(center = [ -3.02103998  -4.64862274  49.54492648], radius = 12.0)
+	basic_test()
 
 	# print min(timeit.Timer(basic_test).repeat(repeat=10,number=10000))
 
-	start_time = timeit.default_timer()
-	timeit.Timer(basic_test).timeit(number=1000)
-	print(timeit.default_timer() - start_time)
+	# start_time = timeit.default_timer()
+	# timeit.Timer(basic_test).timeit(number=1000)
+	# print(timeit.default_timer() - start_time)

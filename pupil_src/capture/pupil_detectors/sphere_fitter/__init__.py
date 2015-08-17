@@ -194,11 +194,14 @@ class Sphere_Fitter():
 		# pupil.circle = self.circleFromParams(pupil.params)
 
 	def update_model(self):
-		self.count += 1
-		if self.count == 30 or 1:
-			self.unproject_observations()
-			self.initialize_model()
+		# this function runs unproject_observations and initialise_model, and prints
+		# the eye model once every 30 iterations.
+		if self.count >= 30:
 			self.count = 0
+			logger.warning(self.eye)
+		self.count += 1
+		self.unproject_observations()
+		self.initialize_model()
 
 	def unproject_observations(self, eye_z = 20):
 		# ransac default to false so I skip for loop (haven't implemented it yet)

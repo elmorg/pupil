@@ -46,6 +46,7 @@ from pupil_detectors import sphere_fitter
 from pupil_detectors.sphere_fitter import visualizer
 from pupil_detectors.sphere_fitter import geometry
 
+from pupil_detectors.eye_model_3d import build_test #cpp model
 
 # time
 import time
@@ -112,7 +113,6 @@ def eye(g_pool,cap_src,cap_size,rx_from_world,eye_id=0):
     def on_char(window,char):
         g_pool.gui.update_char(char)
 
-
     def on_button(window,button, action, mods):
         if g_pool.display_mode == 'roi':
             if action == GLFW_RELEASE and u_r.active_edit_pt:
@@ -128,8 +128,6 @@ def eye(g_pool,cap_src,cap_size,rx_from_world,eye_id=0):
                     return # if the roi interacts we dont what the gui to interact as well
 
         g_pool.gui.update_button(button,action,mods)
-
-
 
     def on_pos(window,x, y):
         hdpi_factor = float(glfwGetFramebufferSize(window)[0]/glfwGetWindowSize(window)[0])
@@ -189,6 +187,8 @@ def eye(g_pool,cap_src,cap_size,rx_from_world,eye_id=0):
     pupil_detector = Canny_Detector(g_pool)
     intrinsics = np.matrix('879.193 0 320; 0 -879.193 240; 0 0 1')
     eye_model = sphere_fitter.Sphere_Fitter(intrinsics = intrinsics)
+    #cpp model
+    cpp_model = build_test.eye_model_3d.PyEyeModelFitter(focal_length=879.193, x_disp = 320, y_disp = 240)
 
     # UI callback functions
     def set_scale(new_scale):
@@ -259,7 +259,6 @@ def eye(g_pool,cap_src,cap_size,rx_from_world,eye_id=0):
 
     # load last gui configuration
     g_pool.gui.configuration = session_settings.get('ui_config',{})
-
 
     #set the last saved window size
     on_resize(main_window, *glfwGetWindowSize(main_window))
@@ -367,6 +366,7 @@ def eye(g_pool,cap_src,cap_size,rx_from_world,eye_id=0):
         #eye sphere fitter adding
         if result['confidence'] > 0.8:
             eye_model.add_pupil_labs_observation(result)
+            cpp_model.add_pupil_labs_observation(result)
             # print eye_model.observations[-1].ellipse
 
             #draw the circle back as an ellipse
@@ -386,6 +386,7 @@ def eye(g_pool,cap_src,cap_size,rx_from_world,eye_id=0):
             # eye_model.unproject_observations()
             # eye_model.initialize_model()
             eye_model.update_model() #this calls unproject and initialize
+            cpp_model.update_model() #this calls unproject and initialize, prints once every 30
             cygl_draw_points([eye_model.eye.project(eye_model.intrinsics).center],30,cygl_rgba(1,1,0,.5)) #draw eye center
 
         #draw all eye normal lines

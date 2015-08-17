@@ -258,7 +258,12 @@ void EyeModelFitter::reset(){
     model_version++;
 }
 
-void  singleeyefitter::EyeModelFitter::print_eye(){
+// std::string singleeyefitter::EyeModelFitter::get_eye_string(){
+//     // std::cout << eye << std::endl;
+//     return eye.tostring();
+// } // to be implemented
+
+void singleeyefitter::EyeModelFitter::print_eye(){
     std::cout << eye << std::endl;
 }
 

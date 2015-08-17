@@ -86,6 +86,7 @@ namespace singleeyefitter {
         void reset();
 
         //printing functions
+        std::string get_eye_string(); // will need to return string instead of simply void printing
         void print_eye();
         void print_ellipse(Index id);
 

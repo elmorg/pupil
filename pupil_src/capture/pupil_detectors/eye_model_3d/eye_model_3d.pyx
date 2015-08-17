@@ -7,6 +7,7 @@ cdef extern from "singleeyefitter/singleeyefitter.h" namespace "singleeyefitter"
         void initialise_model()
         void unproject_observations(double pupil_radius, double eye_z )
         void add_observation(double center_x,double center_y, double major_radius, double minor_radius, double angle)
+        # std::string get_eye_string()
         void print_eye()
         void print_ellipse(size_t id)
 

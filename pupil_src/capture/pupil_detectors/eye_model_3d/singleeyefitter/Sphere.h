@@ -14,13 +14,9 @@ namespace singleeyefitter {
         Vector center;
         Scalar radius;
 
-        Sphere() : center(0, 0, 0), radius(0)
-        {
-        }
+        Sphere() : center(0, 0, 0), radius(0){}
         Sphere(Vector center, Scalar radius)
-            : center(std::move(center)), radius(std::move(radius))
-        {
-        }
+            : center(std::move(center)), radius(std::move(radius)) { }
 
         static const Sphere Null;
 
@@ -32,6 +28,11 @@ namespace singleeyefitter {
         operator safe_bool_type() const {
             return *this != Null ? &Sphere::this_type_does_not_support_comparisons : 0;
         }
+
+        // std::string tostring(){
+        //     std::string toreturn = "Sphere { center: (" + circle.center[0] + "," << circle.center[1] + "," + circle.center[2] << "), radius: " + circle.radius + " }";
+        //     return toreturn;
+        // } // to be implemented
     };
 
     template<typename Scalar>
@@ -55,37 +56,5 @@ namespace singleeyefitter {
     }
 
 }
-
-/*namespace matlab {
-    template<typename T>
-    struct matlab_traits<typename Sphere<T>, typename std::enable_if<
-        matlab::internal::mxHelper<T>::exists
-    >::type>
-    {
-        static Sphere<T> fromMxArray(mxArray* arr) {
-            auto arr_size = mxGetNumberOfElements(arr);
-            auto arr_ndims = mxGetNumberOfDimensions(arr);
-            auto arr_dims = mxGetDimensions(arr);
-
-            if (!mxIsStruct(arr)) {
-                throw std::exception("Conversion requires struct");
-            }
-
-            mxArray* center_arr = mxGetField(arr, 0, "center");
-            if (!center_arr)  {
-                throw std::exception("No 'center' field on struct");
-            }
-
-            mxArray* radius_arr = mxGetField(arr, 0, "radius");
-            if (!radius_arr)  {
-                throw std::exception("No 'radius' field on struct");
-            }
-
-            return Sphere<T>(matlab::matlab_traits<Sphere<T>::Vector>::fromMxArray(center_arr),
-                matlab::matlab_traits<Sphere<T>::Scalar>::fromMxArray(radius_arr));
-        }
-
-    };
-}*/
 
 #endif//_SPHERE_H_
