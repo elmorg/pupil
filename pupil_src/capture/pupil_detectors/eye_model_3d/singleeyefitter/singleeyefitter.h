@@ -118,6 +118,8 @@ namespace singleeyefitter {
         Circle circleFromParams(const PupilParams& params) const;
         static Circle circleFromParams(const Sphere& eye, const PupilParams& params);
 
+        std::vector<Vector3> intersect_contour_with_eye(std::vector<Vector2> contour);
+
         // functions I don't use, that require observation structure
         // const Circle& refine_single_with_contrast(Index id);
         // double single_contrast_metric(Index id) const;

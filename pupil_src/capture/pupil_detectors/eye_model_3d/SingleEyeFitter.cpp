@@ -312,3 +312,20 @@ void singleeyefitter::EyeModelFitter::unproject_observations(double pupil_radius
 
     model_version++;
 }
+
+// std::vector<Vector3> singleeyefitter::EyeModelFitter::intersect_contour_with_eye(std::vector<Vector2> contour){
+//     auto unprojected_point =
+     
+//         # cdef Matrix31d origin = Matrix31d(0,0,0)
+//         # cdef ParametrizedLine3d line
+//         # cdef pair[Matrix31d,Matrix31d] intersect_pts
+//         # for point in contour:
+//         #     direction = Matrix31d(point[0],point[1],point[2])
+//         #     line = ParametrizedLine3d(origin,direction)
+//         #     try:
+//         #         intersect_pts = intersect(line,self.thisptr.eye)
+//         #     except:
+//         #         pass
+//         #     finally:
+//         #         print intersect_pts.first[0],intersect_pts.first[1],intersect_pts.first[2]
+// }

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <boost/range.hpp>
 #include <Eigen/Core>
+#include <math.h> // added by Andrew
 
 namespace singleeyefitter {
 

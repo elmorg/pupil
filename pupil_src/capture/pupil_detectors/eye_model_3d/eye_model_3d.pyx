@@ -43,6 +43,9 @@ cdef extern from "singleeyefitter/singleeyefitter.h" namespace "singleeyefitter"
         Sphere[double] eye
         Ellipse2D[double] projected_eye #technically only need center, not whole ellipse. can optimize here
 
+# cdef extern from 'singleeyefitter/intersect.h' namespace 'singleeyefitter':
+#     cdef pair[Matrix31d,Matrix31d] intersect(const ParametrizedLine3d line, const Sphere[double] sphere) except +
+
 cdef extern from '<Eigen/Eigen>' namespace 'Eigen': 
     cdef cppclass Matrix21d "Eigen::Matrix<double,2,1>": # eigen defaults to column major layout
         Matrix21d() except + 
@@ -51,8 +54,13 @@ cdef extern from '<Eigen/Eigen>' namespace 'Eigen':
 
     cdef cppclass Matrix31d "Eigen::Matrix<double,3,1>": # eigen defaults to column major layout
         Matrix31d() except + 
+        Matrix31d(double x, double y, double z)
         double * data()
         double& operator[](size_t)
+
+    cdef cppclass ParametrizedLine3d "Eigen::ParametrizedLine<double, 3>":
+        ParametrizedLine3d() except +
+        ParametrizedLine3d(Matrix31d origin, Matrix31d direction)        
 
 cdef class PyEyeModelFitter:
     cdef EyeModelFitter *thisptr
@@ -144,6 +152,24 @@ cdef class PyEyeModelFitter:
             (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
             p.circle.radius))
 
+    def intersect_contour_with_eye(self,float[:,:] contour):
+        #eye is sphere.
+        # self.thisptr.intersect_contour_with_eye(contour)
+        pass
+        # cdef Matrix31d direction
+        # cdef Matrix31d origin = Matrix31d(0,0,0)
+        # cdef ParametrizedLine3d line
+        # cdef pair[Matrix31d,Matrix31d] intersect_pts
+        # for point in contour:
+        #     direction = Matrix31d(point[0],point[1],point[2])
+        #     line = ParametrizedLine3d(origin,direction)
+        #     try:
+        #         intersect_pts = intersect(line,self.thisptr.eye)
+        #     except:
+        #         pass
+        #     finally:
+        #         print intersect_pts.first[0],intersect_pts.first[1],intersect_pts.first[2]
+
     property model_version:
         def __get__(self):
             return self.thisptr.model_version
@@ -159,7 +185,6 @@ cdef class PyEyeModelFitter:
             cdef Ellipse2D[double] projected_eye = self.thisptr.projected_eye
             temp = ((projected_eye.center[0],projected_eye.center[1]),
                 projected_eye.major_radius,projected_eye.minor_radius,projected_eye.angle)
-
 
 
 
