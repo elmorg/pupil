@@ -563,7 +563,8 @@ typedef volatile __pyx_atomic_int_type __pyx_atomic_int;
 
 /*--- Type declarations ---*/
 struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter;
-struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations;
+struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations;
+struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations;
 struct __pyx_array_obj;
 struct __pyx_MemviewEnum_obj;
 struct __pyx_memoryview_obj;
@@ -587,11 +588,30 @@ struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitte
 /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":145
  *             p.circle.radius))
  * 
+ *     def get_last_pupil_observations(self,number):             # <<<<<<<<<<<<<<
+ *         cdef EyeModelFitter.Pupil p
+ *         for i in xrange(self.thisptr.pupils.size()-number,self.thisptr.pupils.size()):
+ */
+struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations {
+  PyObject_HEAD
+  PyObject *__pyx_v_i;
+  PyObject *__pyx_v_number;
+  singleeyefitter::EyeModelFitter::Pupil __pyx_v_p;
+  struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *__pyx_v_self;
+  PyObject *__pyx_t_0;
+  Py_ssize_t __pyx_t_1;
+  PyObject *(*__pyx_t_2)(PyObject *);
+};
+
+
+/* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":166
+ *             p.circle.radius))
+ * 
  *     def get_all_pupil_observations(self):             # <<<<<<<<<<<<<<
  *         cdef EyeModelFitter.Pupil p
  *         for p in self.thisptr.pupils:
  */
-struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations {
+struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations {
   PyObject_HEAD
   singleeyefitter::EyeModelFitter::Pupil __pyx_v_p;
   struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *__pyx_v_self;
@@ -773,15 +793,6 @@ static struct __pyx_vtabstruct__memoryviewslice *__pyx_vtabptr__memoryviewslice;
 #define __Pyx_CLEAR(r)    do { PyObject* tmp = ((PyObject*)(r)); r = NULL; __Pyx_DECREF(tmp);} while(0)
 #define __Pyx_XCLEAR(r)   do { if((r) != NULL) {PyObject* tmp = ((PyObject*)(r)); r = NULL; __Pyx_DECREF(tmp);}} while(0)
 
-static void __Pyx_RaiseArgtupleInvalid(const char* func_name, int exact,
-    Py_ssize_t num_min, Py_ssize_t num_max, Py_ssize_t num_found);
-
-static void __Pyx_RaiseDoubleKeywordsError(const char* func_name, PyObject* kw_name);
-
-static int __Pyx_ParseOptionalKeywords(PyObject *kwds, PyObject **argnames[], \
-    PyObject *kwds2, PyObject *values[], Py_ssize_t num_pos_args, \
-    const char* function_name);
-
 #if CYTHON_COMPILING_IN_CPYTHON
 static CYTHON_INLINE PyObject* __Pyx_PyObject_GetAttrStr(PyObject* obj, PyObject* attr_name) {
     PyTypeObject* tp = Py_TYPE(obj);
@@ -796,6 +807,17 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_GetAttrStr(PyObject* obj, PyObject
 #else
 #define __Pyx_PyObject_GetAttrStr(o,n) PyObject_GetAttr(o,n)
 #endif
+
+static PyObject *__Pyx_GetBuiltinName(PyObject *name);
+
+static void __Pyx_RaiseArgtupleInvalid(const char* func_name, int exact,
+    Py_ssize_t num_min, Py_ssize_t num_max, Py_ssize_t num_found);
+
+static void __Pyx_RaiseDoubleKeywordsError(const char* func_name, PyObject* kw_name);
+
+static int __Pyx_ParseOptionalKeywords(PyObject *kwds, PyObject **argnames[], \
+    PyObject *kwds2, PyObject *values[], Py_ssize_t num_pos_args, \
+    const char* function_name);
 
 #if CYTHON_COMPILING_IN_CPYTHON
 static CYTHON_INLINE PyObject* __Pyx_PyObject_Call(PyObject *func, PyObject *arg, PyObject *kw);
@@ -875,8 +897,6 @@ static CYTHON_INLINE void __Pyx_XDEC_MEMVIEW(__Pyx_memviewslice *, int, int);
 
 static CYTHON_INLINE int __Pyx_ArgTypeTest(PyObject *obj, PyTypeObject *type, int none_allowed,
     const char *name, int exact);
-
-static PyObject *__Pyx_GetBuiltinName(PyObject *name);
 
 static CYTHON_INLINE void __Pyx_ErrRestore(PyObject *type, PyObject *value, PyObject *tb);
 static CYTHON_INLINE void __Pyx_ErrFetch(PyObject **type, PyObject **value, PyObject **tb);
@@ -1138,7 +1158,8 @@ static PyObject *__pyx_memoryviewslice_assign_item_from_object(struct __pyx_memo
 
 /* Module declarations from 'pupil_detectors.eye_model_3d.eye_model_3d' */
 static PyTypeObject *__pyx_ptype_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter = 0;
-static PyTypeObject *__pyx_ptype_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations = 0;
+static PyTypeObject *__pyx_ptype_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations = 0;
+static PyTypeObject *__pyx_ptype_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations = 0;
 static PyTypeObject *__pyx_array_type = 0;
 static PyTypeObject *__pyx_MemviewEnum_type = 0;
 static PyTypeObject *__pyx_memoryview_type = 0;
@@ -1185,6 +1206,7 @@ static __Pyx_TypeInfo __Pyx_TypeInfo_float = { "float", NULL, sizeof(float), { 0
 int __pyx_module_is_main_pupil_detectors__eye_model_3d__eye_model_3d = 0;
 
 /* Implementation of 'pupil_detectors.eye_model_3d.eye_model_3d' */
+static PyObject *__pyx_builtin_xrange;
 static PyObject *__pyx_builtin_ValueError;
 static PyObject *__pyx_builtin_MemoryError;
 static PyObject *__pyx_builtin_enumerate;
@@ -1206,8 +1228,10 @@ static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
 static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_20print_eye(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_22get_projected_eye_center(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_24get_pupil_observation(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *__pyx_v_self, PyObject *__pyx_v_index); /* proto */
-static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_26get_all_pupil_observations(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_29intersect_contour_with_eye(CYTHON_UNUSED struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *__pyx_v_self, CYTHON_UNUSED __Pyx_memviewslice __pyx_v_contour); /* proto */
+static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_26get_last_pupil_observations(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *__pyx_v_self, PyObject *__pyx_v_number); /* proto */
+static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_29get_last_pupil_observation(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_31get_all_pupil_observations(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_34intersect_contour_with_eye(CYTHON_UNUSED struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *__pyx_v_self, CYTHON_UNUSED __Pyx_memviewslice __pyx_v_contour); /* proto */
 static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_13model_version___get__(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_3eye___get__(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_13projected_eye___get__(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *__pyx_v_self); /* proto */
@@ -1248,7 +1272,8 @@ static PyObject *__pyx_memoryview___pyx_pf_15View_dot_MemoryView_10memoryview_22
 static void __pyx_memoryviewslice___pyx_pf_15View_dot_MemoryView_16_memoryviewslice___dealloc__(struct __pyx_memoryviewslice_obj *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_15View_dot_MemoryView_16_memoryviewslice_4base___get__(struct __pyx_memoryviewslice_obj *__pyx_v_self); /* proto */
 static PyObject *__pyx_tp_new_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
-static PyObject *__pyx_tp_new_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
+static PyObject *__pyx_tp_new_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
+static PyObject *__pyx_tp_new_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_array(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_Enum(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_memoryview(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
@@ -1290,6 +1315,7 @@ static char __pyx_k_name_2[] = "__name__";
 static char __pyx_k_struct[] = "struct";
 static char __pyx_k_unpack[] = "unpack";
 static char __pyx_k_x_disp[] = "x_disp";
+static char __pyx_k_xrange[] = "xrange";
 static char __pyx_k_y_disp[] = "y_disp";
 static char __pyx_k_fortran[] = "fortran";
 static char __pyx_k_memview[] = "memview";
@@ -1322,11 +1348,13 @@ static char __pyx_k_Invalid_shape_in_axis_d_d[] = "Invalid shape in axis %d: %d.
 static char __pyx_k_Index_out_of_bounds_axis_d[] = "Index out of bounds (axis %d)";
 static char __pyx_k_get_all_pupil_observations[] = "get_all_pupil_observations";
 static char __pyx_k_Step_may_not_be_zero_axis_d[] = "Step may not be zero (axis %d)";
+static char __pyx_k_get_last_pupil_observations[] = "get_last_pupil_observations";
 static char __pyx_k_itemsize_0_for_cython_array[] = "itemsize <= 0 for cython.array";
 static char __pyx_k_Sphere_center_s_s_s_radius_s[] = "Sphere ( center = [%s, %s, %s], radius = %s)";
 static char __pyx_k_unable_to_allocate_array_data[] = "unable to allocate array data.";
 static char __pyx_k_strided_and_direct_or_indirect[] = "<strided and direct or indirect>";
 static char __pyx_k_Ellipse_center_s_s_major_radius[] = "Ellipse ( center = [%s, %s], major_radius = %.3f, minor_radius = %.3f, angle = %.3f)";
+static char __pyx_k_PyEyeModelFitter_get_last_pupil[] = "PyEyeModelFitter.get_last_pupil_observations";
 static char __pyx_k_All_dimensions_preceding_dimensi[] = "All dimensions preceding dimension %d must be indexed and not sliced";
 static char __pyx_k_Buffer_view_does_not_expose_stri[] = "Buffer view does not expose strides";
 static char __pyx_k_Can_only_create_a_buffer_that_is[] = "Can only create a buffer that is contiguous in memory.";
@@ -1355,6 +1383,7 @@ static PyObject *__pyx_kp_s_MemoryView_of_r_object;
 static PyObject *__pyx_n_b_O;
 static PyObject *__pyx_kp_s_Out_of_bounds_on_buffer_access_a;
 static PyObject *__pyx_n_s_PyEyeModelFitter_get_all_pupil_o;
+static PyObject *__pyx_n_s_PyEyeModelFitter_get_last_pupil;
 static PyObject *__pyx_kp_s_Sphere_center_s_s_s_radius_s;
 static PyObject *__pyx_n_s_TypeError;
 static PyObject *__pyx_kp_s_Unable_to_convert_item_to_object;
@@ -1383,6 +1412,7 @@ static PyObject *__pyx_n_s_format;
 static PyObject *__pyx_n_s_fortran;
 static PyObject *__pyx_n_u_fortran;
 static PyObject *__pyx_n_s_get_all_pupil_observations;
+static PyObject *__pyx_n_s_get_last_pupil_observations;
 static PyObject *__pyx_kp_s_got_differing_extents_in_dimensi;
 static PyObject *__pyx_n_s_id;
 static PyObject *__pyx_n_s_import;
@@ -1420,6 +1450,7 @@ static PyObject *__pyx_kp_s_unable_to_allocate_array_data;
 static PyObject *__pyx_kp_s_unable_to_allocate_shape_and_str;
 static PyObject *__pyx_n_s_unpack;
 static PyObject *__pyx_n_s_x_disp;
+static PyObject *__pyx_n_s_xrange;
 static PyObject *__pyx_n_s_y_disp;
 static PyObject *__pyx_float_3_1415926535;
 static PyObject *__pyx_int_0;
@@ -3122,7 +3153,7 @@ static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
  *             (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
  *             p.circle.radius))             # <<<<<<<<<<<<<<
  * 
- *     def get_all_pupil_observations(self):
+ *     def get_last_pupil_observations(self,number):
  */
   __pyx_t_3 = PyFloat_FromDouble(__pyx_v_p.circle.radius); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 143; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
@@ -3197,33 +3228,690 @@ static PyObject *__pyx_gb_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
 /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":145
  *             p.circle.radius))
  * 
- *     def get_all_pupil_observations(self):             # <<<<<<<<<<<<<<
+ *     def get_last_pupil_observations(self,number):             # <<<<<<<<<<<<<<
  *         cdef EyeModelFitter.Pupil p
- *         for p in self.thisptr.pupils:
+ *         for i in xrange(self.thisptr.pupils.size()-number,self.thisptr.pupils.size()):
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_27get_all_pupil_observations(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_27get_all_pupil_observations(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_27get_last_pupil_observations(PyObject *__pyx_v_self, PyObject *__pyx_v_number); /*proto*/
+static PyObject *__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_27get_last_pupil_observations(PyObject *__pyx_v_self, PyObject *__pyx_v_number) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("get_all_pupil_observations (wrapper)", 0);
-  __pyx_r = __pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_26get_all_pupil_observations(((struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *)__pyx_v_self));
+  __Pyx_RefNannySetupContext("get_last_pupil_observations (wrapper)", 0);
+  __pyx_r = __pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_26get_last_pupil_observations(((struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *)__pyx_v_self), ((PyObject *)__pyx_v_number));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_26get_all_pupil_observations(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *__pyx_v_self) {
-  struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations *__pyx_cur_scope;
+static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_26get_last_pupil_observations(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *__pyx_v_self, PyObject *__pyx_v_number) {
+  struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations *__pyx_cur_scope;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("get_last_pupil_observations", 0);
+  __pyx_cur_scope = (struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations *)__pyx_tp_new_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations(__pyx_ptype_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations, __pyx_empty_tuple, NULL);
+  if (unlikely(!__pyx_cur_scope)) {
+    __Pyx_RefNannyFinishContext();
+    return NULL;
+  }
+  __Pyx_GOTREF(__pyx_cur_scope);
+  __pyx_cur_scope->__pyx_v_self = __pyx_v_self;
+  __Pyx_INCREF((PyObject *)__pyx_cur_scope->__pyx_v_self);
+  __Pyx_GIVEREF((PyObject *)__pyx_cur_scope->__pyx_v_self);
+  __pyx_cur_scope->__pyx_v_number = __pyx_v_number;
+  __Pyx_INCREF(__pyx_cur_scope->__pyx_v_number);
+  __Pyx_GIVEREF(__pyx_cur_scope->__pyx_v_number);
+  {
+    __pyx_GeneratorObject *gen = __Pyx_Generator_New((__pyx_generator_body_t) __pyx_gb_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_28generator, (PyObject *) __pyx_cur_scope, __pyx_n_s_get_last_pupil_observations, __pyx_n_s_PyEyeModelFitter_get_last_pupil); if (unlikely(!gen)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_DECREF(__pyx_cur_scope);
+    __Pyx_RefNannyFinishContext();
+    return (PyObject *) gen;
+  }
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_AddTraceback("pupil_detectors.eye_model_3d.eye_model_3d.PyEyeModelFitter.get_last_pupil_observations", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __Pyx_DECREF(((PyObject *)__pyx_cur_scope));
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_gb_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_28generator(__pyx_GeneratorObject *__pyx_generator, PyObject *__pyx_sent_value) /* generator body */
+{
+  struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations *__pyx_cur_scope = ((struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations *)__pyx_generator->closure);
+  PyObject *__pyx_r = NULL;
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  Py_ssize_t __pyx_t_4;
+  PyObject *(*__pyx_t_5)(PyObject *);
+  size_t __pyx_t_6;
+  PyObject *__pyx_t_7 = NULL;
+  PyObject *__pyx_t_8 = NULL;
+  PyObject *__pyx_t_9 = NULL;
+  PyObject *__pyx_t_10 = NULL;
+  PyObject *__pyx_t_11 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("None", 0);
+  switch (__pyx_generator->resume_label) {
+    case 0: goto __pyx_L3_first_run;
+    case 1: goto __pyx_L6_resume_from_yield;
+    default: /* CPython raises the right error here */
+    __Pyx_RefNannyFinishContext();
+    return NULL;
+  }
+  __pyx_L3_first_run:;
+  if (unlikely(!__pyx_sent_value)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":147
+ *     def get_last_pupil_observations(self,number):
+ *         cdef EyeModelFitter.Pupil p
+ *         for i in xrange(self.thisptr.pupils.size()-number,self.thisptr.pupils.size()):             # <<<<<<<<<<<<<<
+ *             p = self.thisptr.pupils[i]
+ *             yield (((p.ellipse.center[0],p.ellipse.center[1]),
+ */
+  __pyx_t_1 = __Pyx_PyInt_FromSize_t(__pyx_cur_scope->__pyx_v_self->thisptr->pupils.size()); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 147; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = PyNumber_Subtract(__pyx_t_1, __pyx_cur_scope->__pyx_v_number); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 147; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyInt_FromSize_t(__pyx_cur_scope->__pyx_v_self->thisptr->pupils.size()); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 147; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 147; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_3);
+  PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  __pyx_t_2 = 0;
+  __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_xrange, __pyx_t_3, NULL); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 147; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  if (likely(PyList_CheckExact(__pyx_t_1)) || PyTuple_CheckExact(__pyx_t_1)) {
+    __pyx_t_3 = __pyx_t_1; __Pyx_INCREF(__pyx_t_3); __pyx_t_4 = 0;
+    __pyx_t_5 = NULL;
+  } else {
+    __pyx_t_4 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 147; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_5 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 147; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  }
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  for (;;) {
+    if (likely(!__pyx_t_5)) {
+      if (likely(PyList_CheckExact(__pyx_t_3))) {
+        if (__pyx_t_4 >= PyList_GET_SIZE(__pyx_t_3)) break;
+        #if CYTHON_COMPILING_IN_CPYTHON
+        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_4); __Pyx_INCREF(__pyx_t_1); __pyx_t_4++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 147; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        #else
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 147; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        #endif
+      } else {
+        if (__pyx_t_4 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
+        #if CYTHON_COMPILING_IN_CPYTHON
+        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_4); __Pyx_INCREF(__pyx_t_1); __pyx_t_4++; if (unlikely(0 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 147; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        #else
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 147; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        #endif
+      }
+    } else {
+      __pyx_t_1 = __pyx_t_5(__pyx_t_3);
+      if (unlikely(!__pyx_t_1)) {
+        PyObject* exc_type = PyErr_Occurred();
+        if (exc_type) {
+          if (likely(exc_type == PyExc_StopIteration || PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+          else {__pyx_filename = __pyx_f[0]; __pyx_lineno = 147; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+        }
+        break;
+      }
+      __Pyx_GOTREF(__pyx_t_1);
+    }
+    __Pyx_XGOTREF(__pyx_cur_scope->__pyx_v_i);
+    __Pyx_XDECREF_SET(__pyx_cur_scope->__pyx_v_i, __pyx_t_1);
+    __Pyx_GIVEREF(__pyx_t_1);
+    __pyx_t_1 = 0;
+
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":148
+ *         cdef EyeModelFitter.Pupil p
+ *         for i in xrange(self.thisptr.pupils.size()-number,self.thisptr.pupils.size()):
+ *             p = self.thisptr.pupils[i]             # <<<<<<<<<<<<<<
+ *             yield (((p.ellipse.center[0],p.ellipse.center[1]),
+ *                 p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ */
+    __pyx_t_6 = __Pyx_PyInt_As_size_t(__pyx_cur_scope->__pyx_v_i); if (unlikely((__pyx_t_6 == (size_t)-1) && PyErr_Occurred())) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_cur_scope->__pyx_v_p = (__pyx_cur_scope->__pyx_v_self->thisptr->pupils[__pyx_t_6]);
+
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":149
+ *         for i in xrange(self.thisptr.pupils.size()-number,self.thisptr.pupils.size()):
+ *             p = self.thisptr.pupils[i]
+ *             yield (((p.ellipse.center[0],p.ellipse.center[1]),             # <<<<<<<<<<<<<<
+ *                 p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ *                 (p.params.theta,p.params.psi,p.params.radius),
+ */
+    __pyx_t_1 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.ellipse.center[0])); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 149; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_2 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.ellipse.center[1])); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 149; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_7 = PyTuple_New(2); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 149; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_7);
+    PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_1);
+    __Pyx_GIVEREF(__pyx_t_1);
+    PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_t_2);
+    __Pyx_GIVEREF(__pyx_t_2);
+    __pyx_t_1 = 0;
+    __pyx_t_2 = 0;
+
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":150
+ *             p = self.thisptr.pupils[i]
+ *             yield (((p.ellipse.center[0],p.ellipse.center[1]),
+ *                 p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),             # <<<<<<<<<<<<<<
+ *                 (p.params.theta,p.params.psi,p.params.radius),
+ *                 ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),
+ */
+    __pyx_t_2 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.ellipse.major_radius); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 150; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_1 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.ellipse.minor_radius); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 150; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_8 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.ellipse.angle); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 150; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_8);
+
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":149
+ *         for i in xrange(self.thisptr.pupils.size()-number,self.thisptr.pupils.size()):
+ *             p = self.thisptr.pupils[i]
+ *             yield (((p.ellipse.center[0],p.ellipse.center[1]),             # <<<<<<<<<<<<<<
+ *                 p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ *                 (p.params.theta,p.params.psi,p.params.radius),
+ */
+    __pyx_t_9 = PyTuple_New(4); if (unlikely(!__pyx_t_9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 149; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_9);
+    PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_7);
+    __Pyx_GIVEREF(__pyx_t_7);
+    PyTuple_SET_ITEM(__pyx_t_9, 1, __pyx_t_2);
+    __Pyx_GIVEREF(__pyx_t_2);
+    PyTuple_SET_ITEM(__pyx_t_9, 2, __pyx_t_1);
+    __Pyx_GIVEREF(__pyx_t_1);
+    PyTuple_SET_ITEM(__pyx_t_9, 3, __pyx_t_8);
+    __Pyx_GIVEREF(__pyx_t_8);
+    __pyx_t_7 = 0;
+    __pyx_t_2 = 0;
+    __pyx_t_1 = 0;
+    __pyx_t_8 = 0;
+
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":151
+ *             yield (((p.ellipse.center[0],p.ellipse.center[1]),
+ *                 p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ *                 (p.params.theta,p.params.psi,p.params.radius),             # <<<<<<<<<<<<<<
+ *                 ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),
+ *                 (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
+ */
+    __pyx_t_8 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.params.theta); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 151; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_8);
+    __pyx_t_1 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.params.psi); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 151; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_2 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.params.radius); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 151; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_7 = PyTuple_New(3); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 151; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_7);
+    PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_8);
+    __Pyx_GIVEREF(__pyx_t_8);
+    PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_t_1);
+    __Pyx_GIVEREF(__pyx_t_1);
+    PyTuple_SET_ITEM(__pyx_t_7, 2, __pyx_t_2);
+    __Pyx_GIVEREF(__pyx_t_2);
+    __pyx_t_8 = 0;
+    __pyx_t_1 = 0;
+    __pyx_t_2 = 0;
+
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":152
+ *                 p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ *                 (p.params.theta,p.params.psi,p.params.radius),
+ *                 ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),             # <<<<<<<<<<<<<<
+ *                 (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
+ *                 p.circle.radius))
+ */
+    __pyx_t_2 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.circle.center[0])); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 152; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_1 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.circle.center[1])); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 152; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_8 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.circle.center[2])); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 152; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_8);
+    __pyx_t_10 = PyTuple_New(3); if (unlikely(!__pyx_t_10)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 152; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_10);
+    PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_2);
+    __Pyx_GIVEREF(__pyx_t_2);
+    PyTuple_SET_ITEM(__pyx_t_10, 1, __pyx_t_1);
+    __Pyx_GIVEREF(__pyx_t_1);
+    PyTuple_SET_ITEM(__pyx_t_10, 2, __pyx_t_8);
+    __Pyx_GIVEREF(__pyx_t_8);
+    __pyx_t_2 = 0;
+    __pyx_t_1 = 0;
+    __pyx_t_8 = 0;
+
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":153
+ *                 (p.params.theta,p.params.psi,p.params.radius),
+ *                 ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),
+ *                 (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),             # <<<<<<<<<<<<<<
+ *                 p.circle.radius))
+ * 
+ */
+    __pyx_t_8 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.circle.normal[0])); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 153; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_8);
+    __pyx_t_1 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.circle.normal[1])); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 153; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_2 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.circle.normal[2])); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 153; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_2);
+    __pyx_t_11 = PyTuple_New(3); if (unlikely(!__pyx_t_11)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 153; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_11);
+    PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_8);
+    __Pyx_GIVEREF(__pyx_t_8);
+    PyTuple_SET_ITEM(__pyx_t_11, 1, __pyx_t_1);
+    __Pyx_GIVEREF(__pyx_t_1);
+    PyTuple_SET_ITEM(__pyx_t_11, 2, __pyx_t_2);
+    __Pyx_GIVEREF(__pyx_t_2);
+    __pyx_t_8 = 0;
+    __pyx_t_1 = 0;
+    __pyx_t_2 = 0;
+
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":154
+ *                 ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),
+ *                 (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
+ *                 p.circle.radius))             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+    __pyx_t_2 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.circle.radius); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_2);
+
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":152
+ *                 p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ *                 (p.params.theta,p.params.psi,p.params.radius),
+ *                 ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),             # <<<<<<<<<<<<<<
+ *                 (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
+ *                 p.circle.radius))
+ */
+    __pyx_t_1 = PyTuple_New(3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 152; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_1);
+    PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_10);
+    __Pyx_GIVEREF(__pyx_t_10);
+    PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_11);
+    __Pyx_GIVEREF(__pyx_t_11);
+    PyTuple_SET_ITEM(__pyx_t_1, 2, __pyx_t_2);
+    __Pyx_GIVEREF(__pyx_t_2);
+    __pyx_t_10 = 0;
+    __pyx_t_11 = 0;
+    __pyx_t_2 = 0;
+
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":149
+ *         for i in xrange(self.thisptr.pupils.size()-number,self.thisptr.pupils.size()):
+ *             p = self.thisptr.pupils[i]
+ *             yield (((p.ellipse.center[0],p.ellipse.center[1]),             # <<<<<<<<<<<<<<
+ *                 p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ *                 (p.params.theta,p.params.psi,p.params.radius),
+ */
+    __pyx_t_2 = PyTuple_New(3); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 149; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_2);
+    PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_9);
+    __Pyx_GIVEREF(__pyx_t_9);
+    PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_7);
+    __Pyx_GIVEREF(__pyx_t_7);
+    PyTuple_SET_ITEM(__pyx_t_2, 2, __pyx_t_1);
+    __Pyx_GIVEREF(__pyx_t_1);
+    __pyx_t_9 = 0;
+    __pyx_t_7 = 0;
+    __pyx_t_1 = 0;
+    __pyx_r = __pyx_t_2;
+    __pyx_t_2 = 0;
+    __Pyx_XGIVEREF(__pyx_t_3);
+    __pyx_cur_scope->__pyx_t_0 = __pyx_t_3;
+    __pyx_cur_scope->__pyx_t_1 = __pyx_t_4;
+    __pyx_cur_scope->__pyx_t_2 = __pyx_t_5;
+    __Pyx_XGIVEREF(__pyx_r);
+    __Pyx_RefNannyFinishContext();
+    /* return from generator, yielding value */
+    __pyx_generator->resume_label = 1;
+    return __pyx_r;
+    __pyx_L6_resume_from_yield:;
+    __pyx_t_3 = __pyx_cur_scope->__pyx_t_0;
+    __pyx_cur_scope->__pyx_t_0 = 0;
+    __Pyx_XGOTREF(__pyx_t_3);
+    __pyx_t_4 = __pyx_cur_scope->__pyx_t_1;
+    __pyx_t_5 = __pyx_cur_scope->__pyx_t_2;
+    if (unlikely(!__pyx_sent_value)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 149; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":147
+ *     def get_last_pupil_observations(self,number):
+ *         cdef EyeModelFitter.Pupil p
+ *         for i in xrange(self.thisptr.pupils.size()-number,self.thisptr.pupils.size()):             # <<<<<<<<<<<<<<
+ *             p = self.thisptr.pupils[i]
+ *             yield (((p.ellipse.center[0],p.ellipse.center[1]),
+ */
+  }
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":145
+ *             p.circle.radius))
+ * 
+ *     def get_last_pupil_observations(self,number):             # <<<<<<<<<<<<<<
+ *         cdef EyeModelFitter.Pupil p
+ *         for i in xrange(self.thisptr.pupils.size()-number,self.thisptr.pupils.size()):
+ */
+
+  /* function exit code */
+  PyErr_SetNone(PyExc_StopIteration);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_7);
+  __Pyx_XDECREF(__pyx_t_8);
+  __Pyx_XDECREF(__pyx_t_9);
+  __Pyx_XDECREF(__pyx_t_10);
+  __Pyx_XDECREF(__pyx_t_11);
+  __Pyx_AddTraceback("get_last_pupil_observations", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_L0:;
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_generator->resume_label = -1;
+  __Pyx_Generator_clear((PyObject*)__pyx_generator);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+}
+
+/* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":157
+ * 
+ * 
+ *     def get_last_pupil_observation(self):             # <<<<<<<<<<<<<<
+ *         cdef EyeModelFitter.Pupil p = self.thisptr.pupils.back()
+ *         return (((p.ellipse.center[0],p.ellipse.center[1]),
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_30get_last_pupil_observation(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_30get_last_pupil_observation(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("get_last_pupil_observation (wrapper)", 0);
+  __pyx_r = __pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_29get_last_pupil_observation(((struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_29get_last_pupil_observation(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *__pyx_v_self) {
+  singleeyefitter::EyeModelFitter::Pupil __pyx_v_p;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  PyObject *__pyx_t_6 = NULL;
+  PyObject *__pyx_t_7 = NULL;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("get_last_pupil_observation", 0);
+
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":158
+ * 
+ *     def get_last_pupil_observation(self):
+ *         cdef EyeModelFitter.Pupil p = self.thisptr.pupils.back()             # <<<<<<<<<<<<<<
+ *         return (((p.ellipse.center[0],p.ellipse.center[1]),
+ *             p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ */
+  __pyx_v_p = __pyx_v_self->thisptr->pupils.back();
+
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":159
+ *     def get_last_pupil_observation(self):
+ *         cdef EyeModelFitter.Pupil p = self.thisptr.pupils.back()
+ *         return (((p.ellipse.center[0],p.ellipse.center[1]),             # <<<<<<<<<<<<<<
+ *             p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ *             (p.params.theta,p.params.psi,p.params.radius),
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = PyFloat_FromDouble((__pyx_v_p.ellipse.center[0])); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 159; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = PyFloat_FromDouble((__pyx_v_p.ellipse.center[1])); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 159; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 159; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_3);
+  PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_2);
+  __pyx_t_1 = 0;
+  __pyx_t_2 = 0;
+
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":160
+ *         cdef EyeModelFitter.Pupil p = self.thisptr.pupils.back()
+ *         return (((p.ellipse.center[0],p.ellipse.center[1]),
+ *             p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),             # <<<<<<<<<<<<<<
+ *             (p.params.theta,p.params.psi,p.params.radius),
+ *             ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),
+ */
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_p.ellipse.major_radius); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_p.ellipse.minor_radius); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_p.ellipse.angle); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_4);
+
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":159
+ *     def get_last_pupil_observation(self):
+ *         cdef EyeModelFitter.Pupil p = self.thisptr.pupils.back()
+ *         return (((p.ellipse.center[0],p.ellipse.center[1]),             # <<<<<<<<<<<<<<
+ *             p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ *             (p.params.theta,p.params.psi,p.params.radius),
+ */
+  __pyx_t_5 = PyTuple_New(4); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 159; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_5);
+  PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3);
+  __Pyx_GIVEREF(__pyx_t_3);
+  PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_5, 2, __pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_5, 3, __pyx_t_4);
+  __Pyx_GIVEREF(__pyx_t_4);
+  __pyx_t_3 = 0;
+  __pyx_t_2 = 0;
+  __pyx_t_1 = 0;
+  __pyx_t_4 = 0;
+
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":161
+ *         return (((p.ellipse.center[0],p.ellipse.center[1]),
+ *             p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ *             (p.params.theta,p.params.psi,p.params.radius),             # <<<<<<<<<<<<<<
+ *             ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),
+ *             (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
+ */
+  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_p.params.theta); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 161; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_p.params.psi); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 161; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_p.params.radius); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 161; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = PyTuple_New(3); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 161; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_3);
+  PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_4);
+  __Pyx_GIVEREF(__pyx_t_4);
+  PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_3, 2, __pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_2);
+  __pyx_t_4 = 0;
+  __pyx_t_1 = 0;
+  __pyx_t_2 = 0;
+
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":162
+ *             p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ *             (p.params.theta,p.params.psi,p.params.radius),
+ *             ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),             # <<<<<<<<<<<<<<
+ *             (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
+ *             p.circle.radius))
+ */
+  __pyx_t_2 = PyFloat_FromDouble((__pyx_v_p.circle.center[0])); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 162; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_1 = PyFloat_FromDouble((__pyx_v_p.circle.center[1])); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 162; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_4 = PyFloat_FromDouble((__pyx_v_p.circle.center[2])); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 162; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_6 = PyTuple_New(3); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 162; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_6);
+  PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_6, 1, __pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_6, 2, __pyx_t_4);
+  __Pyx_GIVEREF(__pyx_t_4);
+  __pyx_t_2 = 0;
+  __pyx_t_1 = 0;
+  __pyx_t_4 = 0;
+
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":163
+ *             (p.params.theta,p.params.psi,p.params.radius),
+ *             ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),
+ *             (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),             # <<<<<<<<<<<<<<
+ *             p.circle.radius))
+ * 
+ */
+  __pyx_t_4 = PyFloat_FromDouble((__pyx_v_p.circle.normal[0])); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 163; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_1 = PyFloat_FromDouble((__pyx_v_p.circle.normal[1])); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 163; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = PyFloat_FromDouble((__pyx_v_p.circle.normal[2])); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 163; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_7 = PyTuple_New(3); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 163; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_7);
+  PyTuple_SET_ITEM(__pyx_t_7, 0, __pyx_t_4);
+  __Pyx_GIVEREF(__pyx_t_4);
+  PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_7, 2, __pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_2);
+  __pyx_t_4 = 0;
+  __pyx_t_1 = 0;
+  __pyx_t_2 = 0;
+
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":164
+ *             ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),
+ *             (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
+ *             p.circle.radius))             # <<<<<<<<<<<<<<
+ * 
+ *     def get_all_pupil_observations(self):
+ */
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_p.circle.radius); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 164; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":162
+ *             p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ *             (p.params.theta,p.params.psi,p.params.radius),
+ *             ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),             # <<<<<<<<<<<<<<
+ *             (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
+ *             p.circle.radius))
+ */
+  __pyx_t_1 = PyTuple_New(3); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 162; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_6);
+  __Pyx_GIVEREF(__pyx_t_6);
+  PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_t_7);
+  __Pyx_GIVEREF(__pyx_t_7);
+  PyTuple_SET_ITEM(__pyx_t_1, 2, __pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_2);
+  __pyx_t_6 = 0;
+  __pyx_t_7 = 0;
+  __pyx_t_2 = 0;
+
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":159
+ *     def get_last_pupil_observation(self):
+ *         cdef EyeModelFitter.Pupil p = self.thisptr.pupils.back()
+ *         return (((p.ellipse.center[0],p.ellipse.center[1]),             # <<<<<<<<<<<<<<
+ *             p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ *             (p.params.theta,p.params.psi,p.params.radius),
+ */
+  __pyx_t_2 = PyTuple_New(3); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 159; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __Pyx_GOTREF(__pyx_t_2);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_5);
+  __Pyx_GIVEREF(__pyx_t_5);
+  PyTuple_SET_ITEM(__pyx_t_2, 1, __pyx_t_3);
+  __Pyx_GIVEREF(__pyx_t_3);
+  PyTuple_SET_ITEM(__pyx_t_2, 2, __pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  __pyx_t_5 = 0;
+  __pyx_t_3 = 0;
+  __pyx_t_1 = 0;
+  __pyx_r = __pyx_t_2;
+  __pyx_t_2 = 0;
+  goto __pyx_L0;
+
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":157
+ * 
+ * 
+ *     def get_last_pupil_observation(self):             # <<<<<<<<<<<<<<
+ *         cdef EyeModelFitter.Pupil p = self.thisptr.pupils.back()
+ *         return (((p.ellipse.center[0],p.ellipse.center[1]),
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_7);
+  __Pyx_AddTraceback("pupil_detectors.eye_model_3d.eye_model_3d.PyEyeModelFitter.get_last_pupil_observation", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+static PyObject *__pyx_gb_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_33generator1(__pyx_GeneratorObject *__pyx_generator, PyObject *__pyx_sent_value); /* proto */
+
+/* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":166
+ *             p.circle.radius))
+ * 
+ *     def get_all_pupil_observations(self):             # <<<<<<<<<<<<<<
+ *         cdef EyeModelFitter.Pupil p
+ *         for p in self.thisptr.pupils:
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_32get_all_pupil_observations(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_32get_all_pupil_observations(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("get_all_pupil_observations (wrapper)", 0);
+  __pyx_r = __pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_31get_all_pupil_observations(((struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_31get_all_pupil_observations(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *__pyx_v_self) {
+  struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations *__pyx_cur_scope;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_all_pupil_observations", 0);
-  __pyx_cur_scope = (struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations *)__pyx_tp_new_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations(__pyx_ptype_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations, __pyx_empty_tuple, NULL);
+  __pyx_cur_scope = (struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations *)__pyx_tp_new_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations(__pyx_ptype_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations, __pyx_empty_tuple, NULL);
   if (unlikely(!__pyx_cur_scope)) {
     __Pyx_RefNannyFinishContext();
     return NULL;
@@ -3233,7 +3921,7 @@ static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
   __Pyx_INCREF((PyObject *)__pyx_cur_scope->__pyx_v_self);
   __Pyx_GIVEREF((PyObject *)__pyx_cur_scope->__pyx_v_self);
   {
-    __pyx_GeneratorObject *gen = __Pyx_Generator_New((__pyx_generator_body_t) __pyx_gb_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_28generator, (PyObject *) __pyx_cur_scope, __pyx_n_s_get_all_pupil_observations, __pyx_n_s_PyEyeModelFitter_get_all_pupil_o); if (unlikely(!gen)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_GeneratorObject *gen = __Pyx_Generator_New((__pyx_generator_body_t) __pyx_gb_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_33generator1, (PyObject *) __pyx_cur_scope, __pyx_n_s_get_all_pupil_observations, __pyx_n_s_PyEyeModelFitter_get_all_pupil_o); if (unlikely(!gen)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 166; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_DECREF(__pyx_cur_scope);
     __Pyx_RefNannyFinishContext();
     return (PyObject *) gen;
@@ -3249,9 +3937,9 @@ static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
   return __pyx_r;
 }
 
-static PyObject *__pyx_gb_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_28generator(__pyx_GeneratorObject *__pyx_generator, PyObject *__pyx_sent_value) /* generator body */
+static PyObject *__pyx_gb_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_33generator1(__pyx_GeneratorObject *__pyx_generator, PyObject *__pyx_sent_value) /* generator body */
 {
-  struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations *__pyx_cur_scope = ((struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations *)__pyx_generator->closure);
+  struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations *__pyx_cur_scope = ((struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations *)__pyx_generator->closure);
   PyObject *__pyx_r = NULL;
   std::vector<singleeyefitter::EyeModelFitter::Pupil> ::iterator __pyx_t_1;
   std::vector<singleeyefitter::EyeModelFitter::Pupil>  *__pyx_t_2;
@@ -3276,14 +3964,14 @@ static PyObject *__pyx_gb_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
     return NULL;
   }
   __pyx_L3_first_run:;
-  if (unlikely(!__pyx_sent_value)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (unlikely(!__pyx_sent_value)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 166; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":147
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":168
  *     def get_all_pupil_observations(self):
  *         cdef EyeModelFitter.Pupil p
  *         for p in self.thisptr.pupils:             # <<<<<<<<<<<<<<
  *             yield (((p.ellipse.center[0],p.ellipse.center[1]),
- *             p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ *                 p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
  */
   __pyx_t_2 = &__pyx_cur_scope->__pyx_v_self->thisptr->pupils;
   __pyx_t_1 = __pyx_t_2->begin();
@@ -3293,18 +3981,18 @@ static PyObject *__pyx_gb_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
     ++__pyx_t_1;
     __pyx_cur_scope->__pyx_v_p = __pyx_t_3;
 
-    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":148
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":169
  *         cdef EyeModelFitter.Pupil p
  *         for p in self.thisptr.pupils:
  *             yield (((p.ellipse.center[0],p.ellipse.center[1]),             # <<<<<<<<<<<<<<
- *             p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
- *             (p.params.theta,p.params.psi,p.params.radius),
+ *                 p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ *                 (p.params.theta,p.params.psi,p.params.radius),
  */
-    __pyx_t_4 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.ellipse.center[0])); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.ellipse.center[0])); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 169; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.ellipse.center[1])); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_5 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.ellipse.center[1])); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 169; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_6 = PyTuple_New(2); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 169; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_6);
     PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4);
     __Pyx_GIVEREF(__pyx_t_4);
@@ -3313,28 +4001,28 @@ static PyObject *__pyx_gb_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
     __pyx_t_4 = 0;
     __pyx_t_5 = 0;
 
-    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":149
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":170
  *         for p in self.thisptr.pupils:
  *             yield (((p.ellipse.center[0],p.ellipse.center[1]),
- *             p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),             # <<<<<<<<<<<<<<
- *             (p.params.theta,p.params.psi,p.params.radius),
- *             ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),
+ *                 p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),             # <<<<<<<<<<<<<<
+ *                 (p.params.theta,p.params.psi,p.params.radius),
+ *                 ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),
  */
-    __pyx_t_5 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.ellipse.major_radius); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 149; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_5 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.ellipse.major_radius); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 170; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_4 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.ellipse.minor_radius); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 149; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.ellipse.minor_radius); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 170; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_7 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.ellipse.angle); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 149; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_7 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.ellipse.angle); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 170; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_7);
 
-    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":148
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":169
  *         cdef EyeModelFitter.Pupil p
  *         for p in self.thisptr.pupils:
  *             yield (((p.ellipse.center[0],p.ellipse.center[1]),             # <<<<<<<<<<<<<<
- *             p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
- *             (p.params.theta,p.params.psi,p.params.radius),
+ *                 p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ *                 (p.params.theta,p.params.psi,p.params.radius),
  */
-    __pyx_t_8 = PyTuple_New(4); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_8 = PyTuple_New(4); if (unlikely(!__pyx_t_8)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 169; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_8);
     PyTuple_SET_ITEM(__pyx_t_8, 0, __pyx_t_6);
     __Pyx_GIVEREF(__pyx_t_6);
@@ -3349,20 +4037,20 @@ static PyObject *__pyx_gb_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
     __pyx_t_4 = 0;
     __pyx_t_7 = 0;
 
-    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":150
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":171
  *             yield (((p.ellipse.center[0],p.ellipse.center[1]),
- *             p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
- *             (p.params.theta,p.params.psi,p.params.radius),             # <<<<<<<<<<<<<<
- *             ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),
- *             (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
+ *                 p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ *                 (p.params.theta,p.params.psi,p.params.radius),             # <<<<<<<<<<<<<<
+ *                 ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),
+ *                 (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
  */
-    __pyx_t_7 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.params.theta); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 150; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_7 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.params.theta); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 171; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_4 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.params.psi); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 150; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.params.psi); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 171; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.params.radius); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 150; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_5 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.params.radius); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 171; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_6 = PyTuple_New(3); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 150; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_6 = PyTuple_New(3); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 171; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_6);
     PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_7);
     __Pyx_GIVEREF(__pyx_t_7);
@@ -3374,20 +4062,20 @@ static PyObject *__pyx_gb_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
     __pyx_t_4 = 0;
     __pyx_t_5 = 0;
 
-    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":151
- *             p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
- *             (p.params.theta,p.params.psi,p.params.radius),
- *             ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),             # <<<<<<<<<<<<<<
- *             (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
- *             p.circle.radius))
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":172
+ *                 p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ *                 (p.params.theta,p.params.psi,p.params.radius),
+ *                 ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),             # <<<<<<<<<<<<<<
+ *                 (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
+ *                 p.circle.radius))
  */
-    __pyx_t_5 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.circle.center[0])); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 151; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_5 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.circle.center[0])); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_4 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.circle.center[1])); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 151; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.circle.center[1])); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_7 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.circle.center[2])); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 151; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_7 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.circle.center[2])); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_9 = PyTuple_New(3); if (unlikely(!__pyx_t_9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 151; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_9 = PyTuple_New(3); if (unlikely(!__pyx_t_9)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_9);
     PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_5);
     __Pyx_GIVEREF(__pyx_t_5);
@@ -3399,20 +4087,20 @@ static PyObject *__pyx_gb_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
     __pyx_t_4 = 0;
     __pyx_t_7 = 0;
 
-    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":152
- *             (p.params.theta,p.params.psi,p.params.radius),
- *             ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),
- *             (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),             # <<<<<<<<<<<<<<
- *             p.circle.radius))
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":173
+ *                 (p.params.theta,p.params.psi,p.params.radius),
+ *                 ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),
+ *                 (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),             # <<<<<<<<<<<<<<
+ *                 p.circle.radius))
  * 
  */
-    __pyx_t_7 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.circle.normal[0])); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 152; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_7 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.circle.normal[0])); if (unlikely(!__pyx_t_7)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 173; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_7);
-    __pyx_t_4 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.circle.normal[1])); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 152; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.circle.normal[1])); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 173; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_5 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.circle.normal[2])); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 152; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_5 = PyFloat_FromDouble((__pyx_cur_scope->__pyx_v_p.circle.normal[2])); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 173; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_10 = PyTuple_New(3); if (unlikely(!__pyx_t_10)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 152; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_10 = PyTuple_New(3); if (unlikely(!__pyx_t_10)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 173; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_10);
     PyTuple_SET_ITEM(__pyx_t_10, 0, __pyx_t_7);
     __Pyx_GIVEREF(__pyx_t_7);
@@ -3424,24 +4112,24 @@ static PyObject *__pyx_gb_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
     __pyx_t_4 = 0;
     __pyx_t_5 = 0;
 
-    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":153
- *             ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),
- *             (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
- *             p.circle.radius))             # <<<<<<<<<<<<<<
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":174
+ *                 ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),
+ *                 (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
+ *                 p.circle.radius))             # <<<<<<<<<<<<<<
  * 
  *     def intersect_contour_with_eye(self,float[:,:] contour):
  */
-    __pyx_t_5 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.circle.radius); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 153; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_5 = PyFloat_FromDouble(__pyx_cur_scope->__pyx_v_p.circle.radius); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 174; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_5);
 
-    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":151
- *             p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
- *             (p.params.theta,p.params.psi,p.params.radius),
- *             ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),             # <<<<<<<<<<<<<<
- *             (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
- *             p.circle.radius))
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":172
+ *                 p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ *                 (p.params.theta,p.params.psi,p.params.radius),
+ *                 ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),             # <<<<<<<<<<<<<<
+ *                 (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
+ *                 p.circle.radius))
  */
-    __pyx_t_4 = PyTuple_New(3); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 151; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_4 = PyTuple_New(3); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 172; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_4);
     PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_9);
     __Pyx_GIVEREF(__pyx_t_9);
@@ -3453,14 +4141,14 @@ static PyObject *__pyx_gb_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
     __pyx_t_10 = 0;
     __pyx_t_5 = 0;
 
-    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":148
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":169
  *         cdef EyeModelFitter.Pupil p
  *         for p in self.thisptr.pupils:
  *             yield (((p.ellipse.center[0],p.ellipse.center[1]),             # <<<<<<<<<<<<<<
- *             p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
- *             (p.params.theta,p.params.psi,p.params.radius),
+ *                 p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ *                 (p.params.theta,p.params.psi,p.params.radius),
  */
-    __pyx_t_5 = PyTuple_New(3); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_5 = PyTuple_New(3); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 169; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_5);
     PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_8);
     __Pyx_GIVEREF(__pyx_t_8);
@@ -3483,18 +4171,18 @@ static PyObject *__pyx_gb_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
     __pyx_L6_resume_from_yield:;
     __pyx_t_1 = __pyx_cur_scope->__pyx_t_0;
     __pyx_t_2 = __pyx_cur_scope->__pyx_t_1;
-    if (unlikely(!__pyx_sent_value)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 148; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    if (unlikely(!__pyx_sent_value)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 169; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
 
-    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":147
+    /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":168
  *     def get_all_pupil_observations(self):
  *         cdef EyeModelFitter.Pupil p
  *         for p in self.thisptr.pupils:             # <<<<<<<<<<<<<<
  *             yield (((p.ellipse.center[0],p.ellipse.center[1]),
- *             p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+ *                 p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
  */
   }
 
-  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":145
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":166
  *             p.circle.radius))
  * 
  *     def get_all_pupil_observations(self):             # <<<<<<<<<<<<<<
@@ -3522,8 +4210,8 @@ static PyObject *__pyx_gb_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
   return NULL;
 }
 
-/* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":155
- *             p.circle.radius))
+/* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":176
+ *                 p.circle.radius))
  * 
  *     def intersect_contour_with_eye(self,float[:,:] contour):             # <<<<<<<<<<<<<<
  *         #eye is sphere.
@@ -3531,8 +4219,8 @@ static PyObject *__pyx_gb_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_30intersect_contour_with_eye(PyObject *__pyx_v_self, PyObject *__pyx_arg_contour); /*proto*/
-static PyObject *__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_30intersect_contour_with_eye(PyObject *__pyx_v_self, PyObject *__pyx_arg_contour) {
+static PyObject *__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_35intersect_contour_with_eye(PyObject *__pyx_v_self, PyObject *__pyx_arg_contour); /*proto*/
+static PyObject *__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_35intersect_contour_with_eye(PyObject *__pyx_v_self, PyObject *__pyx_arg_contour) {
   CYTHON_UNUSED __Pyx_memviewslice __pyx_v_contour = { 0, 0, { 0 }, { 0 }, { 0 } };
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
@@ -3541,7 +4229,7 @@ static PyObject *__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("intersect_contour_with_eye (wrapper)", 0);
   assert(__pyx_arg_contour); {
-    __pyx_v_contour = __Pyx_PyObject_to_MemoryviewSlice_dsds_float(__pyx_arg_contour); if (unlikely(!__pyx_v_contour.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 155; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+    __pyx_v_contour = __Pyx_PyObject_to_MemoryviewSlice_dsds_float(__pyx_arg_contour); if (unlikely(!__pyx_v_contour.memview)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 176; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -3549,14 +4237,14 @@ static PyObject *__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_29intersect_contour_with_eye(((struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *)__pyx_v_self), __pyx_v_contour);
+  __pyx_r = __pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_34intersect_contour_with_eye(((struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *)__pyx_v_self), __pyx_v_contour);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_29intersect_contour_with_eye(CYTHON_UNUSED struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *__pyx_v_self, CYTHON_UNUSED __Pyx_memviewslice __pyx_v_contour) {
+static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_34intersect_contour_with_eye(CYTHON_UNUSED struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *__pyx_v_self, CYTHON_UNUSED __Pyx_memviewslice __pyx_v_contour) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("intersect_contour_with_eye", 0);
@@ -3569,7 +4257,7 @@ static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
   return __pyx_r;
 }
 
-/* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":174
+/* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":195
  * 
  *     property model_version:
  *         def __get__(self):             # <<<<<<<<<<<<<<
@@ -3599,7 +4287,7 @@ static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":175
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":196
  *     property model_version:
  *         def __get__(self):
  *             return self.thisptr.model_version             # <<<<<<<<<<<<<<
@@ -3607,13 +4295,13 @@ static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
  *     property eye:
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->thisptr->model_version); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 175; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->thisptr->model_version); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 196; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_r = __pyx_t_1;
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":174
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":195
  * 
  *     property model_version:
  *         def __get__(self):             # <<<<<<<<<<<<<<
@@ -3632,7 +4320,7 @@ static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
   return __pyx_r;
 }
 
-/* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":178
+/* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":199
  * 
  *     property eye:
  *         def __get__(self):             # <<<<<<<<<<<<<<
@@ -3668,7 +4356,7 @@ static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":179
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":200
  *     property eye:
  *         def __get__(self):
  *             cdef Sphere[double] eye = self.thisptr.eye             # <<<<<<<<<<<<<<
@@ -3678,20 +4366,20 @@ static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
   __pyx_t_1 = __pyx_v_self->thisptr->eye;
   __pyx_v_eye = __pyx_t_1;
 
-  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":180
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":201
  *         def __get__(self):
  *             cdef Sphere[double] eye = self.thisptr.eye
  *             temp = ((eye.center[0],eye.center[1],eye.center[2]),eye.radius)             # <<<<<<<<<<<<<<
  *             return temp
  * 
  */
-  __pyx_t_2 = PyFloat_FromDouble((__pyx_v_eye.center[0])); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 180; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyFloat_FromDouble((__pyx_v_eye.center[0])); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 201; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyFloat_FromDouble((__pyx_v_eye.center[1])); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 180; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyFloat_FromDouble((__pyx_v_eye.center[1])); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 201; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyFloat_FromDouble((__pyx_v_eye.center[2])); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 180; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyFloat_FromDouble((__pyx_v_eye.center[2])); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 201; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyTuple_New(3); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 180; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = PyTuple_New(3); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 201; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
   PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_2);
@@ -3702,9 +4390,9 @@ static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
   __pyx_t_2 = 0;
   __pyx_t_3 = 0;
   __pyx_t_4 = 0;
-  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_eye.radius); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 180; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyFloat_FromDouble(__pyx_v_eye.radius); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 201; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 180; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 201; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_5);
   __Pyx_GIVEREF(__pyx_t_5);
@@ -3715,7 +4403,7 @@ static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
   __pyx_v_temp = __pyx_t_3;
   __pyx_t_3 = 0;
 
-  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":181
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":202
  *             cdef Sphere[double] eye = self.thisptr.eye
  *             temp = ((eye.center[0],eye.center[1],eye.center[2]),eye.radius)
  *             return temp             # <<<<<<<<<<<<<<
@@ -3727,7 +4415,7 @@ static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
   __pyx_r = __pyx_v_temp;
   goto __pyx_L0;
 
-  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":178
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":199
  * 
  *     property eye:
  *         def __get__(self):             # <<<<<<<<<<<<<<
@@ -3750,7 +4438,7 @@ static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
   return __pyx_r;
 }
 
-/* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":184
+/* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":205
  * 
  *     property projected_eye:
  *         def __get__(self):             # <<<<<<<<<<<<<<
@@ -3787,7 +4475,7 @@ static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__get__", 0);
 
-  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":185
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":206
  *     property projected_eye:
  *         def __get__(self):
  *             cdef Ellipse2D[double] projected_eye = self.thisptr.projected_eye             # <<<<<<<<<<<<<<
@@ -3797,18 +4485,18 @@ static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
   __pyx_t_1 = __pyx_v_self->thisptr->projected_eye;
   __pyx_v_projected_eye = __pyx_t_1;
 
-  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":186
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":207
  *         def __get__(self):
  *             cdef Ellipse2D[double] projected_eye = self.thisptr.projected_eye
  *             temp = ((projected_eye.center[0],projected_eye.center[1]),             # <<<<<<<<<<<<<<
  *                 projected_eye.major_radius,projected_eye.minor_radius,projected_eye.angle)
  * 
  */
-  __pyx_t_2 = PyFloat_FromDouble((__pyx_v_projected_eye.center[0])); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 186; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyFloat_FromDouble((__pyx_v_projected_eye.center[0])); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyFloat_FromDouble((__pyx_v_projected_eye.center[1])); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 186; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyFloat_FromDouble((__pyx_v_projected_eye.center[1])); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 186; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyTuple_New(2); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_2);
@@ -3817,28 +4505,28 @@ static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
   __pyx_t_2 = 0;
   __pyx_t_3 = 0;
 
-  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":187
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":208
  *             cdef Ellipse2D[double] projected_eye = self.thisptr.projected_eye
  *             temp = ((projected_eye.center[0],projected_eye.center[1]),
  *                 projected_eye.major_radius,projected_eye.minor_radius,projected_eye.angle)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_projected_eye.major_radius); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 187; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_projected_eye.major_radius); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 208; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_projected_eye.minor_radius); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 187; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_projected_eye.minor_radius); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 208; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_5 = PyFloat_FromDouble(__pyx_v_projected_eye.angle); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 187; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = PyFloat_FromDouble(__pyx_v_projected_eye.angle); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 208; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
 
-  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":186
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":207
  *         def __get__(self):
  *             cdef Ellipse2D[double] projected_eye = self.thisptr.projected_eye
  *             temp = ((projected_eye.center[0],projected_eye.center[1]),             # <<<<<<<<<<<<<<
  *                 projected_eye.major_radius,projected_eye.minor_radius,projected_eye.angle)
  * 
  */
-  __pyx_t_6 = PyTuple_New(4); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 186; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_6 = PyTuple_New(4); if (unlikely(!__pyx_t_6)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 207; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_6);
   PyTuple_SET_ITEM(__pyx_t_6, 0, __pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_4);
@@ -3855,7 +4543,7 @@ static PyObject *__pyx_pf_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEy
   __pyx_v_temp = __pyx_t_6;
   __pyx_t_6 = 0;
 
-  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":184
+  /* "pupil_detectors/eye_model_3d/eye_model_3d.pyx":205
  * 
  *     property projected_eye:
  *         def __get__(self):             # <<<<<<<<<<<<<<
@@ -14758,8 +15446,10 @@ static PyMethodDef __pyx_methods_15pupil_detectors_12eye_model_3d_12eye_model_3d
   {"print_eye", (PyCFunction)__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_21print_eye, METH_NOARGS, 0},
   {"get_projected_eye_center", (PyCFunction)__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_23get_projected_eye_center, METH_NOARGS, 0},
   {"get_pupil_observation", (PyCFunction)__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_25get_pupil_observation, METH_O, 0},
-  {"get_all_pupil_observations", (PyCFunction)__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_27get_all_pupil_observations, METH_NOARGS, 0},
-  {"intersect_contour_with_eye", (PyCFunction)__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_30intersect_contour_with_eye, METH_O, 0},
+  {"get_last_pupil_observations", (PyCFunction)__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_27get_last_pupil_observations, METH_O, 0},
+  {"get_last_pupil_observation", (PyCFunction)__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_30get_last_pupil_observation, METH_NOARGS, 0},
+  {"get_all_pupil_observations", (PyCFunction)__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_32get_all_pupil_observations, METH_NOARGS, 0},
+  {"intersect_contour_with_eye", (PyCFunction)__pyx_pw_15pupil_detectors_12eye_model_3d_12eye_model_3d_16PyEyeModelFitter_35intersect_contour_with_eye, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -14829,64 +15519,83 @@ static PyTypeObject __pyx_type_15pupil_detectors_12eye_model_3d_12eye_model_3d_P
   #endif
 };
 
-static struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations *__pyx_freelist_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations[8];
-static int __pyx_freecount_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations = 0;
+static struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations *__pyx_freelist_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations[8];
+static int __pyx_freecount_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations = 0;
 
-static PyObject *__pyx_tp_new_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations(PyTypeObject *t, CYTHON_UNUSED PyObject *a, CYTHON_UNUSED PyObject *k) {
-  struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations *p;
+static PyObject *__pyx_tp_new_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations(PyTypeObject *t, CYTHON_UNUSED PyObject *a, CYTHON_UNUSED PyObject *k) {
+  struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations *p;
   PyObject *o;
-  if (CYTHON_COMPILING_IN_CPYTHON && likely((__pyx_freecount_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations > 0) & (t->tp_basicsize == sizeof(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations)))) {
-    o = (PyObject*)__pyx_freelist_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations[--__pyx_freecount_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations];
-    memset(o, 0, sizeof(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations));
+  if (CYTHON_COMPILING_IN_CPYTHON && likely((__pyx_freecount_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations > 0) & (t->tp_basicsize == sizeof(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations)))) {
+    o = (PyObject*)__pyx_freelist_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations[--__pyx_freecount_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations];
+    memset(o, 0, sizeof(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations));
     (void) PyObject_INIT(o, t);
     PyObject_GC_Track(o);
   } else {
     o = (*t->tp_alloc)(t, 0);
     if (unlikely(!o)) return 0;
   }
-  p = ((struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations *)o);
+  p = ((struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations *)o);
   new((void*)&(p->__pyx_v_p)) singleeyefitter::EyeModelFitter::Pupil();
-  new((void*)&(p->__pyx_t_0)) std::vector<singleeyefitter::EyeModelFitter::Pupil> ::iterator();
   return o;
 }
 
-static void __pyx_tp_dealloc_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations(PyObject *o) {
-  struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations *p = (struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations *)o;
+static void __pyx_tp_dealloc_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations(PyObject *o) {
+  struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations *p = (struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations *)o;
   PyObject_GC_UnTrack(o);
   __Pyx_call_destructor(&p->__pyx_v_p);
-  __Pyx_call_destructor(&p->__pyx_t_0);
+  Py_CLEAR(p->__pyx_v_i);
+  Py_CLEAR(p->__pyx_v_number);
   Py_CLEAR(p->__pyx_v_self);
-  if (CYTHON_COMPILING_IN_CPYTHON && ((__pyx_freecount_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations < 8) & (Py_TYPE(o)->tp_basicsize == sizeof(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations)))) {
-    __pyx_freelist_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations[__pyx_freecount_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations++] = ((struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations *)o);
+  Py_CLEAR(p->__pyx_t_0);
+  if (CYTHON_COMPILING_IN_CPYTHON && ((__pyx_freecount_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations < 8) & (Py_TYPE(o)->tp_basicsize == sizeof(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations)))) {
+    __pyx_freelist_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations[__pyx_freecount_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations++] = ((struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations *)o);
   } else {
     (*Py_TYPE(o)->tp_free)(o);
   }
 }
 
-static int __pyx_tp_traverse_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations(PyObject *o, visitproc v, void *a) {
+static int __pyx_tp_traverse_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations(PyObject *o, visitproc v, void *a) {
   int e;
-  struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations *p = (struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations *)o;
+  struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations *p = (struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations *)o;
+  if (p->__pyx_v_i) {
+    e = (*v)(p->__pyx_v_i, a); if (e) return e;
+  }
+  if (p->__pyx_v_number) {
+    e = (*v)(p->__pyx_v_number, a); if (e) return e;
+  }
   if (p->__pyx_v_self) {
     e = (*v)(((PyObject*)p->__pyx_v_self), a); if (e) return e;
+  }
+  if (p->__pyx_t_0) {
+    e = (*v)(p->__pyx_t_0, a); if (e) return e;
   }
   return 0;
 }
 
-static int __pyx_tp_clear_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations(PyObject *o) {
+static int __pyx_tp_clear_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations(PyObject *o) {
   PyObject* tmp;
-  struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations *p = (struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations *)o;
+  struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations *p = (struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations *)o;
+  tmp = ((PyObject*)p->__pyx_v_i);
+  p->__pyx_v_i = Py_None; Py_INCREF(Py_None);
+  Py_XDECREF(tmp);
+  tmp = ((PyObject*)p->__pyx_v_number);
+  p->__pyx_v_number = Py_None; Py_INCREF(Py_None);
+  Py_XDECREF(tmp);
   tmp = ((PyObject*)p->__pyx_v_self);
   p->__pyx_v_self = ((struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *)Py_None); Py_INCREF(Py_None);
+  Py_XDECREF(tmp);
+  tmp = ((PyObject*)p->__pyx_t_0);
+  p->__pyx_t_0 = Py_None; Py_INCREF(Py_None);
   Py_XDECREF(tmp);
   return 0;
 }
 
-static PyTypeObject __pyx_type_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations = {
+static PyTypeObject __pyx_type_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations = {
   PyVarObject_HEAD_INIT(0, 0)
-  "pupil_detectors.eye_model_3d.eye_model_3d.__pyx_scope_struct__get_all_pupil_observations", /*tp_name*/
-  sizeof(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations), /*tp_basicsize*/
+  "pupil_detectors.eye_model_3d.eye_model_3d.__pyx_scope_struct__get_last_pupil_observations", /*tp_name*/
+  sizeof(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations), /*tp_basicsize*/
   0, /*tp_itemsize*/
-  __pyx_tp_dealloc_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations, /*tp_dealloc*/
+  __pyx_tp_dealloc_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations, /*tp_dealloc*/
   0, /*tp_print*/
   0, /*tp_getattr*/
   0, /*tp_setattr*/
@@ -14907,8 +15616,8 @@ static PyTypeObject __pyx_type_15pupil_detectors_12eye_model_3d_12eye_model_3d__
   0, /*tp_as_buffer*/
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_HAVE_GC, /*tp_flags*/
   0, /*tp_doc*/
-  __pyx_tp_traverse_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations, /*tp_traverse*/
-  __pyx_tp_clear_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations, /*tp_clear*/
+  __pyx_tp_traverse_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations, /*tp_traverse*/
+  __pyx_tp_clear_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations, /*tp_clear*/
   0, /*tp_richcompare*/
   0, /*tp_weaklistoffset*/
   0, /*tp_iter*/
@@ -14923,7 +15632,116 @@ static PyTypeObject __pyx_type_15pupil_detectors_12eye_model_3d_12eye_model_3d__
   0, /*tp_dictoffset*/
   0, /*tp_init*/
   0, /*tp_alloc*/
-  __pyx_tp_new_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations, /*tp_new*/
+  __pyx_tp_new_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations, /*tp_new*/
+  0, /*tp_free*/
+  0, /*tp_is_gc*/
+  0, /*tp_bases*/
+  0, /*tp_mro*/
+  0, /*tp_cache*/
+  0, /*tp_subclasses*/
+  0, /*tp_weaklist*/
+  0, /*tp_del*/
+  0, /*tp_version_tag*/
+  #if PY_VERSION_HEX >= 0x030400a1
+  0, /*tp_finalize*/
+  #endif
+};
+
+static struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations *__pyx_freelist_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations[8];
+static int __pyx_freecount_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations = 0;
+
+static PyObject *__pyx_tp_new_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations(PyTypeObject *t, CYTHON_UNUSED PyObject *a, CYTHON_UNUSED PyObject *k) {
+  struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations *p;
+  PyObject *o;
+  if (CYTHON_COMPILING_IN_CPYTHON && likely((__pyx_freecount_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations > 0) & (t->tp_basicsize == sizeof(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations)))) {
+    o = (PyObject*)__pyx_freelist_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations[--__pyx_freecount_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations];
+    memset(o, 0, sizeof(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations));
+    (void) PyObject_INIT(o, t);
+    PyObject_GC_Track(o);
+  } else {
+    o = (*t->tp_alloc)(t, 0);
+    if (unlikely(!o)) return 0;
+  }
+  p = ((struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations *)o);
+  new((void*)&(p->__pyx_v_p)) singleeyefitter::EyeModelFitter::Pupil();
+  new((void*)&(p->__pyx_t_0)) std::vector<singleeyefitter::EyeModelFitter::Pupil> ::iterator();
+  return o;
+}
+
+static void __pyx_tp_dealloc_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations(PyObject *o) {
+  struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations *p = (struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations *)o;
+  PyObject_GC_UnTrack(o);
+  __Pyx_call_destructor(&p->__pyx_v_p);
+  __Pyx_call_destructor(&p->__pyx_t_0);
+  Py_CLEAR(p->__pyx_v_self);
+  if (CYTHON_COMPILING_IN_CPYTHON && ((__pyx_freecount_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations < 8) & (Py_TYPE(o)->tp_basicsize == sizeof(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations)))) {
+    __pyx_freelist_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations[__pyx_freecount_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations++] = ((struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations *)o);
+  } else {
+    (*Py_TYPE(o)->tp_free)(o);
+  }
+}
+
+static int __pyx_tp_traverse_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations(PyObject *o, visitproc v, void *a) {
+  int e;
+  struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations *p = (struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations *)o;
+  if (p->__pyx_v_self) {
+    e = (*v)(((PyObject*)p->__pyx_v_self), a); if (e) return e;
+  }
+  return 0;
+}
+
+static int __pyx_tp_clear_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations(PyObject *o) {
+  PyObject* tmp;
+  struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations *p = (struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations *)o;
+  tmp = ((PyObject*)p->__pyx_v_self);
+  p->__pyx_v_self = ((struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter *)Py_None); Py_INCREF(Py_None);
+  Py_XDECREF(tmp);
+  return 0;
+}
+
+static PyTypeObject __pyx_type_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations = {
+  PyVarObject_HEAD_INIT(0, 0)
+  "pupil_detectors.eye_model_3d.eye_model_3d.__pyx_scope_struct_1_get_all_pupil_observations", /*tp_name*/
+  sizeof(struct __pyx_obj_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations), /*tp_basicsize*/
+  0, /*tp_itemsize*/
+  __pyx_tp_dealloc_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations, /*tp_dealloc*/
+  0, /*tp_print*/
+  0, /*tp_getattr*/
+  0, /*tp_setattr*/
+  #if PY_MAJOR_VERSION < 3
+  0, /*tp_compare*/
+  #else
+  0, /*reserved*/
+  #endif
+  0, /*tp_repr*/
+  0, /*tp_as_number*/
+  0, /*tp_as_sequence*/
+  0, /*tp_as_mapping*/
+  0, /*tp_hash*/
+  0, /*tp_call*/
+  0, /*tp_str*/
+  0, /*tp_getattro*/
+  0, /*tp_setattro*/
+  0, /*tp_as_buffer*/
+  Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_HAVE_GC, /*tp_flags*/
+  0, /*tp_doc*/
+  __pyx_tp_traverse_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations, /*tp_traverse*/
+  __pyx_tp_clear_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations, /*tp_clear*/
+  0, /*tp_richcompare*/
+  0, /*tp_weaklistoffset*/
+  0, /*tp_iter*/
+  0, /*tp_iternext*/
+  0, /*tp_methods*/
+  0, /*tp_members*/
+  0, /*tp_getset*/
+  0, /*tp_base*/
+  0, /*tp_dict*/
+  0, /*tp_descr_get*/
+  0, /*tp_descr_set*/
+  0, /*tp_dictoffset*/
+  0, /*tp_init*/
+  0, /*tp_alloc*/
+  __pyx_tp_new_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations, /*tp_new*/
   0, /*tp_free*/
   0, /*tp_is_gc*/
   0, /*tp_bases*/
@@ -15632,6 +16450,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_b_O, __pyx_k_O, sizeof(__pyx_k_O), 0, 0, 0, 1},
   {&__pyx_kp_s_Out_of_bounds_on_buffer_access_a, __pyx_k_Out_of_bounds_on_buffer_access_a, sizeof(__pyx_k_Out_of_bounds_on_buffer_access_a), 0, 0, 1, 0},
   {&__pyx_n_s_PyEyeModelFitter_get_all_pupil_o, __pyx_k_PyEyeModelFitter_get_all_pupil_o, sizeof(__pyx_k_PyEyeModelFitter_get_all_pupil_o), 0, 0, 1, 1},
+  {&__pyx_n_s_PyEyeModelFitter_get_last_pupil, __pyx_k_PyEyeModelFitter_get_last_pupil, sizeof(__pyx_k_PyEyeModelFitter_get_last_pupil), 0, 0, 1, 1},
   {&__pyx_kp_s_Sphere_center_s_s_s_radius_s, __pyx_k_Sphere_center_s_s_s_radius_s, sizeof(__pyx_k_Sphere_center_s_s_s_radius_s), 0, 0, 1, 0},
   {&__pyx_n_s_TypeError, __pyx_k_TypeError, sizeof(__pyx_k_TypeError), 0, 0, 1, 1},
   {&__pyx_kp_s_Unable_to_convert_item_to_object, __pyx_k_Unable_to_convert_item_to_object, sizeof(__pyx_k_Unable_to_convert_item_to_object), 0, 0, 1, 0},
@@ -15660,6 +16479,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_fortran, __pyx_k_fortran, sizeof(__pyx_k_fortran), 0, 0, 1, 1},
   {&__pyx_n_u_fortran, __pyx_k_fortran, sizeof(__pyx_k_fortran), 0, 1, 0, 1},
   {&__pyx_n_s_get_all_pupil_observations, __pyx_k_get_all_pupil_observations, sizeof(__pyx_k_get_all_pupil_observations), 0, 0, 1, 1},
+  {&__pyx_n_s_get_last_pupil_observations, __pyx_k_get_last_pupil_observations, sizeof(__pyx_k_get_last_pupil_observations), 0, 0, 1, 1},
   {&__pyx_kp_s_got_differing_extents_in_dimensi, __pyx_k_got_differing_extents_in_dimensi, sizeof(__pyx_k_got_differing_extents_in_dimensi), 0, 0, 1, 0},
   {&__pyx_n_s_id, __pyx_k_id, sizeof(__pyx_k_id), 0, 0, 1, 1},
   {&__pyx_n_s_import, __pyx_k_import, sizeof(__pyx_k_import), 0, 0, 1, 1},
@@ -15697,10 +16517,16 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_unable_to_allocate_shape_and_str, __pyx_k_unable_to_allocate_shape_and_str, sizeof(__pyx_k_unable_to_allocate_shape_and_str), 0, 0, 1, 0},
   {&__pyx_n_s_unpack, __pyx_k_unpack, sizeof(__pyx_k_unpack), 0, 0, 1, 1},
   {&__pyx_n_s_x_disp, __pyx_k_x_disp, sizeof(__pyx_k_x_disp), 0, 0, 1, 1},
+  {&__pyx_n_s_xrange, __pyx_k_xrange, sizeof(__pyx_k_xrange), 0, 0, 1, 1},
   {&__pyx_n_s_y_disp, __pyx_k_y_disp, sizeof(__pyx_k_y_disp), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
+  #if PY_MAJOR_VERSION >= 3
+  __pyx_builtin_xrange = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_xrange) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 147; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  #else
+  __pyx_builtin_xrange = __Pyx_GetBuiltinName(__pyx_n_s_xrange); if (!__pyx_builtin_xrange) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 147; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  #endif
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 127; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 142; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_builtin_enumerate = __Pyx_GetBuiltinName(__pyx_n_s_enumerate); if (!__pyx_builtin_enumerate) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
@@ -16018,9 +16844,12 @@ PyMODINIT_FUNC PyInit_eye_model_3d(void)
   __pyx_type_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter.tp_print = 0;
   if (PyObject_SetAttrString(__pyx_m, "PyEyeModelFitter", (PyObject *)&__pyx_type_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 65; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter = &__pyx_type_15pupil_detectors_12eye_model_3d_12eye_model_3d_PyEyeModelFitter;
-  if (PyType_Ready(&__pyx_type_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  __pyx_type_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations.tp_print = 0;
-  __pyx_ptype_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations = &__pyx_type_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_all_pupil_observations;
+  if (PyType_Ready(&__pyx_type_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 145; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_type_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations.tp_print = 0;
+  __pyx_ptype_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations = &__pyx_type_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct__get_last_pupil_observations;
+  if (PyType_Ready(&__pyx_type_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 166; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_type_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations.tp_print = 0;
+  __pyx_ptype_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations = &__pyx_type_15pupil_detectors_12eye_model_3d_12eye_model_3d___pyx_scope_struct_1_get_all_pupil_observations;
   if (PyType_Ready(&__pyx_type___pyx_array) < 0) {__pyx_filename = __pyx_f[1]; __pyx_lineno = 99; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type___pyx_array.tp_print = 0;
   __pyx_array_type = &__pyx_type___pyx_array;
@@ -16218,6 +17047,19 @@ end:
     return (__Pyx_RefNannyAPIStruct *)r;
 }
 #endif
+
+static PyObject *__Pyx_GetBuiltinName(PyObject *name) {
+    PyObject* result = __Pyx_PyObject_GetAttrStr(__pyx_b, name);
+    if (unlikely(!result)) {
+        PyErr_Format(PyExc_NameError,
+#if PY_MAJOR_VERSION >= 3
+            "name '%U' is not defined", name);
+#else
+            "name '%.200s' is not defined", PyString_AS_STRING(name));
+#endif
+    }
+    return result;
+}
 
 static void __Pyx_RaiseArgtupleInvalid(
     const char* func_name,
@@ -17283,19 +18125,6 @@ static CYTHON_INLINE int __Pyx_ArgTypeTest(PyObject *obj, PyTypeObject *type, in
     }
     __Pyx_RaiseArgumentTypeInvalid(name, obj, type);
     return 0;
-}
-
-static PyObject *__Pyx_GetBuiltinName(PyObject *name) {
-    PyObject* result = __Pyx_PyObject_GetAttrStr(__pyx_b, name);
-    if (unlikely(!result)) {
-        PyErr_Format(PyExc_NameError,
-#if PY_MAJOR_VERSION >= 3
-            "name '%U' is not defined", name);
-#else
-            "name '%.200s' is not defined", PyString_AS_STRING(name));
-#endif
-    }
-    return result;
 }
 
 static CYTHON_INLINE void __Pyx_ErrRestore(PyObject *type, PyObject *value, PyObject *tb) {

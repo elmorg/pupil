@@ -142,15 +142,36 @@ cdef class PyEyeModelFitter:
             (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
             p.circle.radius))
 
-    def get_all_pupil_observations(self):
+    def get_last_pupil_observations(self,number):
         cdef EyeModelFitter.Pupil p
-        for p in self.thisptr.pupils:
+        for i in xrange(self.thisptr.pupils.size()-number,self.thisptr.pupils.size()):
+            p = self.thisptr.pupils[i]
             yield (((p.ellipse.center[0],p.ellipse.center[1]),
+                p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+                (p.params.theta,p.params.psi,p.params.radius),
+                ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),
+                (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
+                p.circle.radius))
+
+
+    def get_last_pupil_observation(self):
+        cdef EyeModelFitter.Pupil p = self.thisptr.pupils.back()
+        return (((p.ellipse.center[0],p.ellipse.center[1]),
             p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
             (p.params.theta,p.params.psi,p.params.radius),
             ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),
             (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
-            p.circle.radius))
+            p.circle.radius))        
+
+    def get_all_pupil_observations(self):
+        cdef EyeModelFitter.Pupil p
+        for p in self.thisptr.pupils:
+            yield (((p.ellipse.center[0],p.ellipse.center[1]),
+                p.ellipse.major_radius,p.ellipse.minor_radius,p.ellipse.angle),
+                (p.params.theta,p.params.psi,p.params.radius),
+                ((p.circle.center[0],p.circle.center[1],p.circle.center[2]),
+                (p.circle.normal[0],p.circle.normal[1],p.circle.normal[2]),
+                p.circle.radius))
 
     def intersect_contour_with_eye(self,float[:,:] contour):
         #eye is sphere.
