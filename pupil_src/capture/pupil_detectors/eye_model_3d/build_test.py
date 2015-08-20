@@ -30,6 +30,8 @@ if __name__ == '__main__':
 		print " "
 		for pupil in model.get_last_pupil_observations(3):
 			print pupil[0]
+
+		print model.scale
 		
 	basic_test()
 

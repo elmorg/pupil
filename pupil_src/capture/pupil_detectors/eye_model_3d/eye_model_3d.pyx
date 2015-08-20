@@ -42,6 +42,7 @@ cdef extern from "singleeyefitter/singleeyefitter.h" namespace "singleeyefitter"
         vector[Pupil] pupils
         Sphere[double] eye
         Ellipse2D[double] projected_eye #technically only need center, not whole ellipse. can optimize here
+        float scale
 
 # cdef extern from 'singleeyefitter/intersect.h' namespace 'singleeyefitter':
 #     cdef pair[Matrix31d,Matrix31d] intersect(const ParametrizedLine3d line, const Sphere[double] sphere) except +
@@ -194,6 +195,10 @@ cdef class PyEyeModelFitter:
     property model_version:
         def __get__(self):
             return self.thisptr.model_version
+
+    property scale:
+        def __get__(self):
+            return self.thisptr.scale
 
     property eye:
         def __get__(self):

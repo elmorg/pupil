@@ -293,16 +293,20 @@ class Visualizer():
 
 	def draw_contours(self,contours,model):
 		for contour in contours:
-			glPushMatrix()
-			glLoadMatrixf(self.get_image_space_matrix(30))
-			intersect_contour = [(c[0][0],c[0][1],0) for c in contour]
-			print intersect_contour
-			draw_polyline3d(np.array(intersect_contour),color=RGBA(0.,0.,1.,.5))
-			glPopMatrix()
-			# intersect_contour = [sphere_intersect(Line3D((0,0,0),geometry.unproject_point(c[0],20,self.intrinsics)),model.eye) for c in contour]
-			intersect_contour = [geometry.unproject_point(c[0],20,self.intrinsics) for c in contour]
-			# intersect_contour = [c[0] for c in intersect_contour if c is not None]
-			draw_polyline3d(np.array(intersect_contour),color=RGBA(0.,0.,0.,.5))
+				intersect_contour = [sphere_intersect(Line3D((0,0,0),geometry.unproject_point(c[0],20,self.intrinsics)),model.eye) for c in contour]
+				intersect_contour = [c[0] for c in intersect_contour if c is not None]
+				draw_polyline3d(np.array(intersect_contour),color=RGBA(0.,0.,0.,.5))
+		# for contour in contours:
+		# 	glPushMatrix()
+		# 	glLoadMatrixf(self.get_image_space_matrix(30))
+		# 	intersect_contour = [(c[0][0],c[0][1],0) for c in contour]
+		# 	print intersect_contour
+		# 	draw_polyline3d(np.array(intersect_contour),color=RGBA(0.,0.,1.,.5))
+		# 	glPopMatrix()
+		# 	intersect_contour = [sphere_intersect(Line3D((0,0,0),geometry.unproject_point(c[0],20,self.intrinsics)),model.eye) for c in contour]
+		# 	# intersect_contour = [geometry.unproject_point(c[0],20,self.intrinsics) for c in contour]
+		# 	intersect_contour = [c[0] for c in intersect_contour if c is not None]
+		# 	draw_polyline3d(np.array(intersect_contour),color=RGBA(0.,0.,0.,.5))
 
 	def draw_eye_model_text(self, model):
 		status = 'Eyeball center : X%.2fmm Y%.2fmm Z%.2fmm\nGaze vector: Theta: %.3f Psi %.3f\nPupil Diameter: %.2fmm'%(model.eye.center[0],model.eye.center[1],model.eye.center[2],model.observations[-1].params.theta, model.observations[-1].params.psi, 2*model.observations[-1].params.radius)

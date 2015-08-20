@@ -259,7 +259,7 @@ void singleeyefitter::EyeModelFitter::initialise_model()
     }
 
     // Scale eye to anthropomorphic average radius of 12mm
-    auto scale = 12.0 / eye.radius;
+    scale = 12.0 / eye.radius;
     eye.radius = 12.0;
     eye.center *= scale;
     for (auto& pupil : pupils) {

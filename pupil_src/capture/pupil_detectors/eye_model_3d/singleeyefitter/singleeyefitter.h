@@ -63,6 +63,7 @@ namespace singleeyefitter {
         std::mutex model_mutex;
         // Model version gets incremented on initialisation/reset, so that long-running background-thread refines don't overwrite the model
         int model_version = 0;
+        double scale;
 
         // Nonessential Variables I use
         std::vector<Line> pupil_gazelines_projection; // giving an error but will need to add in at some point

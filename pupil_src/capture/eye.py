@@ -148,7 +148,6 @@ def eye(g_pool,cap_src,cap_size,rx_from_world,eye_id=0):
         g_pool.quit.value = True
         logger.info('Process closing from window')
 
-
     # load session persistent settings
     session_settings = Persistent_Dict(os.path.join(g_pool.user_dir,'user_settings_eye%s'%eye_id))
     if session_settings.get("version",VersionFormat('0.0')) < g_pool.version:
@@ -159,7 +158,6 @@ def eye(g_pool,cap_src,cap_size,rx_from_world,eye_id=0):
     cap.frame_size = cap_size
     cap.frame_rate = 90 #default
     cap.settings = session_settings.get('capture_settings',{})
-
 
     # Test capture
     try:

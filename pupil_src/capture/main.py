@@ -107,7 +107,6 @@ def main():
     eye_size = (640,480)
     world_size = (1280,720)
 
-
     # on MacOS we will not use os.fork, elsewhere this does nothing.
     forking_enable(0)
 
