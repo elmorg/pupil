@@ -86,6 +86,7 @@ else:
     from world import world
 
 
+
 class Global_Container(object):
     pass
 
@@ -126,6 +127,7 @@ def main():
     g_pool.version = get_version(version_file)
     g_pool.app = 'capture'
     g_pool.binocular = binocular
+    
 
 
     p_eye = []
@@ -134,6 +136,7 @@ def main():
         p_eye += [Process(target=eye, args=(g_pool,eye_src[eye_id],eye_size,rx,eye_id))]
         g_pool.eye_tx += [tx]
         p_eye[-1].start()
+
 
     world(g_pool,world_src,world_size)
 

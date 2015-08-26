@@ -14,11 +14,12 @@ import numpy as np
 from pyglui import ui
 import zmq
 
-
+from OSC import OSCClient, OSCMessage
 
 import logging
 logger = logging.getLogger(__name__)
-
+client = OSCClient()
+client.connect( ("localhost", 7111) )
 
 
 class Pupil_Server(Plugin):
@@ -79,12 +80,28 @@ class Pupil_Server(Plugin):
                     msg +=key+":"+str(value)+'\n'
             self.socket.send( msg )
 
+
         for g in events.get('gaze_positions',[]):
             msg = "Gaze\n"
             for key,value in g.iteritems():
                 if key not in self.exclude_list:
                     msg +=key+":"+str(value)+'\n'
             self.socket.send( msg )
+            items = msg.split("\n")
+            msg_type = items.pop(0)
+            for index, item in enumerate(items):
+                if 'base' in item:
+                    items.pop(index)
+                        
+            items = dict([i.split(':') for i in items[:-1] ])
+            
+            if 'realtime gaze on mark1' in items:
+                pupil_x1,pupil_y1  = map(float,items['realtime gaze on mark1'][1:-1].split(','))
+                client.send( OSCMessage("/pupil/mark1",(pupil_x1,pupil_y1)))
+
+            if 'realtime gaze on mark2' in items:
+                pupil_x1,pupil_y1  = map(float,items['realtime gaze on mark2'][1:-1].split(','))
+                client.send( OSCMessage("/pupil/mark2",(pupil_x1,pupil_y1)))
 
         # for e in events:
         #     msg = 'Event'+'\n'
