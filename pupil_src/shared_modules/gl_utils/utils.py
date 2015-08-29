@@ -14,7 +14,6 @@ from glfw import glfwGetFramebufferSize,glfwGetWindowSize
 OpenGL.ERROR_LOGGING = False
 from OpenGL.GL import *
 from shader import Shader
-
 import numpy as np
 
 
@@ -23,8 +22,8 @@ __all__ =  ['make_coord_system_norm_based',
             'adjust_gl_view',
             'clear_gl_screen',
             'basic_gl_setup',
-            'cvmat_to_glmat'
-]
+            'cvmat_to_glmat',
+            ]
 
 
 def cvmat_to_glmat(m):

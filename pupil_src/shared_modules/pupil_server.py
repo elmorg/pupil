@@ -92,16 +92,22 @@ class Pupil_Server(Plugin):
             for index, item in enumerate(items):
                 if 'base' in item:
                     items.pop(index)
-                        
             items = dict([i.split(':') for i in items[:-1] ])
-            
             if 'realtime gaze on mark1' in items:
                 pupil_x1,pupil_y1  = map(float,items['realtime gaze on mark1'][1:-1].split(','))
                 client.send( OSCMessage("/pupil/mark1",(pupil_x1,pupil_y1)))
-
+            else:
+                client.send( OSCMessage("/pupil/mark1",(100.0,100.0)))
             if 'realtime gaze on mark2' in items:
                 pupil_x1,pupil_y1  = map(float,items['realtime gaze on mark2'][1:-1].split(','))
                 client.send( OSCMessage("/pupil/mark2",(pupil_x1,pupil_y1)))
+            else:
+                client.send( OSCMessage("/pupil/mark2",(100.0,100.0)))
+            if 'realtime gaze on circles' in items:
+                dist  = float(items.get('realtime gaze on circles'))
+                client.send( OSCMessage("/pupil/circles",dist))
+            else:
+                client.send( OSCMessage("/pupil/circles",100.0))
 
         # for e in events:
         #     msg = 'Event'+'\n'
