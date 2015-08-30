@@ -51,8 +51,6 @@ from pupil_server import Pupil_Server
 from pupil_sync import Pupil_Sync
 from marker_detector import Marker_Detector
 from log_display import Log_Display
-from event_capture import Event_Capture
-
 
 
 # create logger for the context of this function
@@ -82,7 +80,7 @@ def world(g_pool,cap_src,cap_size):
 
     #manage plugins
     runtime_plugins = import_runtime_plugins(os.path.join(g_pool.user_dir,'plugins'))
-    user_launchable_plugins = [Show_Calibration,Pupil_Server,Pupil_Sync,Marker_Detector,Event_Capture]+runtime_plugins
+    user_launchable_plugins = [Show_Calibration,Pupil_Server,Pupil_Sync,Marker_Detector]+runtime_plugins
     system_plugins  = [Log_Display,Display_Recent_Gaze,Recorder]
     plugin_by_index =  system_plugins+user_launchable_plugins+calibration_plugins+gaze_mapping_plugins
     name_by_index = [p.__name__ for p in plugin_by_index]
@@ -216,12 +214,7 @@ def world(g_pool,cap_src,cap_size):
     #plugins that are loaded based on user settings from previous session
     g_pool.notifications = []
     g_pool.plugins = Plugin_List(g_pool,plugin_by_name,session_settings.get('loaded_plugins',default_plugins))
-    
-    #only needed for the gui to show the loaded calibration type
-    for p in g_pool.plugins:
-        if p.base_class_name == 'Calibration_Plugin':
-            g_pool.active_calibration_plugin =  p.__class__
-            break
+
 
     # Register callbacks main_window
     glfwSetFramebufferSizeCallback(main_window,on_resize)
