@@ -87,7 +87,7 @@ class Circle_detect(Plugin):
             self.candidate_ellipses = get_candidate_ellipses(gray_img,
                                                          area_threshold=self.area_threshold,
                                                          dist_threshold=self.dist_threshold,
-                                                         min_ring_count=4,
+                                                         min_ring_count=5,
                                                          visual_debug=self.show_edges)
 
             if len(self.candidate_ellipses) > 0:
@@ -95,16 +95,16 @@ class Circle_detect(Plugin):
                 self.lastTime = frame.timestamp
                 marker_pos = self.candidate_ellipses[0][0]
                 self.pos = normalize(marker_pos,(frame.width,frame.height),flip_y=True)
-                smoother = 0.3
-                smooth_pos = np.array(self.smooth_pos)
-                pos = np.array(self.pos)
-                new_smooth_pos = smooth_pos + smoother*(pos-smooth_pos)
-                smooth_pos = new_smooth_pos
-                self.smooth_pos = list(smooth_pos)
-            
+#                smoother = 0.3
+#                smooth_pos = np.array(self.smooth_pos)
+#                pos = np.array(self.pos)
+#                new_smooth_pos = smooth_pos + smoother*(pos-smooth_pos)
+#                smooth_pos = new_smooth_pos
+#                self.smooth_pos = list(smooth_pos)
+
                 for p in events.get('gaze_positions',[]):
                         #gp_on_s = tuple(s.img_to_ref_surface(np.array(p['norm_gaze'])))
-                        dist = np.linalg.norm(np.array(p['norm_pos'])-self.smooth_pos)
+                        dist = np.linalg.norm(np.array(p['norm_pos'])-self.pos)
                         p['realtime gaze on circles'] = dist
 
 
@@ -155,6 +155,6 @@ class Circle_detect(Plugin):
         """
         if self.active:
             self.stop()
-
+#
 #    def get_init_dict(self):
 #        return {}
