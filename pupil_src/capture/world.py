@@ -51,7 +51,7 @@ from pupil_server import Pupil_Server
 from pupil_remote import Pupil_Remote
 from marker_detector import Marker_Detector
 from log_display import Log_Display
-from circle_detect import Circle_detect
+#from circle_detect import Circle_detect
 
 
 # create logger for the context of this function
@@ -228,7 +228,7 @@ def world(g_pool,cap_src,cap_size):
     g_pool.plugins = Plugin_List(g_pool,plugin_by_name,session_settings.get('loaded_plugins',default_plugins))
 
     # ELM - start circle detect plugin
-    g_pool.plugins.add(Circle_detect)
+    #g_pool.plugins.add(Circle_detect)
     
     
     #only needed for the gui to show the loaded calibration type
