@@ -48,10 +48,14 @@ from recorder import Recorder
 from show_calibration import Show_Calibration
 from display_recent_gaze import Display_Recent_Gaze
 from pupil_server import Pupil_Server
-from pupil_remote import Pupil_Remote
+from pupil_sync import Pupil_Sync
 from marker_detector import Marker_Detector
 from log_display import Log_Display
+<<<<<<< HEAD
 #from circle_detect import Circle_detect
+=======
+from event_capture import Event_Capture
+>>>>>>> pupil-labs/master
 
 
 # create logger for the context of this function
@@ -81,7 +85,7 @@ def world(g_pool,cap_src,cap_size):
 
     #manage plugins
     runtime_plugins = import_runtime_plugins(os.path.join(g_pool.user_dir,'plugins'))
-    user_launchable_plugins = [Show_Calibration,Pupil_Server,Pupil_Remote,Marker_Detector]+runtime_plugins
+    user_launchable_plugins = [Show_Calibration,Pupil_Server,Pupil_Sync,Marker_Detector,Event_Capture]+runtime_plugins
     system_plugins  = [Log_Display,Display_Recent_Gaze,Recorder]
     plugin_by_index =  system_plugins+user_launchable_plugins+calibration_plugins+gaze_mapping_plugins
     name_by_index = [p.__name__ for p in plugin_by_index]
@@ -166,16 +170,6 @@ def world(g_pool,cap_src,cap_size):
     g_pool.active_calibration_plugin = None
 
 
-    #UI callback functions
-    def reset_timebase():
-        #the last frame from worldcam will be t0
-        g_pool.timebase.value = g_pool.capture.get_now()
-        logger.info("New timebase set to %s all timestamps will count from here now."%g_pool.timebase.value)
-
-    def set_calibration_plugin(new_calibration):
-        g_pool.active_calibration_plugin = new_calibration
-        g_pool.plugins.add(new_calibration)
-
     def open_plugin(plugin):
         if plugin ==  "Select to load":
             return
@@ -184,7 +178,6 @@ def world(g_pool,cap_src,cap_size):
     def set_scale(new_scale):
         g_pool.gui.scale = new_scale
         g_pool.gui.collect_menus()
-
 
 
     #window and gl setup
@@ -210,13 +203,12 @@ def world(g_pool,cap_src,cap_size):
     advanced_settings = ui.Growing_Menu('Advanced')
     advanced_settings.append(ui.Selector('update_textures',g_pool,label="Update display",selection=range(3),labels=('No update','Gray','Color')))
     advanced_settings.append(ui.Slider('pupil_confidence_threshold', g_pool,step = .01,min=0.,max=1.,label='Minimum pupil confidence'))
-    advanced_settings.append(ui.Button('Set timebase to 0',reset_timebase))
     advanced_settings.append(ui.Info_Text('Capture Version: %s'%g_pool.version))
     general_settings.append(advanced_settings)
     g_pool.calibration_menu = ui.Growing_Menu('Calibration')
-    g_pool.calibration_menu.append(ui.Selector('active_calibration_plugin',g_pool, selection = calibration_plugins,
+    g_pool.calibration_menu.append(ui.Selector('active_calibration_plugin',getter=lambda: g_pool.active_calibration_plugin.__class__, selection = calibration_plugins,
                                         labels = [p.__name__.replace('_',' ') for p in calibration_plugins],
-                                        setter= set_calibration_plugin,label='Method'))
+                                        setter= open_plugin,label='Method'))
     g_pool.sidebar.append(g_pool.calibration_menu)
     g_pool.gui.append(g_pool.sidebar)
     g_pool.quickbar = ui.Stretching_Menu('Quick Bar',(0,100),(120,-100))
@@ -225,8 +217,10 @@ def world(g_pool,cap_src,cap_size):
     g_pool.capture.init_gui(g_pool.sidebar)
 
     #plugins that are loaded based on user settings from previous session
+    g_pool.notifications = []
     g_pool.plugins = Plugin_List(g_pool,plugin_by_name,session_settings.get('loaded_plugins',default_plugins))
 
+<<<<<<< HEAD
     # ELM - start circle detect plugin
     #g_pool.plugins.add(Circle_detect)
     
@@ -236,6 +230,8 @@ def world(g_pool,cap_src,cap_size):
         if p.base_class_name == 'Calibration_Plugin':
             g_pool.active_calibration_plugin =  p.__class__
             break
+=======
+>>>>>>> pupil-labs/master
 
     # Register callbacks main_window
     glfwSetFramebufferSizeCallback(main_window,on_resize)
@@ -307,7 +303,6 @@ def world(g_pool,cap_src,cap_size):
         cpu_graph.update()
 
 
-
         #a dictionary that allows plugins to post and read events
         events = {}
 
@@ -321,6 +316,12 @@ def world(g_pool,cap_src,cap_size):
             recent_pupil_positions.append(p)
             pupil_graph.add(p['confidence'])
         events['pupil_positions'] = recent_pupil_positions
+
+        # notify each plugin if there are new notifactions:
+        while g_pool.notifications:
+            n = g_pool.notifications.pop(0)
+            for p in g_pool.plugins:
+                p.on_notify(n)
 
         # allow each Plugin to do its work.
         for p in g_pool.plugins:
