@@ -12,11 +12,7 @@ import OpenGL
 # OpenGL.FULL_LOGGING = True
 OpenGL.ERROR_LOGGING = False
 from OpenGL.GL import *
-<<<<<<< HEAD
 from shader import Shader
-=======
-
->>>>>>> pupil-labs/master
 import numpy as np
 
 
